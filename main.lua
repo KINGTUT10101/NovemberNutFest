@@ -9,7 +9,7 @@ local gameWidth, gameHeight = 1920, 1080
 local windowWidth, windowHeight = 1280, 720
 
 -- Declares / initializes the global variables
-
+Scale = 3
 
 -- Defines the functions
 local Player = require("player")
@@ -38,6 +38,7 @@ end
 function love.draw ()
     push:start()
         sceneMan:event ("draw")
+        love.graphics.scale(Scale, Scale)
 
         -- Draw Entities
         Player.draw()
