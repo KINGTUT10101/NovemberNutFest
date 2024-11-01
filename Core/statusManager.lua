@@ -1,6 +1,6 @@
 local copyTable = require ("Helpers.copyTable")
 
-local nutEffectManager = {
+local statusManager = {
     tracker = {},
 }
 
@@ -11,14 +11,13 @@ local defaultClassDef = {
     -- Methods
     update = function () end,
     draw = function () end,
-    collision = function () end,
 }
 
 local function handleNilKey (self, key)
     return defaultClassDef[key]
 end
 
-function nutEffectManager:create (id, classDef)
+function statusManager:create (id, classDef)
     assert (self.tracker[id] == nil, "A class with the provided ID has already been defined")
 
     -- Copy class definition
@@ -37,16 +36,16 @@ function nutEffectManager:create (id, classDef)
     return self:get (id)
 end
 
-function nutEffectManager:delete (id)
+function statusManager:delete (id)
     assert (self.tracker[id] ~= nil, "Provided ID does not match any defined class")
 
     self.tracker[id] = nil
 end
 
-function nutEffectManager:get (id)
+function statusManager:get (id)
     assert (self.tracker[id] ~= nil, "Provided ID does not match any defined class")
 
     return self.tracker[id]
 end
 
-return nutEffectManager
+return statusManager
