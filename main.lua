@@ -12,11 +12,14 @@ local windowWidth, windowHeight = 1280, 720
 
 
 -- Defines the functions
-
+local Player = require("player")
 
 function love.load ()
     -- Set up Push
     push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false})
+
+    -- Load Assets
+    Player.load()
 
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {gameWidth, gameHeight}
@@ -25,12 +28,20 @@ end
 function love.update (dt)
 	tux.callbacks.update (dt)
     sceneMan:event ("update", dt)
+
+    -- Update Entities
+    Player.update(dt)
+
     lovelyToasts.update(dt)
 end
 
 function love.draw ()
     push:start()
         sceneMan:event ("draw")
+
+        -- Draw Entities
+        Player.draw()
+
         tux.callbacks.draw ()
         sceneMan:event ("lateDraw")
         lovelyToasts.draw()
