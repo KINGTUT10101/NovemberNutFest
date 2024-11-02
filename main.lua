@@ -6,7 +6,7 @@ local tux = require ("Libraries.tux")
 
 -- Declares / initializes the local variables
 local gameWidth, gameHeight = 1920, 1080
-local windowWidth, windowHeight = 1280, 720
+local windowWidth, windowHeight = 854, 480
 
 -- Declares / initializes the global variables
 
@@ -37,9 +37,27 @@ function love.draw ()
     push:finish()
 end
 
+local Nut = require ("Core.Nut")
 function love.keypressed (key, scancode, isrepeat)
     tux.callbacks.keypressed (key, scancode, isrepeat)
     sceneMan:event ("keypressed", key, scancode, isrepeat)
+
+    -- TEMP: For testing the nut class
+    local nutObj
+    if key == "1" then
+        nutObj = Nut:new ()
+    elseif key == "2" then
+        nutObj = Nut:new ({damage = 95})
+    elseif key == "3" then
+        nutObj = Nut:new ({damage = 65}, {damage = 35}, {})
+    end
+
+    -- Print nut info
+    print ("NEW NUT OBJECT")
+    for key, value in pairs (nutObj) do
+        print (key, value)
+    end
+    print ()
 end
 
 function love.textinput (text)

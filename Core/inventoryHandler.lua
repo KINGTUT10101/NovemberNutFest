@@ -20,14 +20,14 @@ end
 
 function inventoryHandler:addNut (nutObj)
     -- Check if there is space
-    if self.currentStorage + nutObj.size > self.maxStorage then
+    if self.currentStorage + nutObj.invSize > self.maxStorage then
         return false
     else
         local sectionObj = self.sections[self.activeSection]
 
         sectionObj[#sectionObj+1] = nutObj
 
-        self.currentStorage = self.currentStorage + nutObj.size
+        self.currentStorage = self.currentStorage + nutObj.invSize
 
         return true
     end
@@ -53,7 +53,7 @@ function inventoryHandler:consumeNut ()
     else
         local nutObj = sectionObj[1]
         
-        self.currentStorage = self.currentStorage - nutObj.size
+        self.currentStorage = self.currentStorage - nutObj.invSize
         table.remove (sectionObj, 1)
 
         return nutObj
@@ -69,7 +69,7 @@ function inventoryHandler:dropNut (sectionNum, index)
 
     local nutObj = section[index]
 
-    self.currentStorage = self.currentStorage - nutObj.size
+    self.currentStorage = self.currentStorage - nutObj.invSize
     table.remove (section, index)
 
 
