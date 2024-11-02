@@ -36,7 +36,7 @@ function love.update (dt)
     sceneMan:event ("update", dt)
 
     -- Update Entities
-    Player.update(dt)
+    Player:update(dt)
     EnemyManager.updateEnemies(dt)
 
     lovelyToasts.update(dt)
