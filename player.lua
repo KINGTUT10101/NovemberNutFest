@@ -8,7 +8,7 @@ Player.velX = 0
 Player.velY = 0
 Player.width = 32*Scale
 Player.height = 32*Scale
-Player.speed = 5
+Player.speed = 340
 Player.runSpeed = 1.5
 Player.maxHealth = 100
 Player.health = Player.maxHealth
@@ -16,24 +16,26 @@ Player.dead = false
 
 function Player.load()
 
-    spriteSheet = love.graphics.newImage("Graphics/player.png")
-    spriteSheet:setFilter("nearest", "nearest")
+    SpriteSheets.Player = love.graphics.newImage("Graphics/player.png")
+    SpriteSheets.Player:setFilter("nearest", "nearest")
 end
 
 function Player.update(dt)
 
+    local dtSpeed = Player.speed*dt
+
     -- Control
     if love.keyboard.isDown("w") then
-        Player.velY = Player.velY - Player.speed
+        Player.velY = Player.velY - dtSpeed
     end
     if love.keyboard.isDown("s") then
-        Player.velY = Player.velY + Player.speed
+        Player.velY = Player.velY + dtSpeed
     end
     if love.keyboard.isDown("a") then
-        Player.velX = Player.velX - Player.speed
+        Player.velX = Player.velX - dtSpeed
     end
     if love.keyboard.isDown("d") then
-        Player.velX = Player.velX + Player.speed
+        Player.velX = Player.velX + dtSpeed
     end
 
     if love.keyboard.isDown("lshift") then
@@ -92,7 +94,7 @@ end
 
 function Player.draw() 
     if not Player.dead then
-        love.graphics.draw(spriteSheet, Player.x, Player.y)
+        love.graphics.draw(SpriteSheets.Player, Player.x, Player.y)
     end
 end
 
