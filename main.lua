@@ -9,14 +9,23 @@ local gameWidth, gameHeight = 1920, 1080
 local windowWidth, windowHeight = 1280, 720
 
 -- Declares / initializes the global variables
-
+Scale = 3
+SpriteSheets = {}
 
 -- Defines the functions
-
+local Player = require("player")
+local EnemyManager = require("enemies/enemy")
 
 function love.load ()
     -- Set up Push
     push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false})
+
+    -- Load Assets
+    Player.load()
+    EnemyManager.loadSpriteSheets()
+
+    -- Spawn enemy test
+    EnemyManager.spawnEnemy(100, 100, "genericEnemy")
 
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {gameWidth, gameHeight}
@@ -25,12 +34,23 @@ end
 function love.update (dt)
 	tux.callbacks.update (dt)
     sceneMan:event ("update", dt)
+
+    -- Update Entities
+    Player:update(dt)
+    EnemyManager.updateEnemies(dt)
+
     lovelyToasts.update(dt)
 end
 
 function love.draw ()
     push:start()
         sceneMan:event ("draw")
+        love.graphics.scale(Scale, Scale)
+
+        -- Draw Entities
+        EnemyManager.drawEnemies()
+        Player.draw()
+
         tux.callbacks.draw ()
         sceneMan:event ("lateDraw")
         lovelyToasts.draw()
