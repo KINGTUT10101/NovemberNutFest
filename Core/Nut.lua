@@ -17,6 +17,7 @@ local defaultNut = {
     growthTime = 5, -- How long it takes the nut to grow when planted. In cross-breeding, the highest value of the pair will be used
     yield = 5, -- The base amount of nuts a fully-grown crop will produce
     variation = 1, -- How much the yield can vary in either direction
+    spriteSheetpos = {0, 0}, -- position in the graphics/nuts.png
     specialEffects = {}, -- A list of tables, each with an effect and a probability
 }
 -- Defines min/max value pairs for each nut attribute
@@ -115,6 +116,11 @@ function Nut:new (...)
     clampNutAttributes (newNutObj)
 
     return newNutObj
+end
+
+function Nut:load()
+    SpriteSheets.nuts = love.graphics.newImage("Graphics/nuts.png") -- Each nut's 6x6
+    SpriteSheets.Player:setFilter("nearest", "nearest")
 end
 
 return Nut

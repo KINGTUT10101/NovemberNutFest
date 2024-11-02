@@ -15,6 +15,9 @@ SpriteSheets = {}
 -- Defines the functions
 local Player = require("player")
 local EnemyManager = require("enemies/enemy")
+local Nut = require ("Core.Nut")
+local Gun = require("gun")
+local ProjectileManager = require("projectile")
 
 function love.load ()
     -- Set up Push
@@ -23,6 +26,7 @@ function love.load ()
     -- Load Assets
     Player.load()
     EnemyManager.loadSpriteSheets()
+    Nut:load()
 
     -- Spawn enemy test
     EnemyManager.spawnEnemy(100, 100, "genericEnemy")
@@ -37,6 +41,8 @@ function love.update (dt)
 
     -- Update Entities
     Player:update(dt)
+    Gun:update()
+    ProjectileManager:update()
     EnemyManager.updateEnemies(dt)
 
     lovelyToasts.update(dt)
@@ -50,6 +56,7 @@ function love.draw ()
         -- Draw Entities
         EnemyManager.drawEnemies()
         Player.draw()
+        ProjectileManager:draw()
 
         tux.callbacks.draw ()
         sceneMan:event ("lateDraw")
@@ -57,7 +64,7 @@ function love.draw ()
     push:finish()
 end
 
-local Nut = require ("Core.Nut")
+
 function love.keypressed (key, scancode, isrepeat)
     tux.callbacks.keypressed (key, scancode, isrepeat)
     sceneMan:event ("keypressed", key, scancode, isrepeat)
@@ -73,11 +80,13 @@ function love.keypressed (key, scancode, isrepeat)
     end
 
     -- Print nut info
-    print ("NEW NUT OBJECT")
-    for key, value in pairs (nutObj) do
-        print (key, value)
+    if nutObj ~= nil then
+        print ("NEW NUT OBJECT")
+        for key, value in pairs (nutObj) do
+            print (key, value)
+        end
+        print ()
     end
-    print ()
 end
 
 function love.textinput (text)
