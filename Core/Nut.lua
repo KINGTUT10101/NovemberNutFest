@@ -11,13 +11,12 @@ local defaultNut = {
     projVelocity = 1, -- The velocity of the projectile
     projScale = 1, -- The scale of the projectile
     range = 10, -- The maximum range the projectile until it despawns
-    knockback = 0, -- How far an enemy will be pushed when hit by the projectile
+    knockback = 50, -- How far an enemy will be pushed when hit by the projectile
     invSize = 1, -- How many spaces the nut will use inside the player's inventory
     spread = 0, -- How wide the firing cone is for the projectile. Wider cones make it less accurate
     growthTime = 5, -- How long it takes the nut to grow when planted. In cross-breeding, the highest value of the pair will be used
     yield = 5, -- The base amount of nuts a fully-grown crop will produce
     variation = 1, -- How much the yield can vary in either direction
-    spriteSheetpos = {0, 0}, -- position in the graphics/nuts.png
     specialEffects = {}, -- A list of tables, each with an effect and a probability
 }
 -- Defines min/max value pairs for each nut attribute

@@ -14,6 +14,7 @@ function thisScene:load (...)
     Player.load()
     EnemyManager.loadSpriteSheets()
     Nut:load()
+    Gun:load()
 
     -- Spawn enemy test
     EnemyManager.spawnEnemy(100, 100, "genericEnemy")
@@ -36,6 +37,7 @@ function thisScene:draw ()
     -- Draw Entities
     EnemyManager.drawEnemies()
     Player.draw()
+    Gun:draw()
     ProjectileManager:draw()
 end
 
