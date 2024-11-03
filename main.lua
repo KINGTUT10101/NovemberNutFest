@@ -14,7 +14,7 @@ SpriteSheets = {}
 
 -- Defines the functions
 local Player = require("player")
-local EnemyManager = require("enemies/enemy")
+local EnemyManager = require("Enemies/enemy")
 local Nut = require ("Core.Nut")
 local Gun = require("gun")
 local ProjectileManager = require("projectile")
@@ -23,13 +23,9 @@ function love.load ()
     -- Set up Push
     push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false})
 
-    -- Load Assets
-    Player.load()
-    EnemyManager.loadSpriteSheets()
-    Nut:load()
+    sceneMan:newScene("game", require("Scenes.gameScene"))
 
-    -- Spawn enemy test
-    EnemyManager.spawnEnemy(100, 100, "genericEnemy")
+    sceneMan:push("game")
 
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {gameWidth, gameHeight}
@@ -39,24 +35,14 @@ function love.update (dt)
 	tux.callbacks.update (dt)
     sceneMan:event ("update", dt)
 
-    -- Update Entities
-    Player:update(dt)
-    Gun:update()
-    ProjectileManager:update()
-    EnemyManager.updateEnemies(dt)
-
     lovelyToasts.update(dt)
 end
 
 function love.draw ()
     push:start()
-        sceneMan:event ("draw")
         love.graphics.scale(Scale, Scale)
+        sceneMan:event ("draw")
 
-        -- Draw Entities
-        EnemyManager.drawEnemies()
-        Player.draw()
-        ProjectileManager:draw()
 
         tux.callbacks.draw ()
         sceneMan:event ("lateDraw")

@@ -21,7 +21,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     -- Each enemy will return their init function
     local init
     if type == "genericEnemy" then
-        init = require("enemies/genericEnemy")
+        init = require("Enemies/genericEnemy")
     else
         error(type + "is not a type.")
     end
