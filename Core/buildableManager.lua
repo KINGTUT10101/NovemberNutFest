@@ -11,7 +11,7 @@ local defaultClassDef = {
     frame = nil,
 
     -- Methods
-    new = function () end,
+    start = function () end,
     update = function () end,
     draw = function () end,
     interact = function () end,
