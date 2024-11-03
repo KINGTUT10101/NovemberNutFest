@@ -14,18 +14,18 @@ SpriteSheets = {}
 
 -- Defines the functions
 local Player = require("player")
-local EnemyManager = require("enemies/enemy")
+local EnemyManager = require("Enemies/enemy")
+local Nut = require ("Core.Nut")
+local Gun = require("gun")
+local ProjectileManager = require("projectile")
 
 function love.load ()
     -- Set up Push
     push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false})
 
-    -- Load Assets
-    Player.load()
-    EnemyManager.loadSpriteSheets()
+    sceneMan:newScene("game", require("Scenes.gameScene"))
 
-    -- Spawn enemy test
-    EnemyManager.spawnEnemy(100, 100, "genericEnemy")
+    sceneMan:push("game")
 
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {gameWidth, gameHeight}
@@ -35,21 +35,14 @@ function love.update (dt)
 	tux.callbacks.update (dt)
     sceneMan:event ("update", dt)
 
-    -- Update Entities
-    Player:update(dt)
-    EnemyManager.updateEnemies(dt)
-
     lovelyToasts.update(dt)
 end
 
 function love.draw ()
     push:start()
-        sceneMan:event ("draw")
         love.graphics.scale(Scale, Scale)
+        sceneMan:event ("draw")
 
-        -- Draw Entities
-        EnemyManager.drawEnemies()
-        Player.draw()
 
         tux.callbacks.draw ()
         sceneMan:event ("lateDraw")
@@ -57,7 +50,7 @@ function love.draw ()
     push:finish()
 end
 
-local Nut = require ("Core.Nut")
+
 function love.keypressed (key, scancode, isrepeat)
     tux.callbacks.keypressed (key, scancode, isrepeat)
     sceneMan:event ("keypressed", key, scancode, isrepeat)
@@ -73,11 +66,13 @@ function love.keypressed (key, scancode, isrepeat)
     end
 
     -- Print nut info
-    print ("NEW NUT OBJECT")
-    for key, value in pairs (nutObj) do
-        print (key, value)
+    if nutObj ~= nil then
+        print ("NEW NUT OBJECT")
+        for key, value in pairs (nutObj) do
+            print (key, value)
+        end
+        print ()
     end
-    print ()
 end
 
 function love.textinput (text)

@@ -11,7 +11,7 @@ local defaultNut = {
     projVelocity = 1, -- The velocity of the projectile
     projScale = 1, -- The scale of the projectile
     range = 10, -- The maximum range the projectile until it despawns
-    knockback = 0, -- How far an enemy will be pushed when hit by the projectile
+    knockback = 50, -- How far an enemy will be pushed when hit by the projectile
     invSize = 1, -- How many spaces the nut will use inside the player's inventory
     spread = 0, -- How wide the firing cone is for the projectile. Wider cones make it less accurate
     growthTime = 5, -- How long it takes the nut to grow when planted. In cross-breeding, the highest value of the pair will be used
@@ -115,6 +115,11 @@ function Nut:new (...)
     clampNutAttributes (newNutObj)
 
     return newNutObj
+end
+
+function Nut:load()
+    SpriteSheets.nuts = love.graphics.newImage("Graphics/nuts.png") -- Each nut's 6x6
+    SpriteSheets.Player:setFilter("nearest", "nearest")
 end
 
 return Nut

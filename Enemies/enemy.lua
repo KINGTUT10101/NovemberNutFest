@@ -15,13 +15,12 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.speed = 125
     enemy.dead = false
     enemy.damage = 5
-    enemy.strength = 30 -- knockback strength
     enemy.type = type
 
     -- Each enemy will return their init function
     local init
     if type == "genericEnemy" then
-        init = require("enemies/genericEnemy")
+        init = require("Enemies/genericEnemy")
     else
         error(type + "is not a type.")
     end
@@ -80,7 +79,12 @@ function EnemyManager.spawnEnemy(x, y, type)
         end
 
         -- Damaged by nuts
-        -- TODO
+        for i, p in pairs(projectiles) do
+            if enemy:collisionCheck(p.x, p.y, 6, 6) then
+                enemy:hit(p.damage, p.knockback, p.velX, p.velY)
+                table.remove(projectiles, i)
+            end
+        end
 
         -- Touch Attack
         if Player:collisionCheck(self.x, self.y, self.width, self.height) then
@@ -105,24 +109,75 @@ function EnemyManager.spawnEnemy(x, y, type)
         end
     end
 
+    function enemy:collisionCheck(x, y, width, height)
+        return
+        self.x < x + width and
+        self.x + self.width > x and
+        self.y < y + height and
+        self.y + self.height > y
+    end
+
     function enemy:kill()
         self.dead = true
-        self.healht = 0
+        self.health = 0
+    end
+
+    -- Something hitting the enemy
+    function enemy:hit(damage, strength, velX, velY)
+        
+        self.health = self.health - damage
+
+        local magnitude = math.sqrt(velX * velX + velY * velY)
+    
+        if magnitude > 0 then
+            local dirX = velX / magnitude
+            local dirY = velY / magnitude
+    
+            if dirX < 0 then
+                self:knockback(strength * math.abs(dirX), "left")
+            elseif dirX > 0 then
+                self:knockback(strength * math.abs(dirX), "right")
+            end
+    
+            if dirY < 0 then
+                self:knockback(strength * math.abs(dirY), "up")
+            elseif dirY > 0 then
+                self:knockback(strength * math.abs(dirY), "down")
+            end
+        end
+    end
+
+    function enemy:knockback(strength, direction)
+    
+        if direction == "up" then
+            self.velY = -strength
+        elseif direction == "down" then
+            self.velY = strength
+        elseif direction == "left" then
+            self.velX = -strength
+        elseif direction == "right" then
+            self.velX = strength
+        end
     end
 
     table.insert(Enemies, enemy)
 end
 
 
+
 function EnemyManager.updateEnemies(dt)
-    for i, e in ipairs(Enemies) do
+    for i, e in pairs(Enemies) do
         e:genericUpdate(dt)
         e:update(dt)
+
+        if e.dead then
+            table.remove(Enemies, i)
+        end
     end
 end
 
 function EnemyManager.drawEnemies()
-    for i, e in ipairs(Enemies) do
+    for i, e in pairs(Enemies) do
         e:draw()
     end
 end
