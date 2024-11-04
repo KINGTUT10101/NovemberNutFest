@@ -18,10 +18,11 @@ function projectileManager:update(dt)
         projectile.rotation = projectile.rotation + 3
 
         -- Delete the projectiles after their range comes up
-        if projectile.range <= 0 then
-            table.remove(Projectiles, i)
+        if projectile.timer >= projectile.range then
+            Projectiles[i] = nil
+        else
+            projectile.timer = projectile.timer + dt
         end
-        projectile.range = projectile.range - 1
     end
 
 end
@@ -50,7 +51,10 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     projectile.velY = directionY * (projectile.projVelocity*200)
 
     -- The range needs to scale with the velocity
-    projectile.range = (projectile.range * projectile.projVelocity)*5
+    projectile.range = (projectile.range * projectile.projVelocity)/12
+
+    -- Will accumulate time with delta time
+    projectile.timer = 0
 
     -- Add it into the on screen projectiles
     table.insert(Projectiles, projectile)

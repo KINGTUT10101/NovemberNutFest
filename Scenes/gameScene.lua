@@ -19,6 +19,7 @@ function thisScene:load (...)
 
     -- Spawn enemy test
     EnemyManager.spawnEnemy(100, 100, "genericEnemy")
+    EnemyManager.spawnEnemy(900, 600, "genericEnemy")
 end
 
 function thisScene:delete (...)
@@ -32,13 +33,13 @@ function thisScene:update (dt)
     Gun:update()
     ProjectileManager:update(dt)
     EnemyManager.updateEnemies(dt)
-    hitmarkerManager:update()
+    hitmarkerManager:update(dt)
 end
 
 function thisScene:draw ()
     -- Draw Entities
     EnemyManager.drawEnemies()
-    Player.draw()
+    Player:draw()
     Gun:draw()
     ProjectileManager:draw()
     hitmarkerManager:draw()

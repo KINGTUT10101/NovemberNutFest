@@ -17,6 +17,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.speed = 125
     enemy.dead = false
     enemy.damage = 5
+    enemy.beingKnockedBack = false -- When true the enemy won't go after the player
     enemy.type = type
 
     -- Each enemy will return their init function
@@ -33,21 +34,27 @@ function EnemyManager.spawnEnemy(x, y, type)
         local dtSpeed = self.speed*dt
         local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
-        -- Move towards the player
-        if math.abs(self.x - Player.x) > threshold then
-            if self.x < Player.x then
-                self.velX = self.velX + dtSpeed
-            end
-            if self.x > Player.x then
-                self.velX = self.velX - dtSpeed
-            end
+        if self.beingKnockedBack and self.velX == 0 and self.velY == 0 then
+            self.beingKnockedBack = false
         end
-        if math.abs(self.y - Player.y) > threshold then
-            if self.y < Player.y then
-                self.velY = self.velY + dtSpeed
+
+        -- Move towards the player
+        if not self.beingKnockedBack then
+            if math.abs(self.x - Player.x) > threshold then
+                if self.x < Player.x then
+                    self.velX = self.velX + dtSpeed
+                end
+                if self.x > Player.x then
+                    self.velX = self.velX - dtSpeed
+                end
             end
-            if self.y > Player.y then
-                self.velY = self.velY - dtSpeed
+            if math.abs(self.y - Player.y) > threshold then
+                if self.y < Player.y then
+                    self.velY = self.velY + dtSpeed
+                end
+                if self.y > Player.y then
+                    self.velY = self.velY - dtSpeed
+                end
             end
         end
 
@@ -84,7 +91,7 @@ function EnemyManager.spawnEnemy(x, y, type)
         for i, p in pairs(Projectiles) do
             if enemy:collisionCheck(p.x, p.y, 6, 6) then
                 enemy:hit(p.damage, p.knockback, p.velX, p.velY)
-                table.remove(Projectiles, i)
+                Projectiles[i] = nil
             end
         end
 
@@ -99,17 +106,6 @@ function EnemyManager.spawnEnemy(x, y, type)
         end
     end
 
-    function enemy:knockback(strength, direction)
-        if direction == "left" then
-            self.velX = self.velX - strength
-        elseif direction == "right" then
-            self.velX = self.velX + strength
-        elseif direction == "up" then
-            self.velY = self.velY - strength
-        elseif direction == "down" then
-            self.velY = self.velY + strength
-        end
-    end
 
     function enemy:collisionCheck(x, y, width, height)
         return
@@ -129,7 +125,7 @@ function EnemyManager.spawnEnemy(x, y, type)
 
         self.health = self.health - damage
 
-        hitmarkerManager:new(damage, self.y+self.height, self.x+(self.width/2), self.y)
+        hitmarkerManager:new(damage, self.x+(self.width/2), self.y)
 
         local magnitude = math.sqrt(velX * velX + velY * velY)
     
@@ -162,6 +158,7 @@ function EnemyManager.spawnEnemy(x, y, type)
         elseif direction == "right" then
             self.velX = strength
         end
+        enemy.beingKnockedBack = true
     end
 
     table.insert(Enemies, enemy)
@@ -175,7 +172,7 @@ function EnemyManager.updateEnemies(dt)
         e:update(dt)
 
         if e.dead then
-            table.remove(Enemies, i)
+            Enemies[i] = nil
         end
     end
 end
