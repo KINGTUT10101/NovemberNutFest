@@ -1,6 +1,7 @@
 -- Defines the biomes used in the map
 -- ATTRIBUTES:
--- heat: Defines how hot/cold the biome is, which affects crop growth. 0 is neutral. +-5(?) is max/min
+-- weight: Defines how likely the biome is to appear in world generation
+-- temp: Defines how hot/cold the biome is, which affects crop growth. 0 is neutral. +-5(?) is max/min
 -- fertility: Scales how fast plants grow in the soil. 1 is 100%, aka no scaling
 -- radiation: Defines how much additional radiation the biome has
 -- sizeMean: Defines the average size of the biome
@@ -10,11 +11,11 @@
 -- buildables: List of buildables objects/probability pairs, placed into tables
 local biomes = {
     default = {
-        heat = 0,
+        weight = 0,
+        temp = 0,
         fertility = 0,
         radiation = 0,
-        sizeMean = 50,
-        sizeVarition = 1,
+        size = 1,
         groundTiles = {
 
         },
@@ -28,11 +29,11 @@ local biomes = {
         }
     },
     plains = {
-        heat = 0,
+        weight = 0.75,
+        temp = 0,
         fertility = 1,
         radiation = 0,
-        sizeMean = 50,
-        sizeVarition = 1,
+        size = 0.85,
         groundTiles = {
             -- Ex: grassTileImage1
         },
@@ -46,11 +47,11 @@ local biomes = {
         }
     },
     desert = {
-        heat = 3,
+        weight = 0.75,
+        temp = 2,
         fertility = 0.5,
         radiation = 0.1,
-        sizeMean = 50,
-        sizeVarition = 1,
+        size = 1,
         groundTiles = {
 
         },

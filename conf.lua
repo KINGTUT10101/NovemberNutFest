@@ -4,4 +4,5 @@ function love.conf (t)
     t.window.height = 720
     t.window.title = "November NUT Fest"
     t.window.icon = "Graphics/windowIcon.png"
+    t.window.display = 3
 end

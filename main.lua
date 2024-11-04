@@ -1,3 +1,6 @@
+-- Set RNG seed
+math.randomseed (os.time ())
+
 -- Loads the libraries
 local push = require ("Libraries.push")
 local sceneMan = require ("Libraries.sceneMan")
@@ -29,6 +32,12 @@ function love.load ()
 
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {gameWidth, gameHeight}
+
+    -- Set up scenes and SceneMan
+    sceneMan:newScene ("noiseTest", require ("Scenes.noiseTest"))
+    sceneMan:newScene ("mapGenerationTest", require ("Scenes.mapGenerationTest"))
+
+    sceneMan:push ("mapGenerationTest")
 end
 
 function love.update (dt)
@@ -36,8 +45,8 @@ function love.update (dt)
     sceneMan:event ("update", dt)
 
     -- Update Entities
-    Player:update(dt)
-    EnemyManager.updateEnemies(dt)
+    -- Player:update(dt)
+    -- EnemyManager.updateEnemies(dt)
 
     lovelyToasts.update(dt)
 end
@@ -48,8 +57,8 @@ function love.draw ()
         love.graphics.scale(Scale, Scale)
 
         -- Draw Entities
-        EnemyManager.drawEnemies()
-        Player.draw()
+        -- EnemyManager.drawEnemies()
+        -- Player.draw()
 
         tux.callbacks.draw ()
         sceneMan:event ("lateDraw")
@@ -73,11 +82,13 @@ function love.keypressed (key, scancode, isrepeat)
     end
 
     -- Print nut info
-    print ("NEW NUT OBJECT")
-    for key, value in pairs (nutObj) do
-        print (key, value)
+    if key == "1" or key == "2" or key == "3" then
+        print ("NEW NUT OBJECT")
+        for key, value in pairs (nutObj) do
+            print (key, value)
+        end
+        print ()
     end
-    print ()
 end
 
 function love.textinput (text)
