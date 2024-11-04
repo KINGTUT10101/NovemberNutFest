@@ -5,6 +5,7 @@ local EnemyManager = require("Enemies/enemy")
 local Nut = require ("Core.Nut")
 local Gun = require("gun")
 local ProjectileManager = require("projectile")
+local hitmarkerManager = require("hitmarker")
 
 
 function thisScene:load (...)
@@ -31,6 +32,7 @@ function thisScene:update (dt)
     Gun:update()
     ProjectileManager:update(dt)
     EnemyManager.updateEnemies(dt)
+    hitmarkerManager:update()
 end
 
 function thisScene:draw ()
@@ -39,6 +41,7 @@ function thisScene:draw ()
     Player.draw()
     Gun:draw()
     ProjectileManager:draw()
+    hitmarkerManager:draw()
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)

@@ -1,3 +1,5 @@
+local hitmarkerManager = require "hitmarker"
+
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
 
@@ -79,10 +81,10 @@ function EnemyManager.spawnEnemy(x, y, type)
         end
 
         -- Damaged by nuts
-        for i, p in pairs(projectiles) do
+        for i, p in pairs(Projectiles) do
             if enemy:collisionCheck(p.x, p.y, 6, 6) then
                 enemy:hit(p.damage, p.knockback, p.velX, p.velY)
-                table.remove(projectiles, i)
+                table.remove(Projectiles, i)
             end
         end
 
@@ -124,8 +126,10 @@ function EnemyManager.spawnEnemy(x, y, type)
 
     -- Something hitting the enemy
     function enemy:hit(damage, strength, velX, velY)
-        
+
         self.health = self.health - damage
+
+        hitmarkerManager:new(damage, self.y+self.height, self.x+(self.width/2), self.y)
 
         local magnitude = math.sqrt(velX * velX + velY * velY)
     

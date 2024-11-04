@@ -1,17 +1,17 @@
-projectiles = {}
+Projectiles = {}
 local projectileManager = {}
 
 
 function projectileManager:draw()
 
-    for i, projectile in pairs(projectiles) do
+    for i, projectile in pairs(Projectiles) do
         love.graphics.draw(SpriteSheets.nuts, projectile.x, projectile.y, projectile.rotation, 1, 1, 3, 3)
     end
 end
 
 function projectileManager:update(dt)
 
-    for i, projectile in pairs(projectiles) do
+    for i, projectile in pairs(Projectiles) do
         -- Move the projectiles
         projectile.x = projectile.x + (projectile.velX*dt)
         projectile.y = projectile.y + (projectile.velY*dt)
@@ -19,7 +19,7 @@ function projectileManager:update(dt)
 
         -- Delete the projectiles after their range comes up
         if projectile.range <= 0 then
-            table.remove(projectiles, i)
+            table.remove(Projectiles, i)
         end
         projectile.range = projectile.range - 1
     end
@@ -53,7 +53,7 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     projectile.range = (projectile.range * projectile.projVelocity)*5
 
     -- Add it into the on screen projectiles
-    table.insert(projectiles, projectile)
+    table.insert(Projectiles, projectile)
 end
 
 return projectileManager
