@@ -1,4 +1,4 @@
-local hitmarkerManager = require "hitmarker"
+local hitmarkerManager = require "Managers.hitmarker"
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}

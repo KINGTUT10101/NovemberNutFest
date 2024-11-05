@@ -11,10 +11,10 @@ function projectileManager:draw()
     for _, projectile in pairs(Projectiles) do
 
         if projectile.type == "nut" then
-            love.graphics.draw(SpriteSheets.nuts, projectile.x, projectile.y, projectile.rotation, 1, 1, 3, 3)
+            love.graphics.draw(SpriteSheets.nuts, projectile.x, projectile.y, projectile.rotation, 1, 1, 3, 3) -- all nuts are 6 high and wide
         elseif projectile.type == "throwable" then
             if projectile.object == "nut oil" then
-                love.graphics.draw(SpriteSheets.nutOil, projectile.x, projectile.y, projectile.rotation, 1, 1, 3, 3)
+                love.graphics.draw(SpriteSheets.nutOil, projectile.x, projectile.y, projectile.rotation, 1, 1, projectile.width/2, projectile.height/2)
             elseif projectile.object == "nut butter" then
                 
             end
@@ -40,8 +40,7 @@ function projectileManager:update(dt)
             end
         -- Throwables
         elseif projectile.type == "throwable" then
-            if projectile.x >= projectile.endX+2 and projectile.x <= projectile.endX-2
-            and projectile.y >= projectile.endY+2 and projectile.y <= projectile.endY-2 then
+            if math.abs(projectile.x - projectile.endX) <= 3 and math.abs(projectile.y - projectile.endY) <= 2 then
                 print("collision")
                 projectile:onCollision(projectile.endX, projectile.endY)
                 Projectiles[i] = nil
@@ -77,7 +76,7 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     if projectile.type == "nut" then
 
         -- The range needs to scale with the velocity
-        projectile.range = (projectile.range * projectile.projVelocity)/12
+        projectile.range = (distance/projectile.projVelocity)/80
         
         -- Will accumulate time with delta time
         projectile.timer = 0

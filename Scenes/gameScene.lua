@@ -4,9 +4,9 @@ local Player = require("player")
 local EnemyManager = require("Enemies/enemy")
 local Nut = require ("Core.Nut")
 local Gun = require("gun")
-local ProjectileManager = require("projectile")
-local hitmarkerManager = require("hitmarker")
-local itemManager = require("item")
+local ProjectileManager = require("Managers.projectile")
+local hitmarkerManager = require("Managers.hitmarker")
+local itemManager = require("Managers.item")
 
 
 function thisScene:load (...)

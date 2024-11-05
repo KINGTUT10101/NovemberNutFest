@@ -3,7 +3,7 @@ local numSections = 9
 Throwables = {}
 Consumables = {}
 
-local itemManager = require("item")
+local itemManager = require("Managers.item")
 
 local inventoryHandler = {
     currentStorage = 0,

@@ -3,8 +3,10 @@ Items = {} -- list of items
 
 local throwables = require("Data.throwables")
 local consumables = require("Data.consumables")
-local projectileManager = require("projectile")
+local projectileManager = require("Managers.projectile")
 local copyTable = require("Helpers/copyTable")
+
+local rightPressed = false -- Has the right mouse button been pressed?
 
 function itemManager:newThrowable(object)
 
@@ -37,10 +39,12 @@ end
 -- This will probally be reduntant later. It's just to test throwing throwables and consuming consumables
 function itemManager:update()
 
-    if love.mouse.isDown(2) and #Throwables > 0 then
+    if love.mouse.isDown(2) and #Throwables > 0 and not rightPressed then
         projectileManager:add(Player.x+(Player.width/2), Player.y+(Player.height/2), love.mouse.getX()/1.333, love.mouse.getY()/1.333, Throwables[1])
         table.remove(Throwables, 1)
+        rightPressed = false
     end
+    rightPressed = love.mouse.isDown(2)
 end
 
 return itemManager
