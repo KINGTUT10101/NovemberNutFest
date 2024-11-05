@@ -1,11 +1,24 @@
 Projectiles = {}
 local projectileManager = {}
 
+function projectileManager:load()
+    SpriteSheets.nutOil = love.graphics.newImage("Graphics/nutOil.png")
+    SpriteSheets.nutOil:setFilter("nearest", "nearest")
+end
 
 function projectileManager:draw()
 
-    for i, projectile in pairs(Projectiles) do
-        love.graphics.draw(SpriteSheets.nuts, projectile.x, projectile.y, projectile.rotation, 1, 1, 3, 3)
+    for _, projectile in pairs(Projectiles) do
+
+        if projectile.type == "nut" then
+            love.graphics.draw(SpriteSheets.nuts, projectile.x, projectile.y, projectile.rotation, 1, 1, 3, 3)
+        elseif projectile.type == "throwable" then
+            if projectile.object == "nut oil" then
+                love.graphics.draw(SpriteSheets.nutOil, projectile.x, projectile.y, projectile.rotation, 1, 1, 3, 3)
+            elseif projectile.object == "nut butter" then
+                
+            end
+        end
     end
 end
 
@@ -17,11 +30,22 @@ function projectileManager:update(dt)
         projectile.y = projectile.y + (projectile.velY*dt)
         projectile.rotation = projectile.rotation + 3
 
-        -- Delete the projectiles after their range comes up
-        if projectile.timer >= projectile.range then
-            Projectiles[i] = nil
-        else
-            projectile.timer = projectile.timer + dt
+        -- Nuts
+        if projectile.type == "nut" then
+            -- Delete the projectiles after their range comes up
+            if projectile.timer >= projectile.range then
+                Projectiles[i] = nil
+            else
+                projectile.timer = projectile.timer + dt
+            end
+        -- Throwables
+        elseif projectile.type == "throwable" then
+            if projectile.x >= projectile.endX+2 and projectile.x <= projectile.endX-2
+            and projectile.y >= projectile.endY+2 and projectile.y <= projectile.endY-2 then
+                print("collision")
+                projectile:onCollision(projectile.endX, projectile.endY)
+                Projectiles[i] = nil
+            end
         end
     end
 
@@ -37,7 +61,7 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     projectile.y = startY
     -- Get the difference between the starting and ending point
     local dx = endX - startX
-    local dy = (endY - startY)
+    local dy = endY - startY
 
     -- Get the distance and normalize the direction
     local distance = math.sqrt((dx*dx) + (dy*dy))
@@ -47,14 +71,20 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     local directionY = dy / distance
 
     -- Scale the direction by the projectile speed
-    projectile.velX = directionX * (projectile.projVelocity*200) -- Delta time slows it down
-    projectile.velY = directionY * (projectile.projVelocity*200)
+    projectile.velX = directionX * (projectile.projVelocity*65) -- Delta time slows it down
+    projectile.velY = directionY * (projectile.projVelocity*65)
 
-    -- The range needs to scale with the velocity
-    projectile.range = (projectile.range * projectile.projVelocity)/12
+    if projectile.type == "nut" then
 
-    -- Will accumulate time with delta time
-    projectile.timer = 0
+        -- The range needs to scale with the velocity
+        projectile.range = (projectile.range * projectile.projVelocity)/12
+        
+        -- Will accumulate time with delta time
+        projectile.timer = 0
+    elseif projectile.type == "throwable" then
+        projectile.endX = endX
+        projectile.endY = endY
+    end
 
     -- Add it into the on screen projectiles
     table.insert(Projectiles, projectile)

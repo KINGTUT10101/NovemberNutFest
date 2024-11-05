@@ -58,6 +58,29 @@ function EnemyManager.spawnEnemy(x, y, type)
             end
         end
 
+        -- Stopping if another enemy is next to it
+        -- TODO ** Spacial hashing :)
+        for i, e in pairs(Enemies) do
+            if Enemies[i] ~= self then
+                if e:collisionCheck(self.x+self.velX, self.y, self.width, self.height) then
+                    if self.velX > 0 then
+                        self.x = e.x-self.width
+                    elseif self.x < 0 then
+                        self.x = e.x+e.width
+                    end
+                    self.velX = 0
+                end
+                if e:collisionCheck(self.x, self.y+self.velY, self.width, self.height) then
+                    if self.velY > 0 then
+                        self.y = e.y-self.height
+                    elseif self.y < 0 then
+                        self.y = e.y+e.height
+                    end
+                    self.velY = 0
+                end
+            end
+        end
+
         -- Movement based on velocity
         if self.velX ~= 0 and self.velY ~= 0 then
             self.x = self.x + (self.velX/1.44)
@@ -89,7 +112,7 @@ function EnemyManager.spawnEnemy(x, y, type)
 
         -- Damaged by nuts
         for i, p in pairs(Projectiles) do
-            if enemy:collisionCheck(p.x, p.y, 6, 6) then
+            if p.type == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
                 enemy:hit(p.damage, p.knockback, p.velX, p.velY)
                 Projectiles[i] = nil
             end

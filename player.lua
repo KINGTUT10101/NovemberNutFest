@@ -122,6 +122,7 @@ function Player:draw()
         else
             love.graphics.setColor(1, 1, 1, 0.85)
             love.graphics.draw(SpriteSheets.Player, self.x, self.y)
+            love.graphics.setColor(1, 1, 1, 1)
         end
     end
 end
