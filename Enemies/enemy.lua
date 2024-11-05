@@ -111,10 +111,12 @@ function EnemyManager.spawnEnemy(x, y, type)
         end
 
         -- Damaged by nuts
-        for i, p in pairs(Projectiles) do
-            if p.type == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
-                enemy:hit(p.damage, p.knockback, p.velX, p.velY)
-                Projectiles[i] = nil
+        for i = #Projectiles, 1, -1 do -- Is in reverse to stop the table from becoming sparse
+            if Projectiles[i] ~= nil then
+                if Projectiles[i].type == "nut" and enemy:collisionCheck(Projectiles[i].x, Projectiles[i].y, 6, 6) then
+                    enemy:hit(Projectiles[i].damage, Projectiles[i].knockback, Projectiles[i].velX, Projectiles[i].velY)
+                    table.remove(Projectiles, i)
+                end
             end
         end
 

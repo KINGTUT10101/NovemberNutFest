@@ -7,6 +7,7 @@ throwables.nutOil = {
     object = "nut oil",
     width = 6,
     height = 12,
+    sprite = love.graphics.newImage("Graphics/nutOil.png")
 }
 
 function throwables.nutOil:onCollision(x, y)

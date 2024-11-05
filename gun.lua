@@ -49,8 +49,12 @@ function gun:update(dt)
     end
     -- TEST ** adds nut oil into the inventory
     if love.keyboard.isDown("t") then
-       inventoryHandler:addThrowable("nut oil") 
+       inventoryHandler:addThrowable("nut oil")
     end
+    -- TEST ** adds cashew apples into the inventory
+    if love.keyboard.isDown("y") then
+        inventoryHandler:addConsumeable("cashew apple")
+     end
 end
 
 function gun:shoot(x, y)

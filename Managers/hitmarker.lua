@@ -32,10 +32,12 @@ end
 
 function hitmarkerManager:update(dt)
 
-    for i, h in pairs(hitmarkers) do
+    for i = #hitmarkers, 1, -1 do
+
+        local h = hitmarkers[i]
 
         if h.timer >= h.maxTimer then
-           hitmarkers[i] = nil
+           table.remove(hitmarkers, i)
         end
 
         h.x = h.x + h.velX

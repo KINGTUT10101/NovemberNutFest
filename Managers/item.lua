@@ -6,7 +6,8 @@ local consumables = require("Data.consumables")
 local projectileManager = require("Managers.projectile")
 local copyTable = require("Helpers/copyTable")
 
-local rightPressed = false -- Has the right mouse button been pressed?
+local ePressed = false -- Has e been pressed?
+local hPressed = false -- Has h been pressed?
 
 function itemManager:newThrowable(object)
 
@@ -39,12 +40,22 @@ end
 -- This will probally be reduntant later. It's just to test throwing throwables and consuming consumables
 function itemManager:update()
 
-    if love.mouse.isDown(2) and #Throwables > 0 and not rightPressed then
+    -- Throwables
+    if love.keyboard.isDown("e") and #Throwables > 0 and not ePressed then
         projectileManager:add(Player.x+(Player.width/2), Player.y+(Player.height/2), love.mouse.getX()/1.333, love.mouse.getY()/1.333, Throwables[1])
         table.remove(Throwables, 1)
-        rightPressed = false
+        ePressed = false
     end
-    rightPressed = love.mouse.isDown(2)
+    ePressed = love.keyboard.isDown("e")
+
+    -- Consumables
+    if love.keyboard.isDown("h") and #Consumables > 0 and not hPressed then
+        print("Consume")
+        Consumables[1]:onConsumption()
+        table.remove(Consumables, 1)
+        hPressed = false
+    end
+    hPressed = love.keyboard.isDown("h")
 end
 
 return itemManager

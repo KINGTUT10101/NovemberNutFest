@@ -2,48 +2,45 @@ Projectiles = {}
 local projectileManager = {}
 
 function projectileManager:load()
-    SpriteSheets.nutOil = love.graphics.newImage("Graphics/nutOil.png")
-    SpriteSheets.nutOil:setFilter("nearest", "nearest")
+
 end
 
 function projectileManager:draw()
 
-    for _, projectile in pairs(Projectiles) do
+    for _, p in pairs(Projectiles) do
 
-        if projectile.type == "nut" then
-            love.graphics.draw(SpriteSheets.nuts, projectile.x, projectile.y, projectile.rotation, 1, 1, 3, 3) -- all nuts are 6 high and wide
-        elseif projectile.type == "throwable" then
-            if projectile.object == "nut oil" then
-                love.graphics.draw(SpriteSheets.nutOil, projectile.x, projectile.y, projectile.rotation, 1, 1, projectile.width/2, projectile.height/2)
-            elseif projectile.object == "nut butter" then
-                
-            end
+        if p.type == "nut" then
+            love.graphics.draw(SpriteSheets.nuts, p.x, p.y, p.rotation, 1, 1, 3, 3) -- all nuts are 6 high and wide
+        elseif p.type == "throwable" then
+            love.graphics.draw(p.sprite, p.x, p.y, p.rotation, 1, 1, p.width/2, p.height/2)
         end
     end
 end
 
 function projectileManager:update(dt)
 
-    for i, projectile in pairs(Projectiles) do
+    for i=#Projectiles, 1, -1 do
+
+        local p = Projectiles[i]
+
         -- Move the projectiles
-        projectile.x = projectile.x + (projectile.velX*dt)
-        projectile.y = projectile.y + (projectile.velY*dt)
-        projectile.rotation = projectile.rotation + 3
+        p.x = p.x + (p.velX*dt)
+        p.y = p.y + (p.velY*dt)
+        p.rotation = p.rotation + 3
 
         -- Nuts
-        if projectile.type == "nut" then
+        if p.type == "nut" then
             -- Delete the projectiles after their range comes up
-            if projectile.timer >= projectile.range then
-                Projectiles[i] = nil
+            if p.timer >= p.range then
+                table.remove(Projectiles, i)
             else
-                projectile.timer = projectile.timer + dt
+                p.timer = p.timer + dt
             end
         -- Throwables
-        elseif projectile.type == "throwable" then
-            if math.abs(projectile.x - projectile.endX) <= 3 and math.abs(projectile.y - projectile.endY) <= 2 then
-                print("collision")
-                projectile:onCollision(projectile.endX, projectile.endY)
-                Projectiles[i] = nil
+        elseif p.type == "throwable" then
+            if math.abs(p.x - p.endX) <= 3 and math.abs(p.y - p.endY) <= 2 then
+                p:onCollision(p.endX, p.endY)
+                table.remove(Projectiles, i)
             end
         end
     end
@@ -83,6 +80,9 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     elseif projectile.type == "throwable" then
         projectile.endX = endX
         projectile.endY = endY
+
+        -- Remove anti aliasing, yes I have to do this.
+        projectile.sprite:setFilter("nearest", "nearest")
     end
 
     -- Add it into the on screen projectiles
