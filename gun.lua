@@ -2,17 +2,17 @@ local gun = {}
 
 local nut = require("Core.Nut")
 local inventoryHandler = require("Core.inventoryHandler")
-local ProjectileManager = require("projectile")
+local ProjectileManager = require("Managers.projectile")
 
 gun.mag = {} -- mag loads itself with the active inventory slot
 gun.magSize = 50
-gun.cooldownFrames = .1*60 -- half a second
-gun.cooldownTimer = 0
+gun.cooldownMax = .1 -- in seconds
+gun.cooldownTimer = gun.cooldownMax
 gun.width = 16
 gun.height = 8
 gun.flipped = 1 -- -1 will flip it
 
-function gun:update()
+function gun:update(dt)
 
     -- Set the gun's position based on the player
     gun.x = Player.x+(Player.width-5)
@@ -28,8 +28,8 @@ function gun:update()
     end
 
     -- Lower the cooldown timer
-    if self.cooldownTimer > 0 then
-        self.cooldownTimer = self.cooldownTimer - 1
+    if self.cooldownTimer < self.cooldownMax then
+        self.cooldownTimer = self.cooldownTimer + dt
     end
 
     -- Fire the gun
@@ -47,11 +47,19 @@ function gun:update()
     if love.keyboard.isDown("space") then
         inventoryHandler:addNut(nut:new())
     end
+    -- TEST ** adds nut oil into the inventory
+    if love.keyboard.isDown("t") then
+       inventoryHandler:addThrowable("nut oil")
+    end
+    -- TEST ** adds cashew apples into the inventory
+    if love.keyboard.isDown("y") then
+        inventoryHandler:addConsumeable("cashew apple")
+     end
 end
 
 function gun:shoot(x, y)
 
-    if #self.mag > 0 and self.cooldownTimer <= 0 then
+    if #self.mag > 0 and self.cooldownTimer >= self.cooldownMax then
 
         -- Find where the end of the gun is
         local endX = gun.x + math.cos(gun.rotation) * gun.width
@@ -59,7 +67,7 @@ function gun:shoot(x, y)
 
         -- Shoot the nut
         ProjectileManager:add(endX, endY, x, y, gun.mag[1])
-        self.cooldownTimer = self.cooldownFrames
+        self.cooldownTimer = 0
         
         -- Get rid of the nut in the mag
         table.remove(gun.mag, 1)

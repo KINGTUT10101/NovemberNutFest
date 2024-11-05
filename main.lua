@@ -17,7 +17,7 @@ local Player = require("player")
 local EnemyManager = require("Enemies/enemy")
 local Nut = require ("Core.Nut")
 local Gun = require("gun")
-local ProjectileManager = require("projectile")
+local ProjectileManager = require("Managers.projectile")
 
 function love.load ()
     -- Set up Push

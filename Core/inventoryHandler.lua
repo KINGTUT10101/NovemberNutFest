@@ -1,5 +1,10 @@
 local numSections = 9
 
+Throwables = {}
+Consumables = {}
+
+local itemManager = require("Managers.item")
+
 local inventoryHandler = {
     currentStorage = 0,
     maxStorage = 500,
@@ -79,5 +84,16 @@ end
 -- function inventoryHandler:swapNut (oldSection, oldIndex, newSection, newIndex)
     
 -- end
+
+-- Items
+function inventoryHandler:addThrowable(object)
+
+    table.insert(Throwables, itemManager:newThrowable(object))
+end
+
+function inventoryHandler:addConsumeable(object)
+
+    table.insert(Consumables, itemManager:newConsumable(object))
+end
 
 return inventoryHandler
