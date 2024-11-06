@@ -23,9 +23,9 @@ local defaultTile = {
 local Tile = {} -- Tile class
 
 function Tile:new (ground, biome)
-    assert (ground ~= nil, "Ground graphic not provided")
+    -- assert (ground ~= nil, "Ground graphic not provided")
     assert (biomes[biome] ~= nil, "Provided biome does not correspond to any defined biomes")
-    
+
     local newObj = {
         ground = ground,
         biome = biome,

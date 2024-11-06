@@ -1,6 +1,12 @@
+local Tile = require ("Core.Tile")
 local biomes = require ("Data.biomes")
 local clamp = require ("Libraries.lume").clamp
 local mapToScale = require ("Helpers.mapToScale")
+
+-- NOTE: Assume a tile size of 64x64p when at 1x zoom
+
+local biomeScale = 75
+local buildScale = 1
 
 -- Temperature gradient
 local function stage1 (size)
@@ -93,46 +99,102 @@ local function stage3 (size, tempGrid, grid)
         biomeNoise[temp] = {}
     end
 
-    for id, biomeDef in pairs (biomes) do
+    -- Generate parameters for each biome's noise map
+    for biomeID, biomeDef in pairs (biomes) do
         local temp = biomeDef.temp
-        local sizeCoeff = biomeDef.size
-        sizeCoeff = size + math.random ()
+        local sizeCoeff = biomeDef.size --+ (math.random (-10, 10) / 100) * biomeDef.size
         sizeCoeff = clamp (sizeCoeff, 0.1, 1)
-        sizeCoeff = mapToScale (sizeCoeff, 0, 1, 0.02, 0.1)
+        sizeCoeff = mapToScale (sizeCoeff, 0, 1, 1 / biomeScale * 0.02, 1 / biomeScale * 0.1)
 
-        biomeNoise[temp][id] = {
+        biomeNoise[temp][biomeID] = {
             scaleCoeff = sizeCoeff,
             offset = math.random (1, 100000),
+            weight = biomeDef.weight,
         }
-
-        print ("===" .. id .. "===")
-        print ("Scale:", biomeNoise[temp][id].scaleCoeff)
-        print ("Offset:", biomeNoise[temp][id].offset)
-        print ()
     end
 
-    -- TEMP
-    local baseX = 10000 * love.math.random()
-	local baseY = 10000 * love.math.random()
+    -- Set tiles based on temperature and noise values
     for i = 1, size do
-        local firstPart = tempGrid[i]
+        local firstPart = {}
+        grid[i] = firstPart
+
+        local tempFirstPart = tempGrid[i]
 
         for j = 1, size do
-            -- y = 3x will create horizontally wide biomes
-            -- 0.1 = very small, 0.02 = very large
-            firstPart[j] = love.math.noise (0.01*i, 0.03*j)
+            -- Select biome based on weights
+            local temp = tempFirstPart[j]
+            local selectedBiome = "default"
+            local highestNoise = 0
+
+            for biomeID, biomeNoiseDef in pairs (biomeNoise[temp]) do
+                local noiseX = biomeNoiseDef.scaleCoeff * i + biomeNoiseDef.offset
+                local noiseY = 3 * biomeNoiseDef.scaleCoeff * j + biomeNoiseDef.offset
+                local noiseValue = love.math.noise (noiseX, noiseY) * biomeNoiseDef.weight
+                
+                if noiseValue > highestNoise then
+                    highestNoise = noiseValue
+                    selectedBiome = biomeID
+                end
+            end
+
+            -- Select a ground tile graphic
+            local groundTile = biomes[selectedBiome].groundTiles[math.random (1, #biomes[selectedBiome].groundTiles)]
+
+            -- Set tile
+            firstPart[j] = Tile:new (groundTile, selectedBiome)
         end
     end
 
-    return tempGrid
+    -- -- TEMP
+    -- local baseX = 10000 * love.math.random()
+	-- local baseY = 10000 * love.math.random()
+    -- for i = 1, size do
+    --     local firstPart = tempGrid[i]
+
+    --     for j = 1, size do
+    --         -- y = 3x will create horizontally wide biomes
+    --         -- 0.1 = very small, 0.02 = very large
+    --         firstPart[j] = love.math.noise (0.01*i, 0.03*j)
+    --     end
+    -- end
+
+    return grid
 end
 
-local function stage4 (grid)
+local function stage4 (size, grid)
+    local densityOffset = math.random (1, 100000)
 
-end
+    -- Generate parameters for each biome's noise map
+    local buildNoise = {}
 
-local function stage5 (grid)
+    for biomeID, biomeDef in pairs (biomes) do
+        for index, probPair in ipairs (biomeDef.buildables) do
+            local buildObj = probPair[1]
+            local weight = clamp (probPair[2], 0, 1)
+            
+            buildNoise[biomeID][index] = {
+                buildObj = buildObj,
+                offset = math.random (1, 100000),
+                weight = weight,
+            }
+        end
+    end
 
+    -- Place buildables based on noise values
+    for i = 1, size do
+        local firstPart = {}
+        grid[i] = firstPart
+
+        for j = 1, size do
+            local selectedBuild = nil
+            local highestNoise = 0
+
+            -- Set building
+            if selectedBuild ~= nil then
+
+            end
+        end
+    end
 end
 
 local function generateMap (size)
@@ -140,9 +202,10 @@ local function generateMap (size)
 
     local areaBoundaries, tempGrid = stage1(size)
     local tempGrid = stage2 (size, areaBoundaries, tempGrid)
-    stage3 (size, tempGrid, grid)
+    local grid = stage3 (size, tempGrid, grid)
+    local grid = stage4 (size, grid)
 
-    return tempGrid
+    return grid
 end
 
 return generateMap
