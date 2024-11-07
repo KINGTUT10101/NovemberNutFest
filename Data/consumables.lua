@@ -4,7 +4,10 @@ local consumables = {}
 consumables.cashewApple = {
     health = 15,
     type = "consumable",
-    object = "cashew apple"
+    object = "cashew apple",
+    sprite = love.graphics.newImage("Graphics/cashewApple.png"),
+    width = 8,
+    height = 8,
 }
 
 function consumables.cashewApple:onConsumption(player)

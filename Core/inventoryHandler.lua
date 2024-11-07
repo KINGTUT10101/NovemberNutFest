@@ -3,7 +3,6 @@ local numSections = 9
 Throwables = {}
 Consumables = {}
 
-local itemManager = require("Managers.item")
 
 local inventoryHandler = {
     currentStorage = 0,
@@ -86,14 +85,20 @@ end
 -- end
 
 -- Items
-function inventoryHandler:addThrowable(object)
+function inventoryHandler:addItem(object)
 
-    table.insert(Throwables, itemManager:newThrowable(object))
+    if object.type == "throwable" then
+        table.insert(Throwables, object)
+    elseif object.type == "consumable" then
+        table.insert(Consumables, object)
+    else
+        error(object.type .. " is ont a valid object type.")
+    end
 end
 
 function inventoryHandler:addConsumeable(object)
 
-    table.insert(Consumables, itemManager:newConsumable(object))
+    table.insert(Consumables, object)
 end
 
 return inventoryHandler

@@ -19,7 +19,7 @@ end
 
 function projectileManager:update(dt)
 
-    for i=#Projectiles, 1, -1 do
+    for i = #Projectiles, 1, -1 do
 
         local p = Projectiles[i]
 
@@ -73,7 +73,7 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     if projectile.type == "nut" then
 
         -- The range needs to scale with the velocity
-        projectile.range = (distance/projectile.projVelocity)/80
+        projectile.range = (projectile.range/projectile.projVelocity)/1.85
         
         -- Will accumulate time with delta time
         projectile.timer = 0
@@ -81,8 +81,6 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
         projectile.endX = endX
         projectile.endY = endY
 
-        -- Remove anti aliasing, yes I have to do this.
-        projectile.sprite:setFilter("nearest", "nearest")
     end
 
     -- Add it into the on screen projectiles

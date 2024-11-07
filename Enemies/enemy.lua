@@ -17,7 +17,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.speed = 125
     enemy.dead = false
     enemy.damage = 5
-    enemy.beingKnockedBack = false -- When true the enemy won't go after the player
+    enemy.stunned = false -- When true the enemy won't go after the player
     enemy.type = type
 
     -- Each enemy will return their init function
@@ -34,12 +34,12 @@ function EnemyManager.spawnEnemy(x, y, type)
         local dtSpeed = self.speed*dt
         local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
-        if self.beingKnockedBack and self.velX == 0 and self.velY == 0 then
-            self.beingKnockedBack = false
+        if self.stunned and self.velX == 0 and self.velY == 0 then
+            self.stunned = false
         end
 
         -- Move towards the player
-        if not self.beingKnockedBack then
+        if not self.stunned then
             if math.abs(self.x - Player.x) > threshold then
                 if self.x < Player.x then
                     self.velX = self.velX + dtSpeed
@@ -127,7 +127,7 @@ function EnemyManager.spawnEnemy(x, y, type)
 
         -- Death logic
         if self.health <= 0 then
-            self:kill()
+            self:genericKill()
         end
     end
 
@@ -140,9 +140,13 @@ function EnemyManager.spawnEnemy(x, y, type)
         self.y + self.height > y
     end
 
-    function enemy:kill()
+    function enemy:genericKill()
         self.dead = true
         self.health = 0
+
+        if self.kill ~= nil then
+            self:kill()
+        end
     end
 
     -- Something hitting the enemy
@@ -183,7 +187,7 @@ function EnemyManager.spawnEnemy(x, y, type)
         elseif direction == "right" then
             self.velX = strength
         end
-        enemy.beingKnockedBack = true
+        enemy.stunned = true
     end
 
     table.insert(Enemies, enemy)
