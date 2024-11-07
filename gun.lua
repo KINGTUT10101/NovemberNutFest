@@ -3,6 +3,7 @@ local gun = {}
 local nut = require("Core.Nut")
 local inventoryHandler = require("Core.inventoryHandler")
 local ProjectileManager = require("Managers.projectile")
+local ItemManager = require("Managers.item")
 
 gun.mag = {} -- mag loads itself with the active inventory slot
 gun.magSize = 50
@@ -49,11 +50,11 @@ function gun:update(dt)
     end
     -- TEST ** adds nut oil into the inventory
     if love.keyboard.isDown("t") then
-       inventoryHandler:addThrowable("nut oil")
+       inventoryHandler:addItem(ItemManager:newItem("nut oil"))
     end
     -- TEST ** adds cashew apples into the inventory
     if love.keyboard.isDown("y") then
-        inventoryHandler:addConsumeable("cashew apple")
+        inventoryHandler:addItem(ItemManager:newItem("cashew apple"))
      end
 end
 

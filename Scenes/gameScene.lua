@@ -6,7 +6,7 @@ local Nut = require ("Core.Nut")
 local Gun = require("gun")
 local ProjectileManager = require("Managers.projectile")
 local hitmarkerManager = require("Managers.hitmarker")
-local itemManager = require("Managers.item")
+local ItemManager = require("Managers.item")
 
 
 function thisScene:load (...)
@@ -22,7 +22,6 @@ function thisScene:load (...)
     -- Spawn enemy test
     EnemyManager.spawnEnemy(100, 100, "genericEnemy")
     EnemyManager.spawnEnemy(160, 100, "genericEnemy")
-    EnemyManager.spawnEnemy(900, 600, "genericEnemy")
 end
 
 function thisScene:delete (...)
@@ -33,7 +32,7 @@ end
 function thisScene:update (dt)
     -- Update Entities
     Player:update(dt)
-    itemManager.update(dt)
+    ItemManager.update(dt)
     Gun:update(dt)
     ProjectileManager:update(dt)
     EnemyManager.updateEnemies(dt)
@@ -45,6 +44,7 @@ function thisScene:draw ()
     EnemyManager.drawEnemies()
     Player:draw()
     Gun:draw()
+    ItemManager:draw()
     ProjectileManager:draw()
     hitmarkerManager:draw()
 end
