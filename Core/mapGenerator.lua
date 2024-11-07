@@ -190,18 +190,19 @@ local function stage4 (size, grid)
         for j = 1, size do
             local tile = firstPart[j]
             local buildNoiseBiome = buildNoise[tile.biome]
+            local biome = biomes[tile.biome]
 
-            if math.random () < biomes[tile.biome].buildableDensity and buildNoiseBiome ~= nil then
+            if math.random () < biome.buildableChance and buildNoiseBiome ~= nil then
                 local selectedBuild = nil
                 local highestNoise = 0
 
                 -- Find the winning buildable that will be selected
                 for index, noiseData in pairs (buildNoiseBiome) do
-                    local noiseX = 0.0003 * i + noiseData.offset
-                    local noiseY = 0.0003 * j + noiseData.offset
+                    local noiseX = 0.1 * i + noiseData.offset
+                    local noiseY = 0.1 * j + noiseData.offset
                     local noiseValue = love.math.noise (noiseX, noiseY) * noiseData.weight
 
-                    if noiseValue > highestNoise then
+                    if noiseValue > highestNoise and love.math.noise (noiseX, noiseY) > biome.buildableThreshold then
                         highestNoise = noiseValue
                         selectedBuild = noiseData.buildObj
                     end

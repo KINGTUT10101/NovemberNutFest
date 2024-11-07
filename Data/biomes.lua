@@ -27,7 +27,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -52,8 +52,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
-        buildableThreshold = 0.25,
+        buildableChance = 1,
+        buildableThreshold = 0.65,
         buildables = {
             {baseNuts.peanut, 1}
         }
@@ -73,7 +73,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -94,7 +94,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -119,7 +119,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -140,7 +140,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -165,7 +165,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -186,7 +186,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -207,7 +207,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -232,7 +232,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -253,7 +253,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -278,7 +278,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
@@ -299,7 +299,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 0.05,
+        buildableChance = 0.05,
         buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
