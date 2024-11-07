@@ -1,3 +1,5 @@
+local baseNuts = require ("Data.baseNuts")
+
 -- Defines the biomes used in the map
 -- ATTRIBUTES:
 -- weight: Defines how likely the biome is to appear in world generation
@@ -25,6 +27,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -49,8 +53,9 @@ local biomes = {
             fishRain = 0.005
         },
         buildableDensity = 1,
+        buildableThreshold = 0.25,
         buildables = {
-            -- Ex: {peanutObj, 0.05}
+            {baseNuts.peanut, 1}
         }
     },
     bloodDesert = {
@@ -68,7 +73,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -88,7 +94,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -112,7 +119,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -132,7 +140,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -156,7 +165,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -176,7 +186,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -196,7 +207,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -220,7 +232,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -240,7 +253,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -264,7 +278,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }
@@ -284,7 +299,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableDensity = 1,
+        buildableDensity = 0.05,
+        buildableThreshold = 0.25,
         buildables = {
             -- Ex: {peanutObj, 0.05}
         }

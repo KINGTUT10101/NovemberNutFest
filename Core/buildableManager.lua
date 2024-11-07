@@ -1,4 +1,5 @@
 local copyTable = require ("Helpers.copyTable")
+local setDefaults = require ("Helpers.setDefaults")
 
 local buildableManager = {
     tracker = {},
@@ -29,13 +30,11 @@ function buildableManager:create (id, classDef)
     local newClassDef = copyTable (classDef)
 
     -- Set defaults
-    setmetatable (newClassDef, {
-        __index = handleNilKey,
-    })
+    setDefaults (defaultClassDef, newClassDef)
+    newClassDef.id = id
 
     -- Validate class
-    assert (newClassDef.id ~= nil, "No ID was provided")
-    assert (newClassDef.frame ~= nil, "No frame was provided")
+    -- assert (newClassDef.frame ~= nil, "No frame was provided") -- TEMP: Uncomment later!!!
 
     self.tracker[id] = newClassDef
 
@@ -52,6 +51,14 @@ function buildableManager:get (id)
     assert (self.tracker[id] ~= nil, "Provided ID does not match any defined class")
 
     return self.tracker[id]
+end
+
+function buildableManager:generate (id)
+    assert (self.tracker[id] ~= nil, "Provided ID does not match any defined class")
+
+    local newObj = copyTable (self.tracker[id])
+
+    return newObj
 end
 
 return buildableManager
