@@ -17,13 +17,16 @@ gun.flipped = 1 -- -1 will flip it
 function gun:update(dt)
 
     -- Set the gun's position based on the player
-    gun.x = Player.x+(Player.width-5)
-    gun.y = Player.y+(Player.width/2)
+    gun.x = Player.relX+(Player.width-5)
+    gun.y = Player.relY+(Player.height/2)
+    -- The guns position relative to the screen
+    gun.camX = Player.camX+(Player.width-5)
+    gun.camY = Player.camY+(Player.height/2)
 
     -- Set the gun's rotation based on the cursor
-    gun.rotation =  math.atan2((love.mouse.getY()/1.333) - gun.y, (love.mouse.getX()/1.333) - gun.x)
+    gun.rotation =  math.atan2((love.mouse.getY()/1.333) - gun.camY, (love.mouse.getX()/1.333) - gun.camX)
 
-    if (love.mouse.getX()/1.333) < gun.x then
+    if (love.mouse.getX()/1.333) < gun.camX then
         gun.flipped = -1
     else
         gun.flipped = 1
@@ -37,7 +40,7 @@ function gun:update(dt)
     -- Fire the gun
     if love.mouse.isDown(1) then
         -- This takes account for the game size being different from the window's
-        gun:shoot(love.mouse.getX()/1.333, love.mouse.getY()/1.333)
+        gun:shoot((love.mouse.getX()/1.333)+Player.x, (love.mouse.getY()/1.333)+Player.y)
     end
 
     -- Reload the gun
@@ -67,13 +70,13 @@ function gun:shoot(x, y)
     if #self.mag > 0 and self.cooldownTimer >= self.cooldownMax then
 
         -- Find where the end of the gun is
-        local endX = gun.x + math.cos(gun.rotation) * gun.width
-        local endY = gun.y + math.sin(gun.rotation) * gun.width
+        local startX = gun.x + math.cos(gun.rotation) * gun.width
+        local startY = gun.y + math.sin(gun.rotation) * gun.width
 
         -- Shoot the nut
-        ProjectileManager:add(endX, endY, x, y, gun.mag[1])
+        ProjectileManager:add(startX, startY, x, y, gun.mag[1])
         self.cooldownTimer = 0
-        
+
         -- Get rid of the nut in the mag
         table.remove(gun.mag, 1)
     end
@@ -98,7 +101,7 @@ function gun:load()
 end
 
 function gun:draw()
-    love.graphics.draw(SpriteSheets.gun, gun.x, gun.y, gun.rotation, 1, gun.flipped, 0, gun.height/2)
+    love.graphics.draw(SpriteSheets.gun, self.camX, self.camY, gun.rotation, 1, gun.flipped, 0, gun.height/2)
 end
 
 return gun

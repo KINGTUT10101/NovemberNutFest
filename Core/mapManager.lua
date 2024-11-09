@@ -28,8 +28,8 @@ end
 -- Updates the map and its tiles
 -- The camera position basically defines where the player is in the map
 function mapManager:update (dt, camX, camY, camZoom)
-    self.cam.x = camX
-    self.cam.y = camY
+    self.cam.x = Player.relX
+    self.cam.y = Player.relY
     self.cam.zoom = camZoom
 
     -- TODO: Update buildable tiles from the active grid
@@ -52,8 +52,8 @@ function mapManager:draw()
             -- Remove the subtraction of startX/startY since screenToMap already accounts for camera position
             love.graphics.draw(
                 firstPart[j].ground,
-                (i - 1) * scaledTileSize - camX,
-                (j - 1) * scaledTileSize - camY,
+                (i - 1) * scaledTileSize - Player.relX,
+                (j - 1) * scaledTileSize - Player.relY,
                 nil,
                 zoom
             )

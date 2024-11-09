@@ -17,6 +17,14 @@ Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immu
 --Player.flashTimer = 0 -- The timer that dictates what flash your on based on framerate
 Player.dead = false
 
+-- Where the player is based on the camera's position
+Player.camX = (638/2)-(Player.width/2)
+Player.camY = (358/2)-(Player.height/2)
+
+-- Position with the center of the screen offset
+Player.relX = Player.x + Player.camX
+Player.relY = Player.y + Player.camY
+
 function Player.load()
 
     SpriteSheets.Player = love.graphics.newImage("Graphics/player.png")
@@ -85,6 +93,9 @@ function Player:update(dt)
     if self.velY >= -self.speed/3 or self.velY <= self.speed/3 then
         self.velY = 0
     end
+
+    self.relX = self.x + ((638/2)-(Player.width/2))
+    self.relY = self.y + ((358/2)-(Player.height/2))
 end
 
 function Player:kill()
@@ -96,10 +107,10 @@ end
 
 function Player:collisionCheck(x, y, width, height)
     return
-    self.x < x + width and
-    self.x + self.width > x and
-    self.y < y + height and
-    self.y + self.height > y
+    self.relX < x + width and
+    self.relX + self.width > x and
+    self.relY < y + height and
+    self.relY + self.height > y
 end
 
 -- Something hitting the player
@@ -118,10 +129,10 @@ end
 function Player:draw() 
     if not self.dead then
         if self.immunityTimer >= self.maxImmunityTimer then
-            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
+            love.graphics.draw(SpriteSheets.Player, self.camX, self.camY)
         else
             love.graphics.setColor(1, 1, 1, 0.85)
-            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
+            love.graphics.draw(SpriteSheets.Player, self.camX, self.camY)
             love.graphics.setColor(1, 1, 1, 1)
         end
     end

@@ -82,7 +82,7 @@ function ItemManager:draw()
     
     for i=#Items, 1, -1 do
         local item = Items[i]
-        love.graphics.draw(item.sprite, item.x, item.y)
+        love.graphics.draw(item.sprite, item.x-Player.x, item.y-Player.y)
     end
 end
 
