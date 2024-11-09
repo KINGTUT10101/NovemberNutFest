@@ -59,8 +59,6 @@ function mapManager:draw()
             )
         end
     end
-
-    print (math.max(startX, 1), math.min(endX, self.mapSize))
 end
 
 -- Plants a nut object at the specified tile
