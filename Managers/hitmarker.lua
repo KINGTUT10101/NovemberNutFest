@@ -9,7 +9,7 @@ function hitmarkerManager:new(value, x, y)
 
     hitmarker.x = x
     hitmarker.y = y
-    hitmarker.font = love.graphics.newFont("Fonts/PixelifySans.ttf", value*1.75) -- The size of the hitmarker scales with damage
+    hitmarker.font = love.graphics.newFont("Fonts/PixelifySans.ttf", --[[value--]]10*1.75) -- The size of the hitmarker scales with damage
 
     -- Set the velocity to shoot the hitmarker to the side
     hitmarker.velY = math.random(-7, -5)

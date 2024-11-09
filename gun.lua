@@ -4,10 +4,11 @@ local nut = require("Core.Nut")
 local inventoryHandler = require("Core.inventoryHandler")
 local ProjectileManager = require("Managers.projectile")
 local ItemManager = require("Managers.item")
+local baseNuts = require("Data.baseNuts")
 
 gun.mag = {} -- mag loads itself with the active inventory slot
 gun.magSize = 50
-gun.cooldownMax = .1 -- in seconds
+gun.cooldownMax = .2 -- in seconds
 gun.cooldownTimer = gun.cooldownMax
 gun.width = 16
 gun.height = 8
@@ -46,7 +47,10 @@ function gun:update(dt)
 
     -- TEST ** adds nut to section 1 of inventory
     if love.keyboard.isDown("space") then
-        inventoryHandler:addNut(nut:new())
+        inventoryHandler:addNut(nut:new(baseNuts.almond))
+    end
+    if love.keyboard.isDown("f") then
+        inventoryHandler:addNut(nut:new(baseNuts.candleNut))
     end
     -- TEST ** adds nut oil into the inventory
     if love.keyboard.isDown("t") then

@@ -8,20 +8,23 @@ local ProjectileManager = require("Managers.projectile")
 local hitmarkerManager = require("Managers.hitmarker")
 local ItemManager = require("Managers.item")
 
+-- Enemy Spawn Timer
+local spawnTimer = 0
+local maxSpawnTimer = 3
+
 
 function thisScene:load (...)
     sceneMan = ...
 
     -- Load Assets
     Player.load()
-    EnemyManager.loadSpriteSheets()
     ProjectileManager:load()
     Nut:load()
     Gun:load()
 
     -- Spawn enemy test
-    EnemyManager.spawnEnemy(100, 100, "genericEnemy")
-    EnemyManager.spawnEnemy(160, 100, "genericEnemy")
+    EnemyManager.spawnEnemy(100, 100, "generic enemy")
+    EnemyManager.spawnEnemy(160, 100, "generic enemy")
 end
 
 function thisScene:delete (...)
@@ -30,6 +33,14 @@ function thisScene:delete (...)
 end
 
 function thisScene:update (dt)
+
+    spawnTimer = spawnTimer + dt
+
+    if spawnTimer >= maxSpawnTimer then
+        EnemyManager.spawnEnemy(100, 100, "generic enemy")
+        spawnTimer = 0
+    end
+
     -- Update Entities
     Player:update(dt)
     ItemManager.update(dt)
