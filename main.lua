@@ -30,11 +30,7 @@ function love.load ()
 
     -- Set up Push
     push:setupScreen(GAMEWIDTH, GAMEHEIGHT, windowWidth, windowHeight, {fullscreen = false})
-
-    sceneMan:newScene("game", require("Scenes.gameScene"))
-
-    sceneMan:push("game")
-
+    
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {GAMEWIDTH, GAMEHEIGHT}
 
@@ -42,8 +38,10 @@ function love.load ()
     sceneMan:newScene ("noiseTest", require ("Scenes.noiseTest"))
     sceneMan:newScene ("mapGenerationTest", require ("Scenes.mapGenerationTest"))
     sceneMan:newScene ("backgroundMap", require ("Scenes.backgroundMap"))
+    sceneMan:newScene("game", require("Scenes.gameScene"))
 
     sceneMan:push ("backgroundMap")
+    sceneMan:push ("game")
 end
 
 function love.update (dt)
