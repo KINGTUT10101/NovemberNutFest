@@ -1,5 +1,9 @@
 local numSections = 9
 
+Throwables = {}
+Consumables = {}
+
+
 local inventoryHandler = {
     currentStorage = 0,
     maxStorage = 500,
@@ -79,5 +83,22 @@ end
 -- function inventoryHandler:swapNut (oldSection, oldIndex, newSection, newIndex)
     
 -- end
+
+-- Items
+function inventoryHandler:addItem(object)
+
+    if object.type == "throwable" then
+        table.insert(Throwables, object)
+    elseif object.type == "consumable" then
+        table.insert(Consumables, object)
+    else
+        error(object.type .. " is ont a valid object type.")
+    end
+end
+
+function inventoryHandler:addConsumeable(object)
+
+    table.insert(Consumables, object)
+end
 
 return inventoryHandler

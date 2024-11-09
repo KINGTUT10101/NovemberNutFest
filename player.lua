@@ -12,8 +12,9 @@ Player.speed = 340
 Player.runSpeed = 1.5
 Player.maxHealth = 100
 Player.health = Player.maxHealth
-Player.immunityFrames = 60
-Player.immunityTimer = 0
+Player.maxImmunityTimer = 0.8 -- The max amount of time in the immunity timer
+Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immunity timer
+--Player.flashTimer = 0 -- The timer that dictates what flash your on based on framerate
 Player.dead = false
 
 function Player.load()
@@ -30,10 +31,9 @@ function Player:update(dt)
     end
 
     -- Immunity Frames
-    if self.immunityTimer > 0 then
-        self.immunityTimer = self.immunityTimer - 1
+    if self.immunityTimer < self.maxImmunityTimer then
+        self.immunityTimer = self.immunityTimer + dt
     end
-
 
     local dtSpeed = self.speed*dt
 
@@ -90,6 +90,7 @@ end
 function Player:kill()
     self.dead = true
     self.health = 0
+    print("Player dead")
     -- Other death logic
 end
 
@@ -103,17 +104,25 @@ end
 
 -- Something hitting the player
 function Player:hit(damage)
-    if self.immunityTimer <= 0 then
+    if self.immunityTimer >= self.maxImmunityTimer then
         self.health = self.health - damage
-        self.immunityTimer = self.immunityFrames
+        Player:giveImmunity()
     end
 end
 
+function Player:giveImmunity()
+    self.immunityTimer = 0
+end
 
-function Player.draw() 
-    if not Player.dead then
-        if Player.immunityTimer%4 == 0 then
-            love.graphics.draw(SpriteSheets.Player, Player.x, Player.y)
+
+function Player:draw() 
+    if not self.dead then
+        if self.immunityTimer >= self.maxImmunityTimer then
+            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
+        else
+            love.graphics.setColor(1, 1, 1, 0.85)
+            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
+            love.graphics.setColor(1, 1, 1, 1)
         end
     end
 end

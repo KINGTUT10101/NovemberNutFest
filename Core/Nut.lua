@@ -8,16 +8,17 @@ local setDefaults = require ("Helpers.setDefaults")
 local defaultNut = {
     level = 1, -- The domestication level of the nut, which affects 
     damage = 10, -- The base amount of damage the nut will deal to enemies
-    projVelocity = 1, -- The velocity of the projectile
+    projVelocity = 4, -- The velocity of the projectile
     projScale = 1, -- The scale of the projectile
     range = 10, -- The maximum range the projectile until it despawns
-    knockback = 0, -- How far an enemy will be pushed when hit by the projectile
+    knockback = 50, -- How far an enemy will be pushed when hit by the projectile
     invSize = 1, -- How many spaces the nut will use inside the player's inventory
     spread = 0, -- How wide the firing cone is for the projectile. Wider cones make it less accurate
     growthTime = 5, -- How long it takes the nut to grow when planted. In cross-breeding, the highest value of the pair will be used
     yield = 5, -- The base amount of nuts a fully-grown crop will produce
     variation = 1, -- How much the yield can vary in either direction
     specialEffects = {}, -- A list of tables, each with an effect and a probability
+    type = "nut" -- What type of projectile
 }
 -- Defines min/max value pairs for each nut attribute
 -- TODO: Adjust these values later when balancing the game
@@ -115,6 +116,11 @@ function Nut:new (...)
     clampNutAttributes (newNutObj)
 
     return newNutObj
+end
+
+function Nut:load()
+    SpriteSheets.nuts = love.graphics.newImage("Graphics/nuts.png") -- Each nut's 6x6
+    SpriteSheets.Player:setFilter("nearest", "nearest")
 end
 
 return Nut
