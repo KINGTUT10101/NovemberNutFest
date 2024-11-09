@@ -7,7 +7,7 @@ local baseNuts = {}
 --]]
 
 baseNuts.peanut = {
-    damage = 5,
+    damage = 10,
     projSpeed = 5,
     projSize = 4,
     range = 11,
@@ -35,17 +35,32 @@ baseNuts.coconut = {
 }
 
 baseNuts.almond = {
-    damage = 15,
-    projSpeed = 3,
+    damage = 7,
+    projSpeed = 5,
     projSize = 4,
-    range = 8,
+    range = 11,
     knockback = 4,
-    magSize = 2,
+    magSize = 1,
     spread = 0,
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"pierce"},
+    type = "nut"
+}
+
+baseNuts.candleNut = {
+    damage = 4,
+    projSpeed = 4,
+    projSize = 4,
+    range = 11,
+    knockback = 4,
+    magSize = 1,
+    spread = 0,
+    growthTime = 18000, -- Ticks
+    cropYeild = 8,
+    cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
+    specialEffects = {"fire"},
     type = "nut"
 }
 

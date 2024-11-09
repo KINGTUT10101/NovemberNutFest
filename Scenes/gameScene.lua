@@ -18,7 +18,6 @@ function thisScene:load (...)
 
     -- Load Assets
     Player.load()
-    EnemyManager.loadSpriteSheets()
     ProjectileManager:load()
     Nut:load()
     Gun:load()

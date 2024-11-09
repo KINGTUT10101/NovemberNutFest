@@ -20,8 +20,15 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.damage = 5
     enemy.stunned = false -- When true the enemy won't go after the player
     enemy.type = type
-    enemy.maxImmunityTimer = .2
+    enemy.maxImmunityTimer = .15
     enemy.immunityTimer = enemy.maxImmunityTimer
+
+    -- Status effects
+    enemy.statusEffects = {}
+    enemy.statusEffects.onFire = false
+    enemy.maxFireTimer = 4
+    enemy.fireTimer = enemy.maxFireTimer
+    enemy.fireHitTimer = 0
 
     -- Each enemy will return their init function
     local init
@@ -32,6 +39,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     end
 
     enemy = init(enemy, x, y)
+    enemy:load()
 
     function enemy:genericUpdate(dt)
 
@@ -120,6 +128,10 @@ function EnemyManager.spawnEnemy(x, y, type)
                 if p.type == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
                     enemy:hit(p.damage, p.knockback, p.velX, p.velY)
                     self.immunityTimer = 0
+                    if contains(p.specialEffects, "fire") then
+                        self.statusEffects.onFire = true
+                        self.fireTimer = 0
+                    end
                     if contains(p.specialEffects, "pierce") then
                         if p.pierces >= 2 then
                             table.remove(Projectiles, i)
@@ -130,6 +142,22 @@ function EnemyManager.spawnEnemy(x, y, type)
                     end
                 end
             end
+        end
+
+        -- Status effects
+        if self.statusEffects.onFire and self.fireTimer < self.maxFireTimer then
+            self.fireTimer = self.fireTimer + dt
+            self.fireHitTimer = self.fireHitTimer + dt
+            
+            if self.fireHitTimer > 1 then -- Fire hurts the enemy every second
+                self.fireHitTimer = 0
+                self:hit(2, 0, 0, 0)
+            end
+            
+        elseif self.fireTimer >= self.maxFireTimer then
+            self.fireTimer = 0
+            self.fireHitTimer = 0
+            self.statusEffects.onFire = false
         end
 
         -- Touch Attack
@@ -219,15 +247,13 @@ function EnemyManager.updateEnemies(dt)
 end
 
 function EnemyManager.drawEnemies()
-    for i, e in pairs(Enemies) do
+    for _, e in pairs(Enemies) do
+        if e.statusEffects.onFire then
+            love.graphics.setColor(.5,0,0)
+        end
         e:draw()
+        love.graphics.setColor(1,1, 1)
     end
-end
-
-
-function EnemyManager.loadSpriteSheets()
-    SpriteSheets.GenericEnemy = love.graphics.newImage("Graphics/genericEnemy.png")
-    SpriteSheets.GenericEnemy:setFilter("nearest", "nearest")
 end
 
 return EnemyManager

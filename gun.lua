@@ -49,6 +49,9 @@ function gun:update(dt)
     if love.keyboard.isDown("space") then
         inventoryHandler:addNut(nut:new(baseNuts.almond))
     end
+    if love.keyboard.isDown("f") then
+        inventoryHandler:addNut(nut:new(baseNuts.candleNut))
+    end
     -- TEST ** adds nut oil into the inventory
     if love.keyboard.isDown("t") then
        inventoryHandler:addItem(ItemManager:newItem("nut oil"))
