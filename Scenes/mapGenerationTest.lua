@@ -3,9 +3,10 @@ local sceneMan = require ("Libraries.sceneMan")
 local push = require ("Libraries.push")
 local mapGenerator = require ("Core.mapGenerator")
 local biomes = require ("Data.biomes")
+local mapManager = require("Core.mapManager")
 
 local grid
-local size = 2000
+local size = 500
 local tileSize = 0.5
 local colorMap = {
     [2] = {1, 0, 0, 1},
@@ -121,6 +122,8 @@ function thisScene:draw ()
     love.graphics.rectangle ("fill", 1720, 0, 200, 50)
     love.graphics.setColor ({1, 1, 1, 1})
     love.graphics.printf (math.floor (mx) .. ", " .. math.floor (my), 1720, 10, 200, "center") -- Mouse position
+
+    print (mapManager:screenToMap (mx, my))
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)

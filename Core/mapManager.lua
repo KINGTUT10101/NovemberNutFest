@@ -1,11 +1,13 @@
 local Tile = require ("Core.Tile")
 local buildableManager = require ("Core.buildableManager")
 local biomes = require ("Data.biomes")
+local mapGenerator = require ("Core.mapGenerator")
 
 local mapManager = {
-    grid = {}, -- Stores all map tiles
-    activeGrid = {}, -- Stores map tiles with buildings
-    size = 0,
+    grid = nil, -- Stores all map tiles
+    activeGrid = nil, -- Stores map tiles with buildings
+    mapSize = 0,
+    tileSize = 32,
     cam = {
         x = 0,
         y = 0,
@@ -17,29 +19,44 @@ local mapManager = {
 function mapManager:resetMap (size)
     assert (size > 0 and size < math.huge, "Provided size is out of bounds")
 
-    self.size = size -- Set size
-
-    -- Generate tile objects
-    local grid = self.grid
-    for i = 1, size do
-        local firstPart = {}
-        grid[i] = firstPart
-
-        for j = 1, size do
-            firstPart[j] = {} -- TODO
-        end
-    end
+    self.mapSize = size -- Set size
+    self.grid = mapGenerator (size)
 end
 
 -- Updates the map and its tiles
 -- The camera position basically defines where the player is in the map
-function mapManager:update (dt, playerX, playerY, zoom)
-
+function mapManager:update (dt, camX, camY, camZoom)
+    self.cam.x = camX
+    self.cam.y = camY
+    self.cam.zoom = camZoom
 end
 
 -- Renders tiles that are within the player's view
-function mapManager:draw ()
+function mapManager:draw()
+    local startX, startY = self:screenToMap(0, 0)
+    local endX, endY = self:screenToMap(GAMEWIDTH, GAMEHEIGHT)
+    
+    local grid = self.grid
+    local camX, camY, zoom = self.cam.x, self.cam.y, self.cam.zoom
+    local scaledTileSize = self.tileSize * zoom
 
+    love.graphics.setColor(1, 1, 1, 1)
+    for i = math.max(startX, 1), math.min(endX, self.mapSize) do
+        local firstPart = grid[i]
+
+        for j = math.max(startY, 1), math.min(endY, self.mapSize) do
+            -- Remove the subtraction of startX/startY since screenToMap already accounts for camera position
+            love.graphics.draw(
+                firstPart[j].ground,
+                (i - 1) * scaledTileSize - camX,
+                (j - 1) * scaledTileSize - camY,
+                nil,
+                zoom
+            )
+        end
+    end
+
+    print (math.max(startX, 1), math.min(endX, self.mapSize))
 end
 
 -- Plants a nut object at the specified tile
@@ -61,6 +78,18 @@ end
 -- Adds health to a buildable object at the specified tile if one exists
 function mapManager:adjustHealth (tilex, tiley)
 
+end
+
+function mapManager:screenToMap (screenX, screenY)
+    local contMapX = (screenX + self.cam.x) / self.cam.zoom
+    local mapX = math.floor (contMapX / self.tileSize) + 1
+    -- local mapX = (contMapX - (contMapX%self.tileSize)) / self.tileSize + 1
+
+    local contMapY = (screenY + self.cam.y) / self.cam.zoom
+    local mapY = math.floor (contMapY / self.tileSize) + 1
+    -- local mapY = (contMapY - (contMapY%self.tileSize)) / self.tileSize + 1
+
+    return mapX, mapY
 end
 
 return mapManager

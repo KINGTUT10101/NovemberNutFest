@@ -148,19 +148,6 @@ local function stage3 (size, tempGrid, grid)
         end
     end
 
-    -- -- TEMP
-    -- local baseX = 10000 * love.math.random()
-	-- local baseY = 10000 * love.math.random()
-    -- for i = 1, size do
-    --     local firstPart = tempGrid[i]
-
-    --     for j = 1, size do
-    --         -- y = 3x will create horizontally wide biomes
-    --         -- 0.1 = very small, 0.02 = very large
-    --         firstPart[j] = love.math.noise (0.01*i, 0.03*j)
-    --     end
-    -- end
-
     return grid
 end
 

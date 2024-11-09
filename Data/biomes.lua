@@ -1,5 +1,14 @@
 local baseNuts = require ("Data.baseNuts")
 
+-- TEMP
+local tileImages = {
+    default = love.graphics.newImage ("Graphics/Tiles/default.png"),
+    grass = love.graphics.newImage ("Graphics/Tiles/grass.png"),
+    dirt = love.graphics.newImage ("Graphics/Tiles/dirt.png"),
+    sand = love.graphics.newImage ("Graphics/Tiles/sand.png"),
+    snow = love.graphics.newImage ("Graphics/Tiles/snow.png"),
+}
+
 -- Defines the biomes used in the map
 -- ATTRIBUTES:
 -- weight: Defines how likely the biome is to appear in world generation
@@ -20,7 +29,7 @@ local biomes = {
         size = 1,
         mapColor = {1, 1, 1, 1},
         groundTiles = {
-
+            tileImages.default,
         },
         weather = {
             thunder = 0.01,
@@ -45,7 +54,7 @@ local biomes = {
         size = 0.90,
         mapColor = {1, 1, 0, 1},
         groundTiles = {
-
+            tileImages.sand,
         },
         weather = {
             thunder = 0.01,
@@ -66,7 +75,7 @@ local biomes = {
         size = 0.85,
         mapColor = {1, 0, 0, 1},
         groundTiles = {
-
+            tileImages.sand,
         },
         weather = {
             thunder = 0.01,
@@ -87,7 +96,7 @@ local biomes = {
         size = 0.85,
         mapColor = {0.65, 0.65, 0, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.grass,
         },
         weather = {
             thunder = 0.01,
@@ -112,7 +121,7 @@ local biomes = {
         size = 0.75,
         mapColor = {0.35, 0.65, 0.45, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.dirt,
         },
         weather = {
             thunder = 0.01,
@@ -133,7 +142,7 @@ local biomes = {
         size = 0.40,
         mapColor = {0.45, 0, 1, 1},
         groundTiles = {
-
+            tileImages.sand,
         },
         weather = {
             thunder = 0.01,
@@ -158,7 +167,7 @@ local biomes = {
         size = 0.85,
         mapColor = {0, 1, 0, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.grass,
         },
         weather = {
             thunder = 0.01,
@@ -179,7 +188,7 @@ local biomes = {
         size = 0.45,
         mapColor = {1, 0, 1, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.grass,
         },
         weather = {
             thunder = 0.01,
@@ -200,7 +209,7 @@ local biomes = {
         size = 0.85,
         mapColor = {0, 0.65, 0, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.dirt,
         },
         weather = {
             thunder = 0.01,
@@ -225,7 +234,7 @@ local biomes = {
         size = 1,
         mapColor = {0, 0.75, 0.75, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.dirt,
         },
         weather = {
             thunder = 0.01,
@@ -246,7 +255,7 @@ local biomes = {
         size = 1,
         mapColor = {0, 0.95, 0.55, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.snow,
         },
         weather = {
             thunder = 0.01,
@@ -271,7 +280,7 @@ local biomes = {
         size = 0.90,
         mapColor = {0, 0, 0.25, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.snow,
         },
         weather = {
             thunder = 0.01,
@@ -292,7 +301,7 @@ local biomes = {
         size = 0.35,
         mapColor = {0, 0.75, 0.25, 1},
         groundTiles = {
-            -- Ex: grassTileImage1
+            tileImages.dirt,
         },
         weather = {
             thunder = 0.01,
