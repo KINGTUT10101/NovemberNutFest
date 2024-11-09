@@ -3,6 +3,8 @@ local buildableManager = require ("Core.buildableManager")
 local biomes = require ("Data.biomes")
 local mapGenerator = require ("Core.mapGenerator")
 
+-- MAJOR TODO: Create and update active buildings
+
 local mapManager = {
     grid = nil, -- Stores all map tiles
     activeGrid = nil, -- Stores map tiles with buildings
@@ -29,6 +31,8 @@ function mapManager:update (dt, camX, camY, camZoom)
     self.cam.x = camX
     self.cam.y = camY
     self.cam.zoom = camZoom
+
+    -- TODO: Update buildable tiles from the active grid
 end
 
 -- Renders tiles that are within the player's view
@@ -61,23 +65,66 @@ end
 
 -- Plants a nut object at the specified tile
 -- Two nuts must be planted on the same location for a crop to start growing
-function mapManager:plantNut (tilex, tiley, nutObj)
+function mapManager:plantNut (tileX, tileY, nutObj)
+    assert (nutObj ~= nil, "Nut object not provided")
 
+    local result = false
+    
+    if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
+        local tile = self.grid[tileX][tileY]
+
+        -- TODO: Create nut plant if it doesn't currently exist here
+        -- TODO: Finish code for setting the nuts for the plant
+    end
+
+    return result
 end
 
 -- Creates a buildable object at the specified tile if it is not already occupied
-function mapManager:build (tilex, tiley, buildID)
+function mapManager:build (tileX, tileY, buildID)
+    local result = false
+    
+    if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
+        local tile = self.grid[tileX][tileY]
+        local newBuildable = buildableManager:generate (buildID)
+        result = tile:setBuilding (newBuildable)
+    end
 
+    return result
 end
 
 -- Removes a buildable object at the specified tile if one exists
-function mapManager:destroy (tilex, tiley)
+function mapManager:destroy (tileX, tileY)
+    local result = false
+    
+    if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
+        local tile = self.grid[tileX][tileY]
+        result = tile:removeBuilding ()
+    end
 
+    return result
 end
 
 -- Adds health to a buildable object at the specified tile if one exists
-function mapManager:adjustHealth (tilex, tiley)
+function mapManager:adjustHealth (tileX, tileY, health)
+    local result = false
+    
+    if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
+        local tile = self.grid[tileX][tileY]
+        local buildable = tile.building
 
+        if buildable ~= nil then
+            buildable.health = buildable.health + health
+
+            if buildable.health <= 0 then
+                tile:removeBuilding ()
+            end
+
+            result = true
+        end
+    end
+
+    return result
 end
 
 function mapManager:screenToMap (screenX, screenY)

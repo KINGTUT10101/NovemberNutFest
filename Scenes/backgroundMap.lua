@@ -45,8 +45,6 @@ end
 
 function thisScene:draw ()
     mapManager:draw ()
-
-    -- print (mapManager:screenToMap (0, 0))
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)

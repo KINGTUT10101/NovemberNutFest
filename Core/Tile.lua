@@ -11,12 +11,24 @@ local defaultTile = {
     setBuilding = function (self, buildObj)
         assert (buildObj ~= nil, "Buildable object not provided")
 
-        self.building = buildObj
-        buildObj:start ()
+        if self.building == nil then
+            self.building = buildObj
+            buildObj:start ()
+
+            return true
+        else
+            return false
+        end
     end,
     removeBuilding = function (self)
-        self.building:delete ()
-        self.building = nil
+        if self.building ~= nil then
+            self.building:delete ()
+            self.building = nil
+
+            return true
+        else
+            return false
+        end
     end,
 }
 
