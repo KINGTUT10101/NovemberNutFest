@@ -1,4 +1,5 @@
 local hitmarkerManager = require "Managers.hitmarker"
+local contains = require "Helpers.contains"
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -19,18 +20,25 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.damage = 5
     enemy.stunned = false -- When true the enemy won't go after the player
     enemy.type = type
+    enemy.maxImmunityTimer = .2
+    enemy.immunityTimer = enemy.maxImmunityTimer
 
     -- Each enemy will return their init function
     local init
-    if type == "genericEnemy" then
+    if type == "generic enemy" then
         init = require("Enemies/genericEnemy")
     else
-        error(type + "is not a type.")
+        error(type + "is not an enemy type.")
     end
 
     enemy = init(enemy, x, y)
 
     function enemy:genericUpdate(dt)
+
+        if self.immunityTimer < self.maxImmunityTimer then
+            self.immunityTimer = self.immunityTimer + dt
+        end
+
         local dtSpeed = self.speed*dt
         local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
@@ -58,25 +66,20 @@ function EnemyManager.spawnEnemy(x, y, type)
             end
         end
 
-        -- Stopping if another enemy is next to it
         -- TODO ** Spacial hashing :)
+        -- Collisions with other enemies
         for i, e in pairs(Enemies) do
-            if Enemies[i] ~= self then
-                if e:collisionCheck(self.x+self.velX, self.y, self.width, self.height) then
-                    if self.velX > 0 then
-                        self.x = e.x-self.width
-                    elseif self.x < 0 then
-                        self.x = e.x+e.width
-                    end
+            if e ~= self and e:collisionCheck(self.x + self.velX, self.y + self.velY, self.width, self.height) then
+                            -- Calculate overlap
+                local overlapX = math.min(self.x + self.width, e.x + e.width) - math.max(self.x, e.x)
+                local overlapY = math.min(self.y + self.height, e.y + e.height) - math.max(self.y, e.y)
+
+                if overlapX < overlapY then
                     self.velX = 0
-                end
-                if e:collisionCheck(self.x, self.y+self.velY, self.width, self.height) then
-                    if self.velY > 0 then
-                        self.y = e.y-self.height
-                    elseif self.y < 0 then
-                        self.y = e.y+e.height
-                    end
+                    self.x = self.x + (self.x < e.x and -overlapX or overlapX)
+                else
                     self.velY = 0
+                    self.y = self.y + (self.y < e.y and -overlapY or overlapY)
                 end
             end
         end
@@ -112,10 +115,19 @@ function EnemyManager.spawnEnemy(x, y, type)
 
         -- Damaged by nuts
         for i = #Projectiles, 1, -1 do -- Is in reverse to stop the table from becoming sparse
-            if Projectiles[i] ~= nil then
-                if Projectiles[i].type == "nut" and enemy:collisionCheck(Projectiles[i].x, Projectiles[i].y, 6, 6) then
-                    enemy:hit(Projectiles[i].damage, Projectiles[i].knockback, Projectiles[i].velX, Projectiles[i].velY)
-                    table.remove(Projectiles, i)
+            local p = Projectiles[i]
+            if p ~= nil and self.immunityTimer >= self.maxImmunityTimer then
+                if p.type == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
+                    enemy:hit(p.damage, p.knockback, p.velX, p.velY)
+                    self.immunityTimer = 0
+                    if contains(p.specialEffects, "pierce") then
+                        if p.pierces >= 2 then
+                            table.remove(Projectiles, i)
+                        end
+                        p.pierces = p.pierces + 1
+                    else
+                        table.remove(Projectiles, i)
+                    end
                 end
             end
         end

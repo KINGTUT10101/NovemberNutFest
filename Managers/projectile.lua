@@ -77,6 +77,9 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
         
         -- Will accumulate time with delta time
         projectile.timer = 0
+
+        -- Things for special attributes
+        projectile.pierces = 0
     elseif projectile.type == "throwable" then
         projectile.endX = endX
         projectile.endY = endY
