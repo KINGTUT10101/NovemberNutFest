@@ -4,6 +4,10 @@ local contains = require "Helpers.contains"
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
 
+local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
+local enemyKilledSound = love.audio.newSource("SoundEffects/enemy_killed.wav", "static")
+
+
 function EnemyManager.spawnEnemy(x, y, type)
     local enemy = {}
 
@@ -216,6 +220,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     function enemy:genericKill()
         self.dead = true
         self.health = 0
+        enemyKilledSound:play()
 
         if self.kill ~= nil then
             self:kill()
@@ -224,6 +229,8 @@ function EnemyManager.spawnEnemy(x, y, type)
 
     -- Something hitting the enemy
     function enemy:hit(damage, strength, velX, velY)
+
+        enemyHitSound:play()
 
         -- Scale knockback based on enemy size
         if (self.width * self.height) < 1024 then strength = strength*6 end

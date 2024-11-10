@@ -14,6 +14,8 @@ gun.width = 16
 gun.height = 8
 gun.flipped = 1 -- -1 will flip it
 
+local shootSound = love.audio.newSource("SoundEffects/shoot.wav", "static")
+
 function gun:update(dt)
 
     -- Set the gun's position based on the player
@@ -43,11 +45,6 @@ function gun:update(dt)
         gun:shoot((love.mouse.getX()/1.333)+Player.x, (love.mouse.getY()/1.333)+Player.y)
     end
 
-    -- Reload the gun
-    if love.keyboard.isDown("r") then
-        gun:loadMag()
-    end
-
     -- TEST ** adds nut to section 1 of inventory
     if love.keyboard.isDown("space") then
         inventoryHandler:addNut(nut:new(baseNuts.almond))
@@ -67,31 +64,20 @@ end
 
 function gun:shoot(x, y)
 
-    if #self.mag > 0 and self.cooldownTimer >= self.cooldownMax then
+    local activeSection = inventoryHandler.sections[inventoryHandler.activeSection]
+    if #activeSection > 0 and self.cooldownTimer >= self.cooldownMax then
+
+        shootSound:play()
 
         -- Find where the end of the gun is
         local startX = gun.x + math.cos(gun.rotation) * gun.width
         local startY = gun.y + math.sin(gun.rotation) * gun.width
 
         -- Shoot the nut
-        ProjectileManager:add(startX, startY, x, y, gun.mag[1])
+        ProjectileManager:add(startX, startY, x, y, activeSection[1])
         self.cooldownTimer = 0
 
-        -- Get rid of the nut in the mag
-        table.remove(gun.mag, 1)
-    end
-end
-
-function gun:loadMag() -- Loads the mag with the selected inventory section
-
-    local activeSection = inventoryHandler.sections[inventoryHandler.activeSection]
-    while #gun.mag < gun.magSize do
-        if #activeSection > 0 then
-            table.insert(gun.mag, activeSection[1])
-            inventoryHandler:consumeNut()
-        else
-            break
-        end
+        inventoryHandler:consumeNut()
     end
 end
 
