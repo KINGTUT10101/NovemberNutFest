@@ -101,7 +101,6 @@ end
 function Player:kill()
     self.dead = true
     self.health = 0
-    print("Player dead")
     -- Other death logic
 end
 

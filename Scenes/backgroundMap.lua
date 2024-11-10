@@ -34,9 +34,9 @@ function thisScene:update (dt)
         camera.x = camera.x + camVelocity * dt * camera.zoom
     end
 
-    if love.keyboard.isDown("q") then
+    if love.keyboard.isDown("[") then
         camera.zoom = camera.zoom - zoomVelocity * dt
-    elseif love.keyboard.isDown("e") then
+    elseif love.keyboard.isDown("]") then
         camera.zoom = camera.zoom + zoomVelocity * dt
     end
 

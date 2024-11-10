@@ -7,10 +7,12 @@ local Gun = require("gun")
 local ProjectileManager = require("Managers.projectile")
 local hitmarkerManager = require("Managers.hitmarker")
 local ItemManager = require("Managers.item")
+local gameUI = require("UI/gameUI")
 
 -- Enemy Spawn Timer
 local spawnTimer = 0
 local maxSpawnTimer = 3
+local flip = false -- Will swap between two different enemies
 
 
 function thisScene:load (...)
@@ -23,8 +25,8 @@ function thisScene:load (...)
     Gun:load()
 
     -- Spawn enemy test
-    EnemyManager.spawnEnemy(100, 100, "generic enemy")
-    EnemyManager.spawnEnemy(160, 100, "generic enemy")
+    EnemyManager.spawnEnemy(100, 100, "generic")
+    EnemyManager.spawnEnemy(160, 100, "generic")
 end
 
 function thisScene:delete (...)
@@ -37,8 +39,9 @@ function thisScene:update (dt)
     spawnTimer = spawnTimer + dt
 
     if spawnTimer >= maxSpawnTimer then
-        EnemyManager.spawnEnemy(100, 100, "generic enemy")
+        if flip then EnemyManager.spawnEnemy(100, 100, "generic") else EnemyManager.spawnEnemy(100, 100, "small") end
         spawnTimer = 0
+        if flip then flip = false else flip = true end
     end
 
     -- Update Entities
@@ -58,6 +61,7 @@ function thisScene:draw ()
     ItemManager:draw()
     ProjectileManager:draw()
     hitmarkerManager:draw()
+    gameUI:draw()
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)

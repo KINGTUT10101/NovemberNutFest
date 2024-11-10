@@ -7,12 +7,17 @@ throwables.nutOil = {
     object = "nut oil",
     width = 6,
     height = 12,
+    splashRadius = 150,
     sprite = love.graphics.newImage("Graphics/nutOil.png")
 }
 
 function throwables.nutOil:onCollision(x, y)
-    print("The nut oil went everywhere!!!\nAHHHH!!!!!")
     -- Go through enemies, give them a status effect
+    for _, e in pairs(Enemies) do
+        if e:collisionCheck(x-(self.splashRadius/2), y-(self.splashRadius/2), self.splashRadius, self.splashRadius) then
+            e.statusEffects.oiled = true
+        end
+    end
 end
 
 

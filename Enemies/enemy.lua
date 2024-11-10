@@ -25,15 +25,22 @@ function EnemyManager.spawnEnemy(x, y, type)
 
     -- Status effects
     enemy.statusEffects = {}
+    -- Fire
     enemy.statusEffects.onFire = false
-    enemy.maxFireTimer = 4
+    enemy.maxFireTimer = 7
     enemy.fireTimer = enemy.maxFireTimer
     enemy.fireHitTimer = 0
+    -- Oiled... oiled nuts... heh
+    enemy.statusEffects.oiled = false
+    enemy.maxOiledTimer = 13
+    enemy.oiledTimer = 0
 
     -- Each enemy will return their init function
     local init
-    if type == "generic enemy" then
+    if type == "generic" then
         init = require("Enemies/genericEnemy")
+    elseif type == "small" then
+        init = require("Enemies/smallEnemy")
     else
         error(type + "is not an enemy type.")
     end
@@ -74,11 +81,20 @@ function EnemyManager.spawnEnemy(x, y, type)
             end
         end
 
-        -- TODO ** Spacial hashing :)
-        -- Collisions with other enemies
+
+        -- Go through all enemies
         for i, e in pairs(Enemies) do
+            -- Set oiled enemies on fire
+            if e~=self and e:collisionCheck(self.x-5, self.y-5, self.width+5, self.height+5) then
+                if e.statusEffects.oiled and self.statusEffects.onFire then
+                    e.statusEffects.onFire = true
+                    e.statusEffects.oiled = false
+                end
+            end
+            -- TODO ** Spacial hashing :)
+            -- Collisions with other enemies
             if e ~= self and e:collisionCheck(self.x + self.velX, self.y + self.velY, self.width, self.height) then
-                            -- Calculate overlap
+                -- Calculate overlap
                 local overlapX = math.min(self.x + self.width, e.x + e.width) - math.max(self.x, e.x)
                 local overlapY = math.min(self.y + self.height, e.y + e.height) - math.max(self.y, e.y)
 
@@ -146,6 +162,7 @@ function EnemyManager.spawnEnemy(x, y, type)
 
         -- Status effects
         if self.statusEffects.onFire and self.fireTimer < self.maxFireTimer then
+            self.statusEffects.oiled = false
             self.fireTimer = self.fireTimer + dt
             self.fireHitTimer = self.fireHitTimer + dt
             
@@ -153,16 +170,32 @@ function EnemyManager.spawnEnemy(x, y, type)
                 self.fireHitTimer = 0
                 self:hit(2, 0, 0, 0)
             end
-            
-        elseif self.fireTimer >= self.maxFireTimer then
+
+            if self.fireTimer > self.maxFireTimer then
+                self.fireHitTimer = 0
+                self.fireTimer = 0
+                self.statusEffects.onFire = false
+            end
+        elseif self.fireTimer ~= 0 and self.statusEffects.onFire == false then
             self.fireTimer = 0
             self.fireHitTimer = 0
-            self.statusEffects.onFire = false
+        end
+
+        -- Oiled
+        if self.statusEffects.oiled and self.oiledTimer < self.maxOiledTimer then
+            self.fireTimer = self.oiledTimer + dt
+        elseif self.oiledTimer >= self.maxOiledTimer then
+            self.oiledTimer = 0
+            self.statusEffects.oiled = false
         end
 
         -- Touch Attack
         if Player:collisionCheck(self.x, self.y, self.width, self.height) then
-            Player:hit(self.damage)
+            if not self.statusEffects.oiled then
+                Player:hit(self.damage)
+            else
+                Player:hit(math.floor(self.damage/1.4))
+            end
         end
 
         -- Death logic
@@ -191,6 +224,10 @@ function EnemyManager.spawnEnemy(x, y, type)
 
     -- Something hitting the enemy
     function enemy:hit(damage, strength, velX, velY)
+
+        -- Scale knockback based on enemy size
+        if (self.width * self.height) < 1024 then strength = strength*6 end
+        if strength < 0 then strength = 0 end
 
         self.health = self.health - damage
 
@@ -250,6 +287,8 @@ function EnemyManager.drawEnemies()
     for _, e in pairs(Enemies) do
         if e.statusEffects.onFire then
             love.graphics.setColor(.5,0,0)
+        elseif e.statusEffects.oiled then
+            love.graphics.setColor(.5,.5,0)
         end
         e:draw()
         love.graphics.setColor(1,1, 1)

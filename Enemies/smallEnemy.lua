@@ -1,10 +1,12 @@
 local function genericInit(enemy, x, y)
 
-    enemy.speed = 100
-    enemy.health = 125
+    enemy.speed = 175
+    enemy.health = 50
+    enemy.width = 16
+    enemy.height = 16
 
     function enemy:load()
-        self.sprite = love.graphics.newImage("Graphics/genericEnemy.png")
+        self.sprite = love.graphics.newImage("Graphics/smallEnemy.png")
         self.sprite:setFilter("nearest", "nearest")
     end
 
@@ -13,7 +15,7 @@ local function genericInit(enemy, x, y)
     end
 
     function enemy:kill()
-        ItemManager:placeConsumable(ItemManager:newItem("cashew apple"), self.x, self.y)
+        ItemManager:placeConsumable(ItemManager:newItem("nut oil"), self.x, self.y)
     end
 
     function enemy:draw()

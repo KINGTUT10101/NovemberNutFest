@@ -10,8 +10,12 @@ consumables.cashewApple = {
     height = 8,
 }
 
-function consumables.cashewApple:onConsumption(player)
-    print("You ate the ".. self.object .. "... yummy.")
+function consumables.cashewApple:onConsumption()
+    if Player.health+self.health < Player.maxHealth then
+        Player.health = Player.health+self.health
+    else
+        Player.health = Player.health+(Player.maxHealth-Player.health)
+    end
 end
 
 return consumables

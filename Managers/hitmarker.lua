@@ -2,6 +2,7 @@ local hitmarkerManager = {}
 local hitmarkers = {}
 
 local gravity = .7
+local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 20)
 
 function hitmarkerManager:new(value, x, y)
 
@@ -9,7 +10,6 @@ function hitmarkerManager:new(value, x, y)
 
     hitmarker.x = x
     hitmarker.y = y
-    hitmarker.font = love.graphics.newFont("Fonts/PixelifySans.ttf", --[[value--]]10*1.75) -- The size of the hitmarker scales with damage
 
     -- Set the velocity to shoot the hitmarker to the side
     hitmarker.velY = math.random(-7, -5)
@@ -24,8 +24,7 @@ function hitmarkerManager:new(value, x, y)
     hitmarker.maxTimer = 1.5 -- in seconds
     hitmarker.timeToFade = .5
 
-    --hitmarker.color = {value/20, 0, 0} -- redness of the hitmarker will scale with damage
-    hitmarker.color = {1, 0, 0} -- TEST **
+    hitmarker.color = {1, 0, 0}
 
     table.insert(hitmarkers, hitmarker)
 end
@@ -71,7 +70,7 @@ end
 function hitmarkerManager:draw()
 
     for _, h in pairs(hitmarkers) do
-        love.graphics.setFont(h.font)
+        love.graphics.setFont(font)
         love.graphics.setColor(h.color)
         love.graphics.print(h.value, h.x-Player.x, h.y-Player.y)
     end
