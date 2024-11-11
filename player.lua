@@ -19,8 +19,8 @@ Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immu
 Player.dead = false
 
 -- Where the player is based on the camera's position
-Player.camX = (638/2)-(Player.width/2)
-Player.camY = (358/2)-(Player.height/2)
+Player.camX = (ScaledGameWidth/2)-(Player.width/2)
+Player.camY = (ScaledGameHeight/2)-(Player.height/2)
 
 -- Position with the center of the screen offset
 Player.relX = Player.x + Player.camX

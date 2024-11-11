@@ -10,7 +10,7 @@ function gameUI:draw()
 
 
     -- Invetory Sections
-    drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, 358-37, {1,1,1}, {0,0,0}, font)
+    drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, ScaledGameHeight-37, {1,1,1}, {0,0,0}, font)
 end
 
 

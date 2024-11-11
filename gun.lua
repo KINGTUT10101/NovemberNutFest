@@ -6,8 +6,6 @@ local ProjectileManager = require("Managers.projectile")
 local ItemManager = require("Managers.item")
 local baseNuts = require("Data.baseNuts")
 
-gun.mag = {} -- mag loads itself with the active inventory slot
-gun.magSize = 50
 gun.cooldownMax = .2 -- in seconds
 gun.cooldownTimer = gun.cooldownMax
 gun.width = 16

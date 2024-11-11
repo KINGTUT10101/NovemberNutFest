@@ -26,6 +26,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.type = type
     enemy.maxImmunityTimer = .15
     enemy.immunityTimer = enemy.maxImmunityTimer
+    enemy.slickness = 1 -- How fast the enemy is able to descliate it's speed
 
     -- Status effects
     enemy.statusEffects = {}
@@ -45,6 +46,8 @@ function EnemyManager.spawnEnemy(x, y, type)
         init = require("Enemies/genericEnemy")
     elseif type == "small" then
         init = require("Enemies/smallEnemy")
+    elseif type == "skater" then
+        init = require("Enemies/skater")
     else
         error(type + "is not an enemy type.")
     end
@@ -87,9 +90,9 @@ function EnemyManager.spawnEnemy(x, y, type)
 
 
         -- Go through all enemies
-        for i, e in pairs(Enemies) do
+        for _, e in pairs(Enemies) do
             -- Set oiled enemies on fire
-            if e~=self and e:collisionCheck(self.x-5, self.y-5, self.width+5, self.height+5) then
+            if e~=self and e:collisionCheck(self.x-5, self.y-5, self.width+10, self.height+10) then
                 if e.statusEffects.oiled and self.statusEffects.onFire then
                     e.statusEffects.onFire = true
                     e.statusEffects.oiled = false

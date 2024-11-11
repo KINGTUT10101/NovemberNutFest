@@ -39,7 +39,7 @@ function thisScene:update (dt)
     spawnTimer = spawnTimer + dt
 
     if spawnTimer >= maxSpawnTimer then
-        if flip then EnemyManager.spawnEnemy(100, 100, "generic") else EnemyManager.spawnEnemy(100, 100, "small") end
+        if flip then EnemyManager.spawnEnemy(100, 100, "generic") else EnemyManager.spawnEnemy(100, 100, "small");EnemyManager.spawnEnemy(200, 1200, "skater") end
         spawnTimer = 0
         if flip then flip = false else flip = true end
     end

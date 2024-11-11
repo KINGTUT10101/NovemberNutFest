@@ -14,6 +14,7 @@ local windowWidth, windowHeight = 854, 480
 Scale = 3
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
+ScaledGameWidth, ScaledGameHeight = GAMEWIDTH/Scale, GAMEHEIGHT/Scale
 
 -- Defines the functions
 local Player = require("player")
