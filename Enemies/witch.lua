@@ -1,13 +1,14 @@
 local function genericInit(enemy, x, y)
 
-    enemy.speed = Player.runSpeed
-    enemy.health = 120
-    enemy.damage = 15
+    enemy.speed = Player.speed*Player.runSpeed
+    enemy.health = 250
+    enemy.damage = 20
     enemy.width = 32
     enemy.height = 32
+    enemy.deathSound = love.audio.newSource("SoundEffects/witch_death.wav", "static")
 
     function enemy:load()
-        self.sprite = love.graphics.newImage("Graphics/skater.png")
+        self.sprite = love.graphics.newImage("Graphics/witch.png")
         self.sprite:setFilter("nearest", "nearest")
     end
 

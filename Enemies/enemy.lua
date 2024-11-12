@@ -5,7 +5,6 @@ Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
 
 local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
-local enemyKilledSound = love.audio.newSource("SoundEffects/enemy_killed.wav", "static")
 
 
 function EnemyManager.spawnEnemy(x, y, type)
@@ -28,7 +27,10 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.immunityTimer = enemy.maxImmunityTimer
     enemy.slickness = 1 -- How fast the enemy is able to descliate it's speed
 
-    -- Status effects
+    -- Sound Effects
+    enemy.deathSound = love.audio.newSource("SoundEffects/enemy_killed.wav", "static")
+
+    -- Status Effects
     enemy.statusEffects = {}
     -- Fire
     enemy.statusEffects.onFire = false
@@ -46,8 +48,8 @@ function EnemyManager.spawnEnemy(x, y, type)
         init = require("Enemies/genericEnemy")
     elseif type == "small" then
         init = require("Enemies/smallEnemy")
-    elseif type == "skater" then
-        init = require("Enemies/skater")
+    elseif type == "witch" then
+        init = require("Enemies/witch")
     else
         error(type + "is not an enemy type.")
     end
@@ -223,7 +225,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     function enemy:genericKill()
         self.dead = true
         self.health = 0
-        enemyKilledSound:play()
+        self.deathSound:play()
 
         if self.kill ~= nil then
             self:kill()
