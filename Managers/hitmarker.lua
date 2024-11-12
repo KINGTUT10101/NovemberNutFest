@@ -60,8 +60,7 @@ function hitmarkerManager:update(dt)
 
         -- Hitmarker fades away
         if h.timer > h.maxTimer-h.timeToFade then
-            -- TODO ** Darkness shader fades with last hitmarker rendered???
-            --h.color = {h.color[1], 0, 0, (h.maxTimer-h.timer)/h.timeToFade} -- Always will start and full opacity and go down
+            h.color = {h.color[1], 0, 0, (h.maxTimer-h.timer)/h.timeToFade} -- Always will start and full opacity and go down
         end
 
         h.timer = h.timer + dt
@@ -74,6 +73,7 @@ function hitmarkerManager:draw()
         love.graphics.setFont(font)
         love.graphics.setColor(h.color)
         love.graphics.print(h.value, h.x-Player.x, h.y-Player.y)
+        love.graphics.setColor(1, 1, 1, 1)
     end
 end
 

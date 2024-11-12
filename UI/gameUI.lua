@@ -4,6 +4,8 @@ local drawTextWithBorder = require("Helpers/drawTextWithBorder")
 local inventoryHandler = require("Core.inventoryHandler")
 local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 32)
 
+DarknessLevel = 0.8
+
 function gameUI:load()
     -- Darkness
     Darkness = love.graphics.newShader([[
@@ -33,8 +35,6 @@ function gameUI:load()
         }
     ]])
 
-    Darkness:send("base_opacity", 0.8)
-
     LightSources = {
         {x = 1920/2, y = 1080/2, radius = 150}
     }
@@ -46,12 +46,21 @@ end
 
 function gameUI:update()
 
+    -- Day
+    if love.keyboard.isDown("m") then
+        DarknessLevel = 0
+    end
+    -- Night
+    if love.keyboard.isDown("n") then
+        DarknessLevel = .8
+    end
 
     for i, light in ipairs(LightSources) do
         positions[(i - 1) * 2 + 1] = light.x
         positions[(i - 1) * 2 + 2] = light.y
         radii[i] = light.radius
     end
+    Darkness:send("base_opacity", DarknessLevel)
     Darkness:send("light_positions", positions)
     Darkness:send("light_radii", unpack(radii))
     Darkness:send("num_lights", #LightSources)

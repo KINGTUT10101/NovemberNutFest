@@ -25,7 +25,7 @@ function thisScene:load (...)
     Gun:load()
 
     -- Spawn enemy test
-    --EnemyManager.spawnEnemy(100, 100, "generic")
+    EnemyManager.spawnEnemy(100, 100, "generic")
     --EnemyManager.spawnEnemy(160, 100, "generic")
     --EnemyManager.spawnEnemy(200, 1200, "witch")
 
