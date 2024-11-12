@@ -14,6 +14,7 @@ local windowWidth, windowHeight = 854, 480
 Scale = 3
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
+ScaledGameWidth, ScaledGameHeight = GAMEWIDTH/Scale, GAMEHEIGHT/Scale
 
 -- Defines the functions
 local Player = require("player")
@@ -66,24 +67,6 @@ function love.keypressed (key, scancode, isrepeat)
     tux.callbacks.keypressed (key, scancode, isrepeat)
     sceneMan:event ("keypressed", key, scancode, isrepeat)
 
-    -- TEMP: For testing the nut class
-    local nutObj
-    if key == "1" then
-        nutObj = Nut:new ()
-    elseif key == "2" then
-        nutObj = Nut:new ({damage = 95})
-    elseif key == "3" then
-        nutObj = Nut:new ({damage = 65}, {damage = 35}, {})
-    end
-
-    -- Print nut info
-    if nutObj ~= nil then
-        print ("NEW NUT OBJECT")
-        for key, value in pairs (nutObj) do
-            print (key, value)
-        end
-        print ()
-    end
 end
 
 function love.textinput (text)

@@ -1,5 +1,8 @@
 local throwables = {}
 
+local glassBreakSound = love.audio.newSource("SoundEffects/glass_break.wav", "static")
+
+
 -- Nut Oil
 throwables.nutOil = {
     projVelocity = 4,
@@ -13,6 +16,7 @@ throwables.nutOil = {
 
 function throwables.nutOil:onCollision(x, y)
     -- Go through enemies, give them a status effect
+    glassBreakSound:play()
     for _, e in pairs(Enemies) do
         if e:collisionCheck(x-(self.splashRadius/2), y-(self.splashRadius/2), self.splashRadius, self.splashRadius) then
             e.statusEffects.oiled = true

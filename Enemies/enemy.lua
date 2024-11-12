@@ -4,6 +4,9 @@ local contains = require "Helpers.contains"
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
 
+local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
+
+
 function EnemyManager.spawnEnemy(x, y, type)
     local enemy = {}
 
@@ -22,8 +25,12 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.type = type
     enemy.maxImmunityTimer = .15
     enemy.immunityTimer = enemy.maxImmunityTimer
+    enemy.slickness = 1 -- How fast the enemy is able to descliate it's speed
 
-    -- Status effects
+    -- Sound Effects
+    enemy.deathSound = love.audio.newSource("SoundEffects/enemy_killed.wav", "static")
+
+    -- Status Effects
     enemy.statusEffects = {}
     -- Fire
     enemy.statusEffects.onFire = false
@@ -41,6 +48,8 @@ function EnemyManager.spawnEnemy(x, y, type)
         init = require("Enemies/genericEnemy")
     elseif type == "small" then
         init = require("Enemies/smallEnemy")
+    elseif type == "witch" then
+        init = require("Enemies/witch")
     else
         error(type + "is not an enemy type.")
     end
@@ -83,9 +92,9 @@ function EnemyManager.spawnEnemy(x, y, type)
 
 
         -- Go through all enemies
-        for i, e in pairs(Enemies) do
+        for _, e in pairs(Enemies) do
             -- Set oiled enemies on fire
-            if e~=self and e:collisionCheck(self.x-5, self.y-5, self.width+5, self.height+5) then
+            if e~=self and e:collisionCheck(self.x-5, self.y-5, self.width+10, self.height+10) then
                 if e.statusEffects.oiled and self.statusEffects.onFire then
                     e.statusEffects.onFire = true
                     e.statusEffects.oiled = false
@@ -216,6 +225,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     function enemy:genericKill()
         self.dead = true
         self.health = 0
+        self.deathSound:play()
 
         if self.kill ~= nil then
             self:kill()
@@ -224,6 +234,8 @@ function EnemyManager.spawnEnemy(x, y, type)
 
     -- Something hitting the enemy
     function enemy:hit(damage, strength, velX, velY)
+
+        enemyHitSound:play()
 
         -- Scale knockback based on enemy size
         if (self.width * self.height) < 1024 then strength = strength*6 end

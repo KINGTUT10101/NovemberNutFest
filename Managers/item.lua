@@ -8,6 +8,9 @@ local copyTable = require("Helpers/copyTable")
 local inventoryHandler = require("Core.inventoryHandler")
 
 
+local eatSound = love.audio.newSource("SoundEffects/eating.wav", "static")
+local collectSound = love.audio.newSource("SoundEffects/collect.wav", "static")
+
 local ePressed = false -- Has e been pressed?
 local hPressed = false -- Has h been pressed?
 
@@ -61,6 +64,7 @@ function ItemManager:update()
 
     -- Consumables
     if love.keyboard.isDown("h") and #Consumables > 0 and not hPressed then
+        eatSound:play()
         Consumables[1]:onConsumption()
         table.remove(Consumables, 1)
         hPressed = false
@@ -71,6 +75,7 @@ function ItemManager:update()
     for i=#Items, 1, -1 do
         local item = Items[i]
        if Player:collisionCheck(item.x, item.y, item.width, item.height) then
+            collectSound:play()
             inventoryHandler:addItem(item)
             table.remove(Items, i)
        end
