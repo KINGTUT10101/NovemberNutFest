@@ -5,9 +5,9 @@ local mapManager = require ("Core.mapManager")
 local camera = {
     x = 0,
     y = 0,
-    zoom = 1,
+    zoom = 2,
 }
-local camVelocity = 100
+local camVelocity = 1000
 local zoomVelocity = 10
 
 function thisScene:load (...)

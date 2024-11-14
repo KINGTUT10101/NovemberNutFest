@@ -40,9 +40,11 @@ function love.load ()
     sceneMan:newScene ("mapGenerationTest", require ("Scenes.mapGenerationTest"))
     sceneMan:newScene ("backgroundMap", require ("Scenes.backgroundMap"))
     sceneMan:newScene("game", require("Scenes.gameScene"))
+    sceneMan:newScene("debug", require("Scenes.debug"))
 
     sceneMan:push ("backgroundMap")
-    sceneMan:push ("game")
+    -- sceneMan:push ("game")
+    sceneMan:push ("debug")
 end
 
 function love.update (dt)
@@ -54,7 +56,6 @@ end
 
 function love.draw ()
     push:start()
-        love.graphics.scale(Scale, Scale)
         sceneMan:event ("draw")
         tux.callbacks.draw ()
         sceneMan:event ("lateDraw")

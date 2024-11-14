@@ -28,8 +28,8 @@ end
 -- Updates the map and its tiles
 -- The camera position basically defines where the player is in the map
 function mapManager:update (dt, camX, camY, camZoom)
-    self.cam.x = Player.relX
-    self.cam.y = Player.relY
+    self.cam.x = camX
+    self.cam.y = camY
     self.cam.zoom = camZoom
 
     -- TODO: Update buildable tiles from the active grid
@@ -37,17 +37,12 @@ end
 
 -- Renders tiles that are within the player's view
 function mapManager:draw()
-    local renderedBuildables = 0 -- TEMP
-
     local startX, startY = self:screenToMap(-10, -10)
     local endX, endY = self:screenToMap(GAMEWIDTH + 10, GAMEHEIGHT + 10)
     
     local grid = self.grid
     local camX, camY, zoom = self.cam.x, self.cam.y, self.cam.zoom
     local scaledTileSize = self.tileSize * zoom
-
-    -- print ((math.min(endX, self.mapSize) - math.max(startX, 1)) * (math.min(endY, self.mapSize) - math.max(startY, 1)))
-    print (startX, startY, endX, endY)
 
     love.graphics.setColor(1, 1, 1, 1)
     for i = math.max(startX, 1), math.min(endX, self.mapSize) do
@@ -58,8 +53,8 @@ function mapManager:draw()
 
             love.graphics.draw(
                 tile.ground,
-                (i - 1) * scaledTileSize - Player.relX,
-                (j - 1) * scaledTileSize - Player.relY,
+                (i - 1) * scaledTileSize - camX,
+                (j - 1) * scaledTileSize - camY,
                 nil,
                 zoom
             )
@@ -67,18 +62,14 @@ function mapManager:draw()
             if tile.building ~= nil then
                 love.graphics.draw (
                     tile.building.frame,
-                    (i - 1) * scaledTileSize - Player.relX,
-                    (j - 1) * scaledTileSize - Player.relY - tile.building.frame:getHeight () + 32,
+                    (i - 1) * scaledTileSize - camX,
+                    (j - 1) * scaledTileSize - camY - tile.building.frame:getHeight () + 32,
                     nil,
                     zoom
                 )
-
-                renderedBuildables = renderedBuildables + 1
             end
         end
     end
-
-    -- print (renderedBuildables)
 end
 
 -- Plants a nut object at the specified tile
