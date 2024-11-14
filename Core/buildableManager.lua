@@ -34,7 +34,7 @@ function buildableManager:create (id, classDef)
     newClassDef.id = id
 
     -- Validate class
-    -- assert (newClassDef.frame ~= nil, "No frame was provided") -- TEMP: Uncomment later!!!
+    assert (newClassDef.frame ~= nil, "No frame was provided") -- TEMP: Uncomment later!!!
 
     self.tracker[id] = newClassDef
 

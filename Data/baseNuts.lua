@@ -1,6 +1,8 @@
 local Nut = require ("Core.Nut")
 local buildableManager = require ("Core.buildableManager")
 
+local nutPlantImg = love.graphics.newImage ("Graphics/Plants/nutPlant.png")
+
 local baseNuts = {}
 
 --[[
@@ -79,6 +81,7 @@ buildableManager:create ("peanut", {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
+    frame = nutPlantImg,
 })
 
 baseNuts.peanut = buildableManager:generate ("peanut")
