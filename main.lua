@@ -1,6 +1,11 @@
 -- Set RNG seed
 math.randomseed (os.time ())
 
+-- Set image filtering
+-- This works best for pixel art
+love.graphics.setDefaultFilter ("nearest", "nearest")
+love.graphics.setLineStyle ("smooth")
+
 -- Loads the libraries
 local push = require ("Libraries.push")
 local sceneMan = require ("Libraries.sceneMan")
@@ -25,11 +30,6 @@ local Gun = require("gun")
 local ProjectileManager = require("Managers.projectile")
 
 function love.load ()
-    -- Set image filtering
-    -- This works best for pixel art
-    love.graphics.setDefaultFilter ("nearest", "nearest")
-    love.graphics.setLineStyle ("smooth")
-
     -- Set up Push
     push:setupScreen(GAMEWIDTH, GAMEHEIGHT, windowWidth, windowHeight, {fullscreen = false})
     
