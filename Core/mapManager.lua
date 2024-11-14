@@ -63,7 +63,7 @@ function mapManager:draw()
                 love.graphics.draw (
                     tile.building.frame,
                     (i - 1) * scaledTileSize - camX,
-                    (j - 1) * scaledTileSize - camY - tile.building.frame:getHeight () + 32,
+                    (j - 1) * scaledTileSize - camY - tile.building.frame:getHeight () * zoom + scaledTileSize,
                     nil,
                     zoom
                 )

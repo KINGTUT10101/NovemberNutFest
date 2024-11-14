@@ -8,7 +8,7 @@ local camera = {
     zoom = 2,
 }
 local camVelocity = 1000
-local zoomVelocity = 10
+local zoomVelocity = 5
 
 function thisScene:load (...)
     sceneMan = ...
