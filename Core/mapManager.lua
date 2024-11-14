@@ -37,28 +37,48 @@ end
 
 -- Renders tiles that are within the player's view
 function mapManager:draw()
-    local startX, startY = self:screenToMap(0, 0)
-    local endX, endY = self:screenToMap(GAMEWIDTH, GAMEHEIGHT)
+    local renderedBuildables = 0 -- TEMP
+
+    local startX, startY = self:screenToMap(-10, -10)
+    local endX, endY = self:screenToMap(GAMEWIDTH + 10, GAMEHEIGHT + 10)
     
     local grid = self.grid
     local camX, camY, zoom = self.cam.x, self.cam.y, self.cam.zoom
     local scaledTileSize = self.tileSize * zoom
+
+    -- print ((math.min(endX, self.mapSize) - math.max(startX, 1)) * (math.min(endY, self.mapSize) - math.max(startY, 1)))
+    print (startX, startY, endX, endY)
 
     love.graphics.setColor(1, 1, 1, 1)
     for i = math.max(startX, 1), math.min(endX, self.mapSize) do
         local firstPart = grid[i]
 
         for j = math.max(startY, 1), math.min(endY, self.mapSize) do
-            -- Remove the subtraction of startX/startY since screenToMap already accounts for camera position
+            local tile = firstPart[j]
+
             love.graphics.draw(
-                firstPart[j].ground,
+                tile.ground,
                 (i - 1) * scaledTileSize - Player.relX,
                 (j - 1) * scaledTileSize - Player.relY,
                 nil,
                 zoom
             )
+
+            if tile.building ~= nil then
+                love.graphics.draw (
+                    tile.building.frame,
+                    (i - 1) * scaledTileSize - Player.relX,
+                    (j - 1) * scaledTileSize - Player.relY - tile.building.frame:getHeight () + 32,
+                    nil,
+                    zoom
+                )
+
+                renderedBuildables = renderedBuildables + 1
+            end
         end
     end
+
+    -- print (renderedBuildables)
 end
 
 -- Plants a nut object at the specified tile
@@ -127,12 +147,12 @@ end
 
 function mapManager:screenToMap (screenX, screenY)
     local contMapX = (screenX + self.cam.x) / self.cam.zoom
-    local mapX = math.floor (contMapX / self.tileSize) + 1
-    -- local mapX = (contMapX - (contMapX%self.tileSize)) / self.tileSize + 1
+    -- local mapX = math.floor (contMapX / self.tileSize) + 1
+    local mapX = (contMapX - (contMapX%self.tileSize)) / self.tileSize + 1
 
     local contMapY = (screenY + self.cam.y) / self.cam.zoom
-    local mapY = math.floor (contMapY / self.tileSize) + 1
-    -- local mapY = (contMapY - (contMapY%self.tileSize)) / self.tileSize + 1
+    -- local mapY = math.floor (contMapY / self.tileSize) + 1
+    local mapY = (contMapY - (contMapY%self.tileSize)) / self.tileSize + 1
 
     return mapX, mapY
 end

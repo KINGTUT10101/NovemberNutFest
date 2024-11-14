@@ -14,7 +14,6 @@ local defaultClassDef = {
     -- Methods
     start = function () end,
     update = function () end,
-    draw = function () end,
     interact = function () end,
     delete = function () end,
 }
