@@ -26,10 +26,11 @@ function thisScene:load (...)
 
     -- Spawn enemy test
     EnemyManager.spawnEnemy(100, 100, "generic")
-    --EnemyManager.spawnEnemy(160, 100, "generic")
+    EnemyManager.spawnEnemy(160, 100, "generic")
     --EnemyManager.spawnEnemy(200, 1200, "witch")
 
     gameUI:load()
+    --gameUI:addLight(1600, 300, 200)
 end
 
 function thisScene:delete (...)
@@ -44,7 +45,7 @@ function thisScene:update (dt)
     spawnTimer = spawnTimer + dt
 
     if spawnTimer >= maxSpawnTimer then
-        if flip then EnemyManager.spawnEnemy(100, 100, "generic") else EnemyManager.spawnEnemy(100, 100, "small") end
+        --if flip then EnemyManager.spawnEnemy(100, 100, "generic") else EnemyManager.spawnEnemy(100, 100, "small") end
         spawnTimer = 0
         if flip then flip = false else flip = true end
     end
