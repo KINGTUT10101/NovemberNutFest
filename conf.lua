@@ -5,4 +5,6 @@ function love.conf (t)
     t.window.title = "November NUT Fest"
     t.window.icon = "Graphics/windowIcon.png"
     t.window.display = 2
+
+    t.window.vsync = 0
 end

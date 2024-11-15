@@ -1,6 +1,11 @@
 -- Set RNG seed
 math.randomseed (os.time ())
 
+-- Set image filtering
+-- This works best for pixel art
+love.graphics.setDefaultFilter ("nearest", "nearest")
+love.graphics.setLineStyle ("smooth")
+
 -- Loads the libraries
 local push = require ("Libraries.push")
 local sceneMan = require ("Libraries.sceneMan")
@@ -14,6 +19,7 @@ local windowWidth, windowHeight = 854, 480
 Scale = 3
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
+DevMode = true
 ScaledGameWidth, ScaledGameHeight = GAMEWIDTH/Scale, GAMEHEIGHT/Scale
 
 -- Defines the functions
@@ -24,11 +30,6 @@ local Gun = require("gun")
 local ProjectileManager = require("Managers.projectile")
 
 function love.load ()
-    -- Set image filtering
-    -- This works best for pixel art
-    love.graphics.setDefaultFilter ("nearest", "nearest")
-    love.graphics.setLineStyle ("smooth")
-
     -- Set up Push
     push:setupScreen(GAMEWIDTH, GAMEHEIGHT, windowWidth, windowHeight, {fullscreen = false})
     
@@ -40,9 +41,11 @@ function love.load ()
     sceneMan:newScene ("mapGenerationTest", require ("Scenes.mapGenerationTest"))
     sceneMan:newScene ("backgroundMap", require ("Scenes.backgroundMap"))
     sceneMan:newScene("game", require("Scenes.gameScene"))
+    sceneMan:newScene("debug", require("Scenes.debug"))
 
     sceneMan:push ("backgroundMap")
-    sceneMan:push ("game")
+    -- sceneMan:push ("game")
+    sceneMan:push ("debug")
 end
 
 function love.update (dt)
@@ -54,7 +57,6 @@ end
 
 function love.draw ()
     push:start()
-        love.graphics.scale(Scale, Scale)
         sceneMan:event ("draw")
         tux.callbacks.draw ()
         sceneMan:event ("lateDraw")
@@ -71,4 +73,8 @@ end
 
 function love.textinput (text)
     tux.callbacks.textinput (text)
+end
+
+function love.mousereleased (x, y, button)
+    sceneMan:event ("mousereleased", x, y, button)
 end

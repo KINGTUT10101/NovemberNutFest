@@ -13,6 +13,7 @@ local defaultTile = {
 
         if self.building == nil then
             self.building = buildObj
+            buildObj.lastUpdate = love.timer.getTime()
             buildObj:start ()
 
             return true
