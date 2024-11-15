@@ -70,6 +70,7 @@ baseNuts.candleNut = {
 }
 
 
+-- This is an example of how to make a buildable class
 buildableManager:create ("peanut", {
     damage = 5,
     projSpeed = 200,
@@ -83,8 +84,13 @@ buildableManager:create ("peanut", {
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     frame = nutPlantImg,
     interact = function () print ("HEY") end,
+    update = function (dt, passedTime)
+        -- do something
+        print (passedTime)
+    end,
 })
 
+-- These are examples of how to make buildable objects from a defined class
 baseNuts.peanut = buildableManager:generate ("peanut")
 baseNuts.walnut = buildableManager:generate ("peanut")
 baseNuts.acorn = buildableManager:generate ("peanut")

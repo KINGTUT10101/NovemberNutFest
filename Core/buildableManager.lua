@@ -10,12 +10,13 @@ local defaultClassDef = {
     id = nil,
     health = 100,
     frame = nil,
+    lastUpdate = 0,
 
     -- Methods
-    start = function () end,
-    update = function () end,
-    interact = function () end,
-    delete = function () end,
+    start = function (self) end,
+    update = function (self, dt, passedTime) end,
+    interact = function (self, tileX, tileY) end,
+    delete = function (self) end,
 }
 
 local function handleNilKey (self, key)

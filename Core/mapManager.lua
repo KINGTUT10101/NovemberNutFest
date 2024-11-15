@@ -6,15 +6,15 @@ local mapGenerator = require ("Core.mapGenerator")
 -- MAJOR TODO: Create and update active buildings
 
 local mapManager = {
-    grid = nil, -- Stores all map tiles
-    activeGrid = nil, -- Stores map tiles with buildings
+    grid = {}, -- Stores all map tiles
+    activeGrid = {}, -- Stores map tiles with buildings
     mapSize = 0,
     tileSize = 32,
     cam = {
         x = 0,
         y = 0,
         zoom = 1,
-    }
+    },
 }
 
 -- Regenerates the map using the specified size, in tiles
@@ -32,7 +32,24 @@ function mapManager:update (dt, camX, camY, camZoom)
     self.cam.y = camY
     self.cam.zoom = camZoom
 
-    -- TODO: Update buildable tiles from the active grid
+    -- Updates buildables within the player's view
+    local updateStartTime = love.timer.getTime()
+    local startX, startY = self:screenToMap(-10, -10)
+    local endX, endY = self:screenToMap(GAMEWIDTH + 10, GAMEHEIGHT + 10)
+    local grid = self.grid
+
+    for i = math.max(startX, 1), math.min(endX, self.mapSize) do
+        local firstPart = grid[i]
+    
+        for j = math.max(startY, 1), math.min(endY, self.mapSize) do
+            local buildable = firstPart[j].building
+
+            if buildable ~= nil then
+                buildable:update (dt, updateStartTime - buildable.lastUpdate)
+                buildable.lastUpdate = updateStartTime
+            end
+        end
+    end
 end
 
 -- Renders tiles that are within the player's view
@@ -156,7 +173,7 @@ function mapManager:interact (tileX, tileY)
         local buildable = tile.building
     
         if buildable ~= nil then
-            buildable:interact (tileX, tileY)
+            buildable:interact ()
     
             result = true
         end
