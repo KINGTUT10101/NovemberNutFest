@@ -6,5 +6,5 @@ function love.conf (t)
     t.window.icon = "Graphics/windowIcon.png"
     t.window.display = 2
 
-    t.window.vsync = 1
+    t.window.vsync = 0
 end
