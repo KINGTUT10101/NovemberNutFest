@@ -148,4 +148,21 @@ function mapManager:screenToMap (screenX, screenY)
     return mapX, mapY
 end
 
+function mapManager:interact (tileX, tileY)
+    local result = false
+    
+    if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
+        local tile = self.grid[tileX][tileY]
+        local buildable = tile.building
+    
+        if buildable ~= nil then
+            buildable:interact (tileX, tileY)
+    
+            result = true
+        end
+    end
+    
+    return result
+end
+
 return mapManager

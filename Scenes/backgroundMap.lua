@@ -1,6 +1,7 @@
 local thisScene = {}
 local sceneMan = require ("Libraries.sceneMan")
 local mapManager = require ("Core.mapManager")
+local push = require ("Libraries.push")
 
 local camera = {
     x = 0,
@@ -52,7 +53,9 @@ function thisScene:keypressed (key, scancode, isrepeat)
 end
 
 function thisScene:mousereleased (x, y, button)
+    local mx, my = push:toGame(love.mouse.getPosition ())
 
+    mapManager:interact (mapManager:screenToMap (mx, my))
 end
 
 return thisScene

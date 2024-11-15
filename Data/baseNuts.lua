@@ -82,6 +82,7 @@ buildableManager:create ("peanut", {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     frame = nutPlantImg,
+    interact = function () print ("HEY") end,
 })
 
 baseNuts.peanut = buildableManager:generate ("peanut")
