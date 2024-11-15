@@ -86,7 +86,6 @@ buildableManager:create ("peanut", {
     interact = function () print ("HEY") end,
     update = function (dt, passedTime)
         -- do something
-        print (passedTime)
     end,
 })
 
