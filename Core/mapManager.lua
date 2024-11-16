@@ -91,19 +91,21 @@ end
 
 -- Plants a nut object at the specified tile
 -- Two nuts must be planted on the same location for a crop to start growing
+-- Returns true if the nut was planted successfully
 function mapManager:plantNut (tileX, tileY, nutObj)
     assert (nutObj ~= nil, "Nut object not provided")
-
-    local result = false
     
     if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
         local tile = self.grid[tileX][tileY]
+        local buildable = tile.building
 
-        -- TODO: Create nut plant if it doesn't currently exist here
-        -- TODO: Finish code for setting the nuts for the plant
+        -- Check if tile contains a nut plant
+        if buildable.id == "nutPlant" then
+            return buildable:addNut (nutObj, tile)
+        end
     end
 
-    return result
+    return false
 end
 
 -- Creates a buildable object at the specified tile if it is not already occupied
