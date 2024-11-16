@@ -1,6 +1,6 @@
 local copyTable = require ("Helpers.copyTable")
 local average = require ("Helpers.average")
-local clamp = require ("Helpers.clamp")
+local clamp = require ("Libraries.lume").clamp
 local mapToScale = require ("Helpers.mapToScale")
 local setDefaults = require ("Helpers.setDefaults")
 
