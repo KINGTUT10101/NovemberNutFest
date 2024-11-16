@@ -1,6 +1,6 @@
 local function genericInit(enemy, x, y)
 
-    enemy.speed = 0--100
+    enemy.speed = 100
     enemy.health = 125
 
     function enemy:load()

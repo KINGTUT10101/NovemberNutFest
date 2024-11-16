@@ -24,9 +24,9 @@ function gun:update(dt)
     gun.camY = Player.camY+(Player.height/2)
 
     -- Set the gun's rotation based on the cursor
-    gun.rotation =  math.atan2((love.mouse.getY()) - gun.camY, (love.mouse.getX()) - gun.camX)
+    gun.rotation =  math.atan2((WindowYToGame(love.mouse.getY())) - gun.camY, WindowXToGame(love.mouse.getX()) - gun.camX)
 
-    if (love.mouse.getX()) < gun.camX then
+    if (WindowXToGame(love.mouse.getX())) < gun.camX then
         gun.flipped = -1
     else
         gun.flipped = 1
@@ -40,7 +40,7 @@ function gun:update(dt)
     -- Fire the gun
     if love.mouse.isDown(1) then
         -- This takes account for the game size being different from the window's
-        gun:shoot((love.mouse.getX())+Player.x, (love.mouse.getY())+Player.y)
+        gun:shoot(WindowXToGame(love.mouse.getX())+Player.x, WindowYToGame(love.mouse.getY())+Player.y)
     end
 
     -- TEST ** adds nut to section 1 of inventory
