@@ -41,6 +41,9 @@ end
 
 function thisScene:update (dt)
 
+    love.graphics.push()
+    love.graphics.scale(camera.zoom, camera.zoom)
+
     -- TEST ** spawner
     spawnTimer = spawnTimer + dt
 
@@ -60,9 +63,15 @@ function thisScene:update (dt)
     EnemyManager.updateEnemies(dt)
     hitmarkerManager:update(dt)
     gameUI:update()
+
+    love.graphics.pop()
 end
 
 function thisScene:draw ()
+
+    love.graphics.push()
+    love.graphics.scale(camera.zoom, camera.zoom)
+
     -- Draw Entities
     EnemyManager.drawEnemies()
     Player:draw()
@@ -72,6 +81,7 @@ function thisScene:draw ()
     hitmarkerManager:draw()
     gameUI:draw()
 
+    love.graphics.pop()
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)

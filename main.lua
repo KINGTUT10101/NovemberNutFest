@@ -20,7 +20,7 @@ Scale = 3
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
 DevMode = true
-ScaledGameWidth, ScaledGameHeight = GAMEWIDTH/Scale, GAMEHEIGHT/Scale
+--ScaledGameWidth, ScaledGameHeight = GAMEWIDTH/camera.zoom, GAMEHEIGHT/camera.zoom
 
 -- Defines the functions
 local Player = require("player")
@@ -45,7 +45,7 @@ function love.load ()
 
     sceneMan:push ("backgroundMap")
     -- sceneMan:push ("game")
-    sceneMan:push ("debug")
+    sceneMan:push ("game")
 end
 
 function love.update (dt)

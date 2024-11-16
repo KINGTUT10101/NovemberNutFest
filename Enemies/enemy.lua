@@ -59,6 +59,9 @@ function EnemyManager.spawnEnemy(x, y, type)
 
     function enemy:genericUpdate(dt)
 
+        self.camX = self.x - Player.x
+        self.camY = self.y - Player.y
+
         if self.immunityTimer < self.maxImmunityTimer then
             self.immunityTimer = self.immunityTimer + dt
         end

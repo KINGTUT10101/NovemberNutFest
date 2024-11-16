@@ -18,14 +18,6 @@ Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immu
 --Player.flashTimer = 0 -- The timer that dictates what flash your on based on framerate
 Player.dead = false
 
--- Where the player is based on the camera's position
-Player.camX = (ScaledGameWidth/2)-(Player.width/2)
-Player.camY = (ScaledGameHeight/2)-(Player.height/2)
-
--- Position with the center of the screen offset
-Player.relX = Player.x + Player.camX
-Player.relY = Player.y + Player.camY
-
 -- Sound Effedts
 local hurtSound = love.audio.newSource("SoundEffects/player_hurt.wav", "static")
 
@@ -33,9 +25,25 @@ function Player.load()
 
     SpriteSheets.Player = love.graphics.newImage("Graphics/player.png")
     SpriteSheets.Player:setFilter("nearest", "nearest")
+
+        -- Where the player is based on the camera's position
+        Player.camX = ((GAMEWIDTH/2))-((Player.width/2))
+        Player.camY = ((GAMEHEIGHT/2))-((Player.height/2))
+
+        -- Position with the center of the screen offset
+        Player.relX = Player.x + Player.camX
+        Player.relY = Player.y + Player.camY
 end
 
 function Player:update(dt)
+
+    Player.camX = (GAMEWIDTH/(2*camera.zoom))-(Player.width/(2*camera.zoom))
+    Player.camY = (GAMEHEIGHT/(2*camera.zoom))-(Player.height/(2*camera.zoom))
+
+    Player.relX = Player.x + Player.camX
+    Player.relY = Player.y + Player.camY
+
+    print(Player.x)
 
     -- Change active inventory section
     if love.keyboard.isDown("1") then
@@ -57,8 +65,8 @@ function Player:update(dt)
     elseif love.keyboard.isDown("9") then
         inventoryHandler.activeSection = 9
     end
-        
-    
+
+
 
     -- Deathcheck
     if Player.health <= 0 then
@@ -121,8 +129,8 @@ function Player:update(dt)
         self.velY = 0
     end
 
-    self.relX = self.x + ((638/2)-(Player.width/2))
-    self.relY = self.y + ((358/2)-(Player.height/2))
+    self.relX = self.x + self.camX
+    self.relY = self.y + self.camY
 end
 
 function Player:kill()
@@ -153,7 +161,7 @@ function Player:giveImmunity()
 end
 
 
-function Player:draw() 
+function Player:draw()
     if not self.dead then
         if self.immunityTimer >= self.maxImmunityTimer then
             love.graphics.draw(SpriteSheets.Player, self.camX, self.camY)

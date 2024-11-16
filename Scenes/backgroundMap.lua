@@ -3,7 +3,7 @@ local sceneMan = require ("Libraries.sceneMan")
 local mapManager = require ("Core.mapManager")
 local push = require ("Libraries.push")
 
-local camera = {
+camera = {
     x = 0,
     y = 0,
     zoom = 2,
@@ -23,6 +23,7 @@ function thisScene:delete (...)
 end
 
 function thisScene:update (dt)
+    --[[
     if love.keyboard.isDown("w") then
         camera.y = camera.y - camVelocity * dt * camera.zoom
     elseif love.keyboard.isDown("s") then
@@ -40,8 +41,9 @@ function thisScene:update (dt)
     elseif love.keyboard.isDown("]") then
         camera.zoom = camera.zoom + zoomVelocity * dt
     end
+    --]]
 
-    mapManager:update (dt, camera.x, camera.y, camera.zoom)
+    mapManager:update (dt, Player.relX, Player.relY, camera.zoom)
 end
 
 function thisScene:draw ()
