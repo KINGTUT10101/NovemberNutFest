@@ -43,8 +43,6 @@ function Player:update(dt)
     Player.relX = Player.x + Player.camX
     Player.relY = Player.y + Player.camY
 
-    print(Player.x)
-
     -- Change active inventory section
     if love.keyboard.isDown("1") then
         inventoryHandler.activeSection = 1

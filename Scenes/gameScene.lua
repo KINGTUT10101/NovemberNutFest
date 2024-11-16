@@ -85,7 +85,7 @@ function thisScene:draw ()
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)
-    
+
 end
 
 function thisScene:mousereleased (x, y, button)

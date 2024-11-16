@@ -35,15 +35,14 @@ function thisScene:update (dt)
     elseif love.keyboard.isDown("d") then
         camera.x = camera.x + camVelocity * dt * camera.zoom
     end
-
+    --]]
     if love.keyboard.isDown("[") then
         camera.zoom = camera.zoom - zoomVelocity * dt
     elseif love.keyboard.isDown("]") then
         camera.zoom = camera.zoom + zoomVelocity * dt
     end
-    --]]
 
-    mapManager:update (dt, Player.relX, Player.relY, camera.zoom)
+    mapManager:update (dt, Player.relX*camera.zoom, Player.relY*camera.zoom, camera.zoom)
 end
 
 function thisScene:draw ()

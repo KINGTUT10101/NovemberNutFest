@@ -26,6 +26,9 @@ function hitmarkerManager:new(value, x, y)
 
     hitmarker.color = {1, 0, 0}
 
+    hitmarker.velX = hitmarker.velX/camera.zoom
+    hitmarker.velY = hitmarker.velY/camera.zoom
+
     table.insert(hitmarkers, hitmarker)
 end
 

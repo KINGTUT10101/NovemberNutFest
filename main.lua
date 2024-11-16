@@ -13,14 +13,13 @@ local lovelyToasts = require ("Libraries.lovelyToasts")
 local tux = require ("Libraries.tux")
 
 -- Declares / initializes the local variables
-local windowWidth, windowHeight = 854, 480
+
 
 -- Declares / initializes the global variables
-Scale = 3
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
+WindowWidth, WindowHeight = 854, 480
 DevMode = true
---ScaledGameWidth, ScaledGameHeight = GAMEWIDTH/camera.zoom, GAMEHEIGHT/camera.zoom
 
 -- Defines the functions
 local Player = require("player")
@@ -30,8 +29,9 @@ local Gun = require("gun")
 local ProjectileManager = require("Managers.projectile")
 
 function love.load ()
+
     -- Set up Push
-    push:setupScreen(GAMEWIDTH, GAMEHEIGHT, windowWidth, windowHeight, {fullscreen = false})
+    push:setupScreen(GAMEWIDTH, GAMEHEIGHT, WindowWidth, WindowHeight, {fullscreen = false})
     
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {GAMEWIDTH, GAMEHEIGHT}
@@ -77,4 +77,33 @@ end
 
 function love.mousereleased (x, y, button)
     sceneMan:event ("mousereleased", x, y, button)
+end
+
+-- Convert game coordinates to window coordinates
+function GameXToWindow(x_game)
+    local scaleX = WindowWidth / GAMEWIDTH
+
+    local x_window = x_game * scaleX
+
+    return x_window
+end
+function GameYToWindow(y_game)
+    local scaleY = WindowHeight / GAMEHEIGHT
+
+    local y_window = y_game * scaleY
+
+    return y_window
+end
+
+-- Convert window coordinates to game coordinates
+function WindowXToGame(x_window)
+    local scaleX = GAMEWIDTH / WindowWidth
+
+    return (x_window * scaleX)/camera.zoom
+end
+
+function WindowYToGame(y_window)
+    local scaleY = GAMEHEIGHT / WindowHeight
+
+    return (y_window * scaleY)/camera.zoom
 end
