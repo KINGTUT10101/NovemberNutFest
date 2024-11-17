@@ -15,13 +15,15 @@ local layout = {
     }
 }
 
-function layout:reset (x, y, marginX, marginY)
+function layout:setOrigin (x, y, marginX, marginY)
     self.origin.x = x
-    self.origin.rowX = 0
+    self.origin.rowX = x
     self.origin.rowY = y
     self.origin.rowH = marginY
     self.origin.marginX = marginX
     self.origin.marginY = marginY
+
+    -- print (x, y)
 end
 
 function layout:left (w, h)
@@ -34,10 +36,11 @@ function layout:left (w, h)
 end
 
 function layout:right (w, h)
-    self.origin.rowX = self.origin.rowX + self.origin.marginX + w
+    local origRowX = self.origin.rowX
+    self.origin.rowX = origRowX + self.origin.marginX + w
     self.origin.rowH = math.max (self.origin.rowH, h + self.origin.marginY)
 
-    return self.origin.rowX + self.origin.marginX / 2, self.origin.y + self.origin.marginY / 2, w, h
+    return origRowX + self.origin.marginX / 2, self.origin.rowY + self.origin.marginY / 2, w, h
 end
 
 function layout:down (w, h)
