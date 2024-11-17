@@ -30,6 +30,12 @@ local Gun = require("gun")
 local ProjectileManager = require("Managers.projectile")
 
 function love.load ()
+    -- TEMP
+    -- Loads personal config changes
+    -- You can change these by editing personalConfig.lua
+    local config = require ("personalConfig")
+    windowWidth, windowHeight = config.window[1], config.window[2]
+
     -- Set up Push
     push:setupScreen(GAMEWIDTH, GAMEHEIGHT, windowWidth, windowHeight, {fullscreen = false})
     
@@ -42,9 +48,10 @@ function love.load ()
     sceneMan:newScene ("backgroundMap", require ("Scenes.backgroundMap"))
     sceneMan:newScene("game", require("Scenes.gameScene"))
     sceneMan:newScene("debug", require("Scenes.debug"))
+    sceneMan:newScene("title", require("Scenes.title"))
 
-    sceneMan:push ("backgroundMap")
-    -- sceneMan:push ("game")
+    -- sceneMan:push ("backgroundMap")
+    sceneMan:push ("title")
     sceneMan:push ("debug")
 end
 
