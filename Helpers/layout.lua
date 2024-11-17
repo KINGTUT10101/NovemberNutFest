@@ -17,20 +17,35 @@ local layout = {
 
 function layout:reset (x, y, marginX, marginY)
     self.origin.x = x
-    self.origin.y = y
     self.origin.rowX = 0
-    self.origin.rowH = 0
+    self.origin.rowY = y
+    self.origin.rowH = marginY
     self.origin.marginX = marginX
     self.origin.marginY = marginY
 end
 
+function layout:left (w, h)
+    local startingRowX = self.origin.rowX - (w + self.origin.marginX)
+    self.origin.rowX = startingRowX
+    local result = {self:right (w, h)}
+    self.origin.rowX = startingRowX
+
+    return result
+end
+
 function layout:right (w, h)
-    local origRowX = self.origin.rowX
-
     self.origin.rowX = self.origin.rowX + self.origin.marginX + w
-    self.origin.rowH = math.max (self.origin.rowH + self.origin.marginY, h)
+    self.origin.rowH = math.max (self.origin.rowH, h + self.origin.marginY)
 
-    return origRowX + self.origin.marginX / 2, w, h
+    return self.origin.rowX + self.origin.marginX / 2, self.origin.y + self.origin.marginY / 2, w, h
+end
+
+function layout:down (w, h)
+    self.origin.rowY = self.origin.rowY + self.origin.rowH
+    self.origin.rowH = self.origin.marginY
+    self.origin.rowX = self.origin.x
+
+    return self:right (w, h)
 end
 
 function layout:setParent (x, y, w, h)
