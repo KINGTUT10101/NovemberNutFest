@@ -47,12 +47,13 @@ local function ammoInventory (x, y, sectionIndex)
     }, layout:right (compW, 50))
 
     -- Inventory section items
+    local invIndexOffset = (page - 1) * itemsPerRow * rowsPerPage
     layout:setOrigin (x + 25, y + 50, 5, 5)
     layout:down (0, 0)
 
     for i = 1, rowsPerPage do
         for j = 1, itemsPerRow do
-            local nutObj = sectionNuts[(i - 1) * itemsPerRow + j]
+            local nutObj = sectionNuts[(i - 1) * itemsPerRow + j + invIndexOffset]
 
             if nutObj == nil then
                 break
@@ -61,7 +62,7 @@ local function ammoInventory (x, y, sectionIndex)
                     image = icons.info,
                     iscale = 2,
                 }, layout:right (70, 70)) == "end" then
-                    print ((i - 1) * itemsPerRow + j)
+                    print ((i - 1) * itemsPerRow + j + invIndexOffset)
                     selectedNut = nutObj
                 end
             end
