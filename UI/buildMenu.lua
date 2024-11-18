@@ -37,6 +37,8 @@ local page = 1
 local maxPage = #buildablesToShow
 
 local function buildMenu (x, y)
+    local selectedBuild = nil
+
     -- Page buttons
     if tux.show.button ({
         text = "<<",
@@ -92,12 +94,29 @@ local function buildMenu (x, y)
         valign = "top",
     }, layout:down (400, 200))
 
+    -- Action buttons
+    layout:setOrigin (x + compW, y, 5, 10)
+
+    -- Select
+    if tux.show.button ({
+        image = icons.confirm,
+        iscale = 2,
+        tooltip = {
+            text = "Select buildable"
+        },
+    }, layout:right (75, 75)) == "end" then
+        print (buildablesToShow[page].name)
+        selectedBuild = buildablesToShow[page].buildable
+    end
+
     -- Background
     tux.show.label ({
         text = "Buildables",
         valign = "top",
         padding = {padAll = 5}
     }, x, y, compW, compH)
+
+    return selectedBuild
 end
 
 return buildMenu
