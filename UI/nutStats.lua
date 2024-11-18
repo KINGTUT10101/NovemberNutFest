@@ -111,7 +111,7 @@ local function nutStats (x, y, nutObj, mode)
 
         -- Text
         tux.show.label ({
-            text = statDef.name .. ": " .. "42",
+            text = statDef.name .. ": " .. nutObj[statDef.id],
             align = "left",
             colors = {1, 0, 0, 1},
             fsize = 28,
