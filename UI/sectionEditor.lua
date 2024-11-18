@@ -3,22 +3,35 @@ local layout = require ("Helpers.layout")
 local icons = require ("Helpers.icons")
 local inventoryHandler = require ("Core.inventoryHandler")
 
+local sectionIcons = {
+    icons.inverseStar,
+    icons.lightbulb,
+    icons.extinguisher,
+    icons.temperature,
+}
+
 local compW, compH = 435, 500
 local itemsPerRow = 5
-local rowsPerPage = 5
+local rowsPerPage = 3
+local maxNameLength = 15
 
 local lastSectionIndex = nil
 local page = 1
 
-local function ammoInventory (x, y, sectionIndex)
-    local sectionNuts = inventoryHandler:getSectionStorage (sectionIndex)
-    local maxPage = math.ceil (#sectionNuts / (itemsPerRow * rowsPerPage))
+local nameInputData = {
+    text = "ERROR",
+    inFocus = false,
+}
+
+local function sectionEditor (x, y, sectionIndex)
+    local maxPage = math.ceil (#sectionIcons / (itemsPerRow * rowsPerPage))
     local selectedNut = nil
 
     -- Reset values if section index was changed
     if lastSectionIndex ~= sectionIndex then
         lastSectionIndex = sectionIndex
         page = 1
+        nameInputData.text = inventoryHandler:getSectionName (sectionIndex)
     end
 
     -- Page buttons
@@ -46,24 +59,39 @@ local function ammoInventory (x, y, sectionIndex)
         colors = {0, 0, 0, 0}
     }, layout:right (compW, 50))
 
+    -- Name editor
+    layout:setParent (x, y, compW, compH)
+    local centeredPos = {layout:center (400, 0)}
+    layout:setOrigin (centeredPos[1], y + 440, 0, 0)
+
+    tux.show.singleInput ({
+        data = nameInputData,
+        fsize = 24,
+        padding = {padX = 5}
+    }, centeredPos[1], y + 50, 400, 50)
+
+    -- Clamp name length
+    if #nameInputData.text > maxNameLength then
+        nameInputData.text = string.sub (nameInputData.text, 1, maxNameLength)
+    end
+
     -- Inventory section items
     local invIndexOffset = (page - 1) * itemsPerRow * rowsPerPage
-    layout:setOrigin (x + 25, y + 50, 5, 5)
+    layout:setOrigin (x + 25, y + 200, 5, 5)
     layout:down (0, 0)
 
     for i = 1, rowsPerPage do
         for j = 1, itemsPerRow do
-            local nutObj = sectionNuts[(i - 1) * itemsPerRow + j + invIndexOffset]
+            local icon = sectionIcons[(i - 1) * itemsPerRow + j + invIndexOffset]
 
-            if nutObj == nil then
+            if icon == nil then
                 break
             else
                 if tux.show.button ({
-                    image = icons.info,
+                    image = icon,
                     iscale = 2,
                 }, layout:right (70, 70)) == "end" then
                     print ((i - 1) * itemsPerRow + j + invIndexOffset)
-                    selectedNut = nutObj
                 end
             end
         end
@@ -73,20 +101,29 @@ local function ammoInventory (x, y, sectionIndex)
     -- Edit buttons
     layout:setOrigin (x + compW, y, 5, 10)
 
-    -- Edit name
+    -- Save
     if tux.show.button ({
-        image = inventoryHandler:getSectionIcon (sectionIndex),
+        image = icons.save,
         iscale = 2,
         tooltip = {
-            text = "Edit section info"
+            text = "Save and close"
         },
-    }, layout:down (75, 75)) == "end" then
-        print ("EDIT")
+    }, layout:right (75, 75)) == "end" then
+        print ("SAVE")
     end
+
+    -- Section icon
+    layout:setParent (x, y + 100, compW, 100)
+
+    tux.show.label ({
+        image = inventoryHandler:getSectionIcon (sectionIndex),
+        iscale = 2.5,
+        colors = {0, 0, 0, 0},
+    }, layout:center (compW, 100))
 
     -- Background
     tux.show.label ({
-        text = "Ammo Inventory",
+        text = "Edit Section",
         valign = "top",
         padding = {padAll = 5}
     }, x, y, compW, compH)
@@ -94,4 +131,4 @@ local function ammoInventory (x, y, sectionIndex)
     return selectedNut
 end
 
-return ammoInventory
+return sectionEditor
