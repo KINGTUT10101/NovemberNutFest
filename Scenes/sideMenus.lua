@@ -9,6 +9,7 @@ local icons = require ("Helpers.icons")
 local nutStats = require ("UI.nutStats")
 local ammoInventory = require ("UI.ammoInventory")
 local sectionEditor = require ("UI.sectionEditor")
+local buildMenu = require ("UI.buildMenu")
 
 local nutStatsMode = "combat"
 local testNut = Nut:new ()
@@ -21,7 +22,7 @@ end
 function thisScene:update (dt)
     -- nutStatsMode = nutStats (15, 575, testNut, nutStatsMode)
 
-    sectionEditor (15, 575, 1)
+    buildMenu (15, 575)
 end
 
 function thisScene:draw ()
