@@ -71,9 +71,12 @@ function love.load ()
     sceneMan:newScene("game", require("Scenes.gameScene"))
     sceneMan:newScene("debug", require("Scenes.debug"))
     sceneMan:newScene("title", require("Scenes.title"))
+    sceneMan:newScene("gameMenu", require("Scenes.gameMenu"))
+    sceneMan:newScene("sideMenus", require("Scenes.sideMenus"))
 
-    -- sceneMan:push ("backgroundMap")
-    sceneMan:push ("title")
+    sceneMan:push ("backgroundMap")
+    sceneMan:push ("sideMenus")
+    sceneMan:push ("gameMenu")
     sceneMan:push ("debug")
 end
 

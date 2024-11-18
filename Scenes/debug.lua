@@ -73,8 +73,6 @@ function thisScene:lateDraw ()
 
     -- Mouse crosshair
     if showMouseCrosshair == true then
-
-
         love.graphics.setColor(1, 0, 0, 1)
         love.graphics.line (mx, 0, mx, 1080)
         love.graphics.line (0, my, 1920, my)
