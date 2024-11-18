@@ -75,7 +75,7 @@ function hitmarkerManager:draw()
     for _, h in pairs(hitmarkers) do
         love.graphics.setFont(font)
         love.graphics.setColor(h.color)
-        love.graphics.print(h.value, h.x-Player.x, h.y-Player.y)
+        love.graphics.print(h.value, h.x-camera.x, h.y-camera.y)
         love.graphics.setColor(1, 1, 1, 1)
     end
 end

@@ -5,6 +5,7 @@ local inventoryHandler = require("Core.inventoryHandler")
 local ProjectileManager = require("Managers.projectile")
 local ItemManager = require("Managers.item")
 local baseNuts = require("Data.baseNuts")
+local push = require("Libraries.push")
 
 gun.cooldownMax = .2 -- in seconds
 gun.cooldownTimer = gun.cooldownMax
@@ -17,16 +18,13 @@ local shootSound = love.audio.newSource("SoundEffects/shoot.wav", "static")
 function gun:update(dt)
 
     -- Set the gun's position based on the player
-    gun.x = Player.relX+(Player.width-5)
-    gun.y = Player.relY+(Player.height/2)
-    -- The guns position relative to the screen
-    gun.camX = Player.camX+(Player.width-5)
-    gun.camY = Player.camY+(Player.height/2)
+    gun.x = Player.x+(Player.width-5)
+    gun.y = Player.y+(Player.height/2)
 
     -- Set the gun's rotation based on the cursor
-    gun.rotation =  math.atan2((WindowYToGame(love.mouse.getY())) - gun.camY, WindowXToGame(love.mouse.getX()) - gun.camX)
+    gun.rotation =  math.atan2((WindowYToGame(love.mouse.getY())) - (push:getHeight()/2), WindowXToGame(love.mouse.getX()) - (push:getWidth()/2))
 
-    if (WindowXToGame(love.mouse.getX())) < gun.camX then
+    if (WindowXToGame(love.mouse.getX())) < push:getWidth()/2 then
         gun.flipped = -1
     else
         gun.flipped = 1
@@ -85,7 +83,7 @@ function gun:load()
 end
 
 function gun:draw()
-    love.graphics.draw(SpriteSheets.gun, self.camX, self.camY, gun.rotation, 1, gun.flipped, 0, gun.height/2)
+    love.graphics.draw(SpriteSheets.gun, self.x-camera.x, self.y-camera.y, gun.rotation, 1, gun.flipped, 0, gun.height/2)
 end
 
 return gun

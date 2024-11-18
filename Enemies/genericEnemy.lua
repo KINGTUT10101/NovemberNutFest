@@ -18,7 +18,7 @@ local function genericInit(enemy, x, y)
 
     function enemy:draw()
         -- Add death animations ect.
-        love.graphics.draw(self.sprite, self.camX, self.camY)
+        love.graphics.draw(self.sprite, self.x-camera.x, self.y-camera.y)
     end
 
     return enemy

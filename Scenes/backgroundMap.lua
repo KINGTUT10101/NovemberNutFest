@@ -42,7 +42,7 @@ function thisScene:update (dt)
         camera.zoom = camera.zoom + zoomVelocity * dt
     end
 
-    mapManager:update (dt, Player.relX*camera.zoom, Player.relY*camera.zoom, camera.zoom)
+    mapManager:update (dt, Player.x*camera.zoom, Player.y*camera.zoom, camera.zoom)
 end
 
 function thisScene:draw ()

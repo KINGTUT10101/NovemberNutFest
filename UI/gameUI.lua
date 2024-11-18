@@ -4,7 +4,7 @@ local drawTextWithBorder = require("Helpers/drawTextWithBorder")
 local inventoryHandler = require("Core.inventoryHandler")
 local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 48)
 
-DarknessLevel = .9
+DarknessLevel = 0
 
 function gameUI:load()
     -- Darkness
@@ -63,8 +63,8 @@ function gameUI:update()
     local lightAmount = 0
 
     -- Add the players position as a light
-    table.insert(lights, (Player.camX*camera.zoom)+((Player.width/2)*camera.zoom))
-    table.insert(lights, (Player.camY*camera.zoom)+((Player.height/2)*camera.zoom))
+    table.insert(lights, ((Player.x-camera.x)*camera.zoom)+((Player.width/2)*camera.zoom))
+    table.insert(lights, ((Player.y-camera.y)*camera.zoom)+((Player.height/2)*camera.zoom))
     table.insert(lights, 65*camera.zoom)
     table.insert(lights, 0)
     table.insert(lights, 0)
