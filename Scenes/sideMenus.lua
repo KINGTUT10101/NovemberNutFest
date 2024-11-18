@@ -16,7 +16,7 @@ function thisScene:load (...)
 end
 
 function thisScene:update (dt)
-    nutStatsMode = nutStats (15, 575, testNut, nutStatsMode)
+    -- nutStatsMode = nutStats (15, 575, testNut, nutStatsMode)
 end
 
 function thisScene:draw ()
