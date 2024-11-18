@@ -12,6 +12,8 @@ local sectionEditor = require ("UI.sectionEditor")
 local buildMenu = require ("UI.buildMenu")
 local requiredMaterials = require ("UI.requiredMaterials")
 
+local pauseMenu = require ("UI.pauseMenu")
+
 local nutStatsMode = "combat"
 local testNut = Nut:new ()
 
@@ -23,7 +25,7 @@ end
 function thisScene:update (dt)
     -- nutStatsMode = nutStats (15, 575, testNut, nutStatsMode)
 
-    requiredMaterials (15, 575)
+    pauseMenu ()
 end
 
 function thisScene:draw ()
