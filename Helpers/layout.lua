@@ -32,7 +32,7 @@ function layout:left (w, h)
     local result = {self:right (w, h)}
     self.origin.rowX = startingRowX
 
-    return result
+    return unpack (result)
 end
 
 function layout:right (w, h)
@@ -43,12 +43,20 @@ function layout:right (w, h)
     return origRowX + self.origin.marginX / 2, self.origin.rowY + self.origin.marginY / 2, w, h
 end
 
-function layout:down (w, h)
+function layout:down (w, h, rightMode)
+    if rightMode == nil then
+        rightMode = true
+    end
+
     self.origin.rowY = self.origin.rowY + self.origin.rowH
     self.origin.rowH = self.origin.marginY
     self.origin.rowX = self.origin.x
 
-    return self:right (w, h)
+    if rightMode == true then
+        return self:right (w, h)
+    else
+        return self:left (w, h)
+    end
 end
 
 function layout:setParent (x, y, w, h)
