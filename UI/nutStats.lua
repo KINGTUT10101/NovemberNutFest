@@ -69,6 +69,7 @@ local statsToShow = {
 local compW, compH = 435, 500
 
 -- Mode can be either "combat", "effects", or "farming"
+-- The component may modify the mode, so it returns the new mode as a string
 local function nutStats (x, y, nutObj, mode)
     -- Mode change buttons
     layout:setParent (x + 10, y, compW - 20, compH)

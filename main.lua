@@ -47,6 +47,7 @@ function love.load ()
     local test = require ("Helpers.slices").default
     tux.utils.setDefaultSlices (test)
     tux.utils.setDefaultFontSize (32)
+    tux.utils.setTooltipFont ("default", 24)
     tux.utils.setDefaultColors (
         {
             normal = {
