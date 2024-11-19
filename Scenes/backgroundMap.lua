@@ -2,14 +2,11 @@ local thisScene = {}
 local sceneMan = require ("Libraries.sceneMan")
 local mapManager = require ("Core.mapManager")
 local push = require ("Libraries.push")
+local camera = require("Libraries.hump.camera")
 
-camera = {
-    x = 0,
-    y = 0,
-    zoom = 2,
-}
+
 local camVelocity = 1000
-local zoomVelocity = 5
+local zoomVelocity = .01
 
 function thisScene:load (...)
     sceneMan = ...
@@ -23,30 +20,21 @@ function thisScene:delete (...)
 end
 
 function thisScene:update (dt)
-    --[[
-    if love.keyboard.isDown("w") then
-        camera.y = camera.y - camVelocity * dt * camera.zoom
-    elseif love.keyboard.isDown("s") then
-        camera.y = camera.y + camVelocity * dt * camera.zoom
-    end
 
-    if love.keyboard.isDown("a") then
-        camera.x = camera.x - camVelocity * dt * camera.zoom
-    elseif love.keyboard.isDown("d") then
-        camera.x = camera.x + camVelocity * dt * camera.zoom
-    end
-    --]]
     if love.keyboard.isDown("[") then
-        camera.zoom = camera.zoom - zoomVelocity * dt
+        camera:zoom(camera.scale-zoomVelocity * dt)
     elseif love.keyboard.isDown("]") then
-        camera.zoom = camera.zoom + zoomVelocity * dt
+        camera:zoom(camera.scale+zoomVelocity * dt)
     end
 
-    mapManager:update (dt, Player.relX*camera.zoom, Player.relY*camera.zoom, camera.zoom)
+    mapManager:update (dt, 0, 0, 1)
 end
 
 function thisScene:draw ()
-    mapManager:draw ()
+    camera:attach(nil, nil, push:getWidth(), push:getHeight())
+    love.graphics.setScissor(0, 0, push:getWidth(), push:getHeight())
+    mapManager:draw()
+    camera:detach()
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)

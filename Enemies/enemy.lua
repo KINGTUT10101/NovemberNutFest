@@ -59,9 +59,6 @@ function EnemyManager.spawnEnemy(x, y, type)
 
     function enemy:genericUpdate(dt)
 
-        self.camX = self.x - Player.x
-        self.camY = self.y - Player.y
-
         if self.immunityTimer < self.maxImmunityTimer then
             self.immunityTimer = self.immunityTimer + dt
         end
@@ -75,19 +72,19 @@ function EnemyManager.spawnEnemy(x, y, type)
 
         -- Move towards the player
         if not self.stunned then
-            if math.abs(self.x - Player.relX) > threshold then
-                if self.x < Player.relX then
+            if math.abs(self.x - Player.x) > threshold then
+                if self.x < Player.x then
                     self.velX = self.velX + dtSpeed
                 end
-                if self.x > Player.relX then
+                if self.x > Player.x then
                     self.velX = self.velX - dtSpeed
                 end
             end
-            if math.abs(self.y - Player.relY) > threshold then
-                if self.y < Player.relY then
+            if math.abs(self.y - Player.y) > threshold then
+                if self.y < Player.y then
                     self.velY = self.velY + dtSpeed
                 end
-                if self.y > Player.relY then
+                if self.y > Player.y then
                     self.velY = self.velY - dtSpeed
                 end
             end

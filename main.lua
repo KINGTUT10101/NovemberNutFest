@@ -96,14 +96,4 @@ function GameYToWindow(y_game)
 end
 
 -- Convert window coordinates to game coordinates
-function WindowXToGame(x_window)
-    local scaleX = GAMEWIDTH / WindowWidth
 
-    return (x_window * scaleX)/camera.zoom
-end
-
-function WindowYToGame(y_window)
-    local scaleY = GAMEHEIGHT / WindowHeight
-
-    return (y_window * scaleY)/camera.zoom
-end

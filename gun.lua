@@ -5,6 +5,8 @@ local inventoryHandler = require("Core.inventoryHandler")
 local ProjectileManager = require("Managers.projectile")
 local ItemManager = require("Managers.item")
 local baseNuts = require("Data.baseNuts")
+local push = require("Libraries.push")
+local camera = require("Libraries.hump.camera")
 
 gun.cooldownMax = .2 -- in seconds
 gun.cooldownTimer = gun.cooldownMax
@@ -16,17 +18,19 @@ local shootSound = love.audio.newSource("SoundEffects/shoot.wav", "static")
 
 function gun:update(dt)
 
+    local mouseGameX, mouseGameY = push:toGame(love.mouse.getPosition())
+
     -- Set the gun's position based on the player
-    gun.x = Player.relX+(Player.width-5)
-    gun.y = Player.relY+(Player.height/2)
-    -- The guns position relative to the screen
-    gun.camX = Player.camX+(Player.width-5)
-    gun.camY = Player.camY+(Player.height/2)
+    gun.x = Player.x+(Player.width-5)
+    gun.y = Player.y+(Player.height/2)
+
+    gun.camX = (GAMEWIDTH/2)+(Player.width-5)
+    gun.camY = (GAMEHEIGHT/2)+(Player.height/2)
 
     -- Set the gun's rotation based on the cursor
-    gun.rotation =  math.atan2((WindowYToGame(love.mouse.getY())) - gun.camY, WindowXToGame(love.mouse.getX()) - gun.camX)
+    gun.rotation =  math.atan2(mouseGameY - gun.camY, mouseGameX - gun.camX)
 
-    if (WindowXToGame(love.mouse.getX())) < gun.camX then
+    if mouseGameX < gun.camX then
         gun.flipped = -1
     else
         gun.flipped = 1
@@ -39,8 +43,9 @@ function gun:update(dt)
 
     -- Fire the gun
     if love.mouse.isDown(1) then
-        -- This takes account for the game size being different from the window's
-        gun:shoot(WindowXToGame(love.mouse.getX())+Player.x, WindowYToGame(love.mouse.getY())+Player.y)
+
+        local targetX, targetY = push:toGame(camera:worldCoords(love.mouse.getPosition()))
+        gun:shoot(targetX, targetY)
     end
 
     -- TEST ** adds nut to section 1 of inventory
@@ -85,7 +90,7 @@ function gun:load()
 end
 
 function gun:draw()
-    love.graphics.draw(SpriteSheets.gun, self.camX, self.camY, gun.rotation, 1, gun.flipped, 0, gun.height/2)
+    love.graphics.draw(SpriteSheets.gun, self.x, self.y, gun.rotation, 1, gun.flipped, 0, gun.height/2)
 end
 
 return gun

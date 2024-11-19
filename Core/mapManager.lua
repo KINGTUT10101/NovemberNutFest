@@ -62,10 +62,10 @@ function mapManager:draw()
     local scaledTileSize = self.tileSize * zoom
 
     love.graphics.setColor(1, 1, 1, 1)
-    for i = math.max(startX, 1), math.min(endX, self.mapSize) do
+    for i = 1, self.mapSize do
         local firstPart = grid[i]
 
-        for j = math.max(startY, 1), math.min(endY, self.mapSize) do
+        for j = 1, self.mapSize do
             local tile = firstPart[j]
 
             love.graphics.draw(
