@@ -68,7 +68,7 @@ end
 function thisScene:draw ()
 
     camera:attach(nil, nil, push:getWidth(), push:getHeight())
-
+    love.graphics.setScissor(0, 0, push:getWidth(), push:getHeight())
     -- Draw Entities
     EnemyManager.drawEnemies()
     Player:draw()

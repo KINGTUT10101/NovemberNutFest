@@ -27,11 +27,12 @@ function thisScene:update (dt)
         camera:zoom(camera.scale+zoomVelocity * dt)
     end
 
-    mapManager:update (dt)
+    mapManager:update (dt, 0, 0, 1)
 end
 
 function thisScene:draw ()
     camera:attach(nil, nil, push:getWidth(), push:getHeight())
+    love.graphics.setScissor(0, 0, push:getWidth(), push:getHeight())
     mapManager:draw()
     camera:detach()
 end
