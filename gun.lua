@@ -45,6 +45,8 @@ function gun:update(dt)
 
         local targetX = Player.x + (mouseGameX - GAMEWIDTH/2)
         local targetY = Player.y + (mouseGameY - GAMEHEIGHT/2)
+        gun:shoot(targetX, targetY)
+        --print(targetX, Player.x)
     end
 
     -- TEST ** adds nut to section 1 of inventory

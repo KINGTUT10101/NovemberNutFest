@@ -27,7 +27,7 @@ function thisScene:update (dt)
         camera:zoom(camera.scale+zoomVelocity * dt)
     end
 
-    mapManager:update (dt, 0, 0, 1)
+    mapManager:update (dt)
 end
 
 function thisScene:draw ()

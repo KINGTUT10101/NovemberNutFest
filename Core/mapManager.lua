@@ -2,6 +2,7 @@ local Tile = require ("Core.Tile")
 local buildableManager = require ("Core.buildableManager")
 local biomes = require ("Data.biomes")
 local mapGenerator = require ("Core.mapGenerator")
+local camera = require("Libraries.hump.camera")
 
 -- MAJOR TODO: Create and update active buildings
 
@@ -10,11 +11,6 @@ local mapManager = {
     activeGrid = {}, -- Stores map tiles with buildings
     mapSize = 0,
     tileSize = 32,
-    cam = {
-        x = 0,
-        y = 0,
-        zoom = 1,
-    },
 }
 
 -- Regenerates the map using the specified size, in tiles
@@ -27,10 +23,7 @@ end
 
 -- Updates the map and its tiles
 -- The camera position basically defines where the player is in the map
-function mapManager:update (dt, camX, camY, camZoom)
-    self.cam.x = camX
-    self.cam.y = camY
-    self.cam.zoom = camZoom
+function mapManager:update (dt)
 
     -- Updates buildables within the player's view
     local updateStartTime = love.timer.getTime()
@@ -56,10 +49,8 @@ end
 function mapManager:draw()
     local startX, startY = self:screenToMap(-10, -10)
     local endX, endY = self:screenToMap(GAMEWIDTH + 10, GAMEHEIGHT + 10)
-    
+
     local grid = self.grid
-    local camX, camY, zoom = self.cam.x, self.cam.y, self.cam.zoom
-    local scaledTileSize = self.tileSize * zoom
 
     love.graphics.setColor(1, 1, 1, 1)
     for i = math.max(startX, 1), math.min(endX, self.mapSize) do
@@ -70,19 +61,17 @@ function mapManager:draw()
 
             love.graphics.draw(
                 tile.ground,
-                (i - 1) * scaledTileSize - camX,
-                (j - 1) * scaledTileSize - camY,
-                nil,
-                zoom
+                (i - 1) * self.tileSize,
+                (j - 1) * self.tileSize,
+                nil
             )
 
             if tile.building ~= nil then
                 love.graphics.draw (
                     tile.building.frame,
-                    (i - 1) * scaledTileSize - camX,
-                    (j - 1) * scaledTileSize - camY - tile.building.frame:getHeight () * zoom + scaledTileSize,
-                    nil,
-                    zoom
+                    (i - 1) * self.tileSize,
+                    (j - 1) * self.tileSize - (tile.building.frame:getHeight()/4),
+                    nil
                 )
             end
         end
@@ -153,14 +142,15 @@ function mapManager:adjustHealth (tileX, tileY, health)
     return result
 end
 
-function mapManager:screenToMap (screenX, screenY)
-    local contMapX = (screenX + self.cam.x) / self.cam.zoom
-    -- local mapX = math.floor (contMapX / self.tileSize) + 1
-    local mapX = (contMapX - (contMapX%self.tileSize)) / self.tileSize + 1
+function mapManager:screenToMap(screenX, screenY)
 
-    local contMapY = (screenY + self.cam.y) / self.cam.zoom
-    -- local mapY = math.floor (contMapY / self.tileSize) + 1
-    local mapY = (contMapY - (contMapY%self.tileSize)) / self.tileSize + 1
+    -- Convert screen coordinates to world coordinates (taking zoom into account)
+    local worldX = (screenX + camera.x)/camera.scale
+    local worldY = (screenY + camera.y)/camera.scale
+
+    -- Convert world coordinates to map coordinates
+    local mapX = math.floor(worldX / self.tileSize) + 1
+    local mapY = math.floor(worldY / self.tileSize) + 1
 
     return mapX, mapY
 end
