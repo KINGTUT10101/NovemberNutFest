@@ -44,7 +44,8 @@ function gun:update(dt)
     -- Fire the gun
     if love.mouse.isDown(1) then
 
-        local targetX, targetY = push:toGame(camera:worldCoords(love.mouse.getPosition()))
+        local targetX = Player.x + (mouseGameX - gun.camX)
+        local targetY = Player.y + (mouseGameY - gun.camY)
         gun:shoot(targetX, targetY)
     end
 
