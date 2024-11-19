@@ -6,6 +6,7 @@ local ProjectileManager = require("Managers.projectile")
 local ItemManager = require("Managers.item")
 local baseNuts = require("Data.baseNuts")
 local push = require("Libraries.push")
+local camera = require("Libraries.hump.camera")
 
 gun.cooldownMax = .2 -- in seconds
 gun.cooldownTimer = gun.cooldownMax
@@ -43,10 +44,8 @@ function gun:update(dt)
     -- Fire the gun
     if love.mouse.isDown(1) then
 
-        local targetX = Player.x + (mouseGameX - GAMEWIDTH/2)
-        local targetY = Player.y + (mouseGameY - GAMEHEIGHT/2)
+        local targetX, targetY = push:toGame(camera:worldCoords(love.mouse.getPosition()))
         gun:shoot(targetX, targetY)
-        --print(targetX, Player.x)
     end
 
     -- TEST ** adds nut to section 1 of inventory

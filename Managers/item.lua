@@ -57,9 +57,7 @@ function ItemManager:update()
 
     -- Throwables
     if love.keyboard.isDown("e") and #Throwables > 0 and not ePressed then
-        local mouseGameX, mouseGameY = push:toGame(love.mouse.getPosition())
-        local targetX = Player.x + (mouseGameX - GAMEWIDTH/2)
-        local targetY = Player.y + (mouseGameY - GAMEHEIGHT/2)
+        local targetX, targetY = push:toGame(camera:worldCoords(love.mouse.getPosition()))
         projectileManager:add(Player.x+(Player.width/2), Player.y+(Player.height/2), targetX, targetY, Throwables[1])
         table.remove(Throwables, 1)
         ePressed = false
