@@ -17,14 +17,19 @@ local shootSound = love.audio.newSource("SoundEffects/shoot.wav", "static")
 
 function gun:update(dt)
 
+    local mouseGameX, mouseGameY = push:toGame(love.mouse.getPosition())
+
     -- Set the gun's position based on the player
     gun.x = Player.x+(Player.width-5)
     gun.y = Player.y+(Player.height/2)
 
-    -- Set the gun's rotation based on the cursor
-    gun.rotation =  math.atan2((WindowYToGame(love.mouse.getY())) - (push:getHeight()/2), WindowXToGame(love.mouse.getX()) - (push:getWidth()/2))
+    gun.camX = (GAMEWIDTH/2)+(Player.width-5)
+    gun.camY = (GAMEHEIGHT/2)+(Player.height/2)
 
-    if (WindowXToGame(love.mouse.getX())) < push:getWidth()/2 then
+    -- Set the gun's rotation based on the cursor
+    gun.rotation =  math.atan2(mouseGameY - gun.camY, mouseGameX - gun.camX)
+
+    if mouseGameX < gun.camX then
         gun.flipped = -1
     else
         gun.flipped = 1
@@ -37,8 +42,9 @@ function gun:update(dt)
 
     -- Fire the gun
     if love.mouse.isDown(1) then
-        -- This takes account for the game size being different from the window's
-        gun:shoot(WindowXToGame(love.mouse.getX())+Player.x, WindowYToGame(love.mouse.getY())+Player.y)
+
+        local targetX = Player.x + (mouseGameX - GAMEWIDTH/2)
+        local targetY = Player.y + (mouseGameY - GAMEHEIGHT/2)
     end
 
     -- TEST ** adds nut to section 1 of inventory
@@ -83,7 +89,7 @@ function gun:load()
 end
 
 function gun:draw()
-    love.graphics.draw(SpriteSheets.gun, self.x-camera.x, self.y-camera.y, gun.rotation, 1, gun.flipped, 0, gun.height/2)
+    love.graphics.draw(SpriteSheets.gun, self.x, self.y, gun.rotation, 1, gun.flipped, 0, gun.height/2)
 end
 
 return gun

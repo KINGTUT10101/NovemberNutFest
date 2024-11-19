@@ -1,6 +1,7 @@
 local inventoryHandler = require("Core.inventoryHandler")
 local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
+local push = require("Libraries.push")
 Player = {}
 
 local spriteSheet
@@ -20,6 +21,7 @@ Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immu
 --Player.flashTimer = 0 -- The timer that dictates what flash your on based on framerate
 Player.dead = false
 
+
 -- Sound Effedts
 local hurtSound = love.audio.newSource("SoundEffects/player_hurt.wav", "static")
 
@@ -33,7 +35,6 @@ end
 Builds = {}
 
 function Player:update(dt)
-
 
     -- Change active inventory section
     if love.keyboard.isDown("1") then
@@ -96,39 +97,19 @@ function Player:update(dt)
 
     -- Collisions with buildables
     -- Updates buildables within the player's view
-    local updateStartTime = love.timer.getTime()
-    local startX, startY = mapManager:screenToMap(-1280, -1280)
-    local endX, endY = mapManager:screenToMap(GAMEWIDTH + 1280, GAMEHEIGHT + 1280)
+    local startX, startY = 0, 0
+    local endX, endY = 0, 0
     local grid = mapManager.grid
 
-    for i = math.max(startX, 1), math.min(endX, mapManager.mapSize) do
+    for i = 1, mapManager.mapSize do
         local firstPart = grid[i]
 
-        for j = math.max(startY, 1), math.min(endY, mapManager.mapSize) do
+        for j = 1, mapManager.mapSize do
             local buildable = firstPart[j].building
 
             if buildable ~= nil then
-                local buildX, buildY = (i*mapManager.tileSize)-992, (j*mapManager.tileSize)-576
+                local buildX, buildY = (i*mapManager.tileSize)-mapManager.tileSize, (j*mapManager.tileSize)-mapManager.tileSize
                 table.insert(Builds, {x = buildX, y = buildY})
-                if collisionCheck(self.x, self.y, self.width, self.height, buildX, buildY, mapManager.tileSize, mapManager.tileSize) then
-                    --[[if self.velX > 0 then
-                        self.velX = 0
-                        self.x = buildX-self.width
-                    end
-                    if self.velX < 0 then
-                        self.velX = 0
-                        self.x = buildX+mapManager.tileSize
-                    end
-                    if self.velY > 0 then
-                        self.velY = 0
-                        self.y = buildY-self.height
-                    end
-                    if self.velY < 0 then
-                        self.velY = 0
-                        self.y = buildY+mapManager.tileSize
-                    end--]]
-                    --print("Build X:" .. buildX, "Build Y:" .. buildY)
-                end
             end
         end
     end
@@ -196,10 +177,10 @@ end
 function Player:draw()
     if not self.dead then
         if self.immunityTimer >= self.maxImmunityTimer then
-            love.graphics.draw(SpriteSheets.Player, self.x-camera.x, self.y-camera.y)
+            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
         else
             love.graphics.setColor(1, 1, 1, 0.85)
-            love.graphics.draw(SpriteSheets.Player, self.x-camera.x, self.y-camera.y)
+            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
             love.graphics.setColor(1, 1, 1, 1)
         end
     end
@@ -208,7 +189,7 @@ function Player:draw()
     for _, b in ipairs(Builds) do
         --print("Player X: " .. self.x, "Player Y:" .. self.y)
         love.graphics.setColor(0, 0, 0)
-        love.graphics.rectangle("line", b.x-Player.x, b.y-Player.y, mapManager.tileSize, mapManager.tileSize)
+        love.graphics.rectangle("line", b.x, b.y, mapManager.tileSize, mapManager.tileSize)
         love.graphics.setColor(1, 1, 1)
     end
 end

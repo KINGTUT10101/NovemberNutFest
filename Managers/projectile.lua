@@ -10,9 +10,9 @@ function projectileManager:draw()
     for _, p in pairs(Projectiles) do
 
         if p.type == "nut" then
-            love.graphics.draw(SpriteSheets.nuts, p.x-camera.x, p.y-camera.y, p.rotation, 1, 1, 3, 3) -- all nuts are 6 high and wide
+            love.graphics.draw(SpriteSheets.nuts, p.x, p.y, p.rotation, 1, 1, 3, 3) -- all nuts are 6 high and wide
         elseif p.type == "throwable" then
-            love.graphics.draw(p.sprite, p.x-camera.x, p.y-camera.y, p.rotation, 1, 1, p.width/2, p.height/2)
+            love.graphics.draw(p.sprite, p.x, p.y, p.rotation, 1, 1, p.width/2, p.height/2)
         end
     end
 end
@@ -83,7 +83,6 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     elseif projectile.type == "throwable" then
         projectile.endX = endX
         projectile.endY = endY
-
     end
 
     -- Add it into the on screen projectiles

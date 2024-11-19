@@ -2,7 +2,8 @@ local gameUI = {}
 
 local drawTextWithBorder = require("Helpers/drawTextWithBorder")
 local inventoryHandler = require("Core.inventoryHandler")
-local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 48)
+local push = require("Libraries.push")
+local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 96)
 
 DarknessLevel = 0
 
@@ -63,6 +64,7 @@ function gameUI:update()
     local lightAmount = 0
 
     -- Add the players position as a light
+    --[[
     table.insert(lights, ((Player.x-camera.x)*camera.zoom)+((Player.width/2)*camera.zoom))
     table.insert(lights, ((Player.y-camera.y)*camera.zoom)+((Player.height/2)*camera.zoom))
     table.insert(lights, 65*camera.zoom)
@@ -83,12 +85,13 @@ function gameUI:update()
             lightAmount = lightAmount + 1
         end
     end
-
+    
 
     -- Update shader variables
     Darkness:send("base_opacity", DarknessLevel)
     Darkness:send("lights", unpack(lights))
     Darkness:send("num_lights", lightAmount)
+    --]]
 end
 
 function gameUI:draw()
@@ -107,7 +110,7 @@ function gameUI:draw()
     drawTextWithBorder("Health: " .. Player.health, 5, 5, {1,1,1}, {0,0,0}, font)
 
     -- Invetory Sections
-    drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, WindowHeight-5, {1,1,1}, {0,0,0}, font)
+    drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, push:getHeight()-99, {1,1,1}, {0,0,0}, font)
 
 end
 
