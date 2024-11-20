@@ -1,5 +1,7 @@
 local hitmarkerManager = require "Managers.hitmarker"
 local contains = require "Helpers.contains"
+local mapManager = require("Core.mapManager")
+local collisionCheck = require("Helpers.collisionCheck")
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -93,6 +95,7 @@ function EnemyManager.spawnEnemy(x, y, type)
 
         -- Go through all enemies
         for _, e in pairs(Enemies) do
+
             -- Set oiled enemies on fire
             if e~=self and e:collisionCheck(self.x-5, self.y-5, self.width+10, self.height+10) then
                 if e.statusEffects.oiled and self.statusEffects.onFire then
@@ -113,6 +116,57 @@ function EnemyManager.spawnEnemy(x, y, type)
                 else
                     self.velY = 0
                     self.y = self.y + (self.y < e.y and -overlapY or overlapY)
+                end
+            end
+
+            -- Collisions with buildables
+            local grid = mapManager.grid
+            local tileSize = mapManager.tileSize
+            local searchRadius = 2 -- Adjust this based on how many tiles around the player should be checked
+
+            -- Calculate player's grid position
+            local enemyTileX = math.floor(e.x / tileSize) + 1
+            local enemyTileY = math.floor(e.y / tileSize) + 1
+
+            -- Determine the bounds to search
+            local startX = math.max(1, enemyTileX - searchRadius)
+            local endX = math.min(mapManager.mapSize, enemyTileX + searchRadius)
+            local startY = math.max(1, enemyTileY - searchRadius)
+            local endY = math.min(mapManager.mapSize, enemyTileY + searchRadius)
+
+            -- Iterate over the reduced grid range
+            for i = startX, endX do
+                local firstPart = grid[i]
+
+                for j = startY, endY do
+                    local buildable = firstPart[j].building
+
+                    if buildable ~= nil then
+                        local buildX, buildY = (i * tileSize) - tileSize, (j * tileSize) - tileSize
+                        table.insert(Builds, {x = buildX, y = buildY})
+
+                        local epsilon = .1 -- Small value to allow slight overlap
+
+                        -- Horizontal collision
+                        if collisionCheck(self.x + self.velX, self.y, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
+                            if self.velX > 0 then
+                                self.x = buildX - self.width
+                            elseif self.velX < 0 then
+                                self.x = buildX + tileSize
+                            end
+                            self.velX = 0
+                        end
+
+                        -- Vertical collision
+                        if collisionCheck(self.x, self.y + self.velY, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
+                            if self.velY > 0 then
+                                self.y = buildY - self.height
+                            elseif self.velY < 0 then
+                                self.y = buildY + tileSize
+                            end
+                            self.velY = 0
+                        end
+                    end
                 end
             end
         end

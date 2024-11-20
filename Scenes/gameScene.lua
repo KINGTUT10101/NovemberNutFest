@@ -27,8 +27,8 @@ function thisScene:load (...)
     Gun:load()
 
     -- Spawn enemy test
-    --EnemyManager.spawnEnemy(0, 0, "generic")
-    --EnemyManager.spawnEnemy(0, 100, "generic")
+    EnemyManager.spawnEnemy(0, 0, "generic")
+    EnemyManager.spawnEnemy(0, 100, "generic")
     --EnemyManager.spawnEnemy(200, 1200, "witch")
 
     gameUI:load()
@@ -80,6 +80,11 @@ function thisScene:draw ()
     camera:detach()
 
     gameUI:draw()
+
+        -- TEST ** 
+        for i=#Builds, 1, -1 do
+            table.remove(Builds, i)
+        end
 
 end
 
