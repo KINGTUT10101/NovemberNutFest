@@ -81,6 +81,11 @@ function thisScene:draw ()
 
     gameUI:draw()
 
+        -- TEST ** 
+        for i=#Builds, 1, -1 do
+            table.remove(Builds, i)
+        end
+
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)

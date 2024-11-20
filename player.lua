@@ -90,26 +90,56 @@ function Player:update(dt)
         self.velY = self.velY * self.runSpeed
     end
 
-    -- TEST ** 
-    for i=#Builds, 1, -1 do
-        table.remove(Builds, i)
-    end
 
     -- Collisions with buildables
     -- Updates buildables within the player's view
-    local startX, startY = 0, 0
-    local endX, endY = 0, 0
     local grid = mapManager.grid
-
-    for i = 1, mapManager.mapSize do
+    local tileSize = mapManager.tileSize
+    local searchRadius = 2 -- Adjust this based on how many tiles around the player should be checked
+    
+    -- Calculate player's grid position
+    local playerTileX = math.floor(self.x / tileSize) + 1
+    local playerTileY = math.floor(self.y / tileSize) + 1
+    
+    -- Determine the bounds to search
+    local startX = math.max(1, playerTileX - searchRadius)
+    local endX = math.min(mapManager.mapSize, playerTileX + searchRadius)
+    local startY = math.max(1, playerTileY - searchRadius)
+    local endY = math.min(mapManager.mapSize, playerTileY + searchRadius)
+    
+    -- Iterate over the reduced grid range
+    for i = startX, endX do
         local firstPart = grid[i]
-
-        for j = 1, mapManager.mapSize do
+        
+        for j = startY, endY do
             local buildable = firstPart[j].building
-
+            
             if buildable ~= nil then
-                local buildX, buildY = (i*mapManager.tileSize)-mapManager.tileSize, (j*mapManager.tileSize)-mapManager.tileSize
+                local buildX, buildY = (i * tileSize) - tileSize, (j * tileSize) - tileSize
                 table.insert(Builds, {x = buildX, y = buildY})
+    
+                local epsilon = 3 -- Small value to allow slight overlap
+
+                -- Horizontal collision
+                if collisionCheck(self.x + self.velX, self.y, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
+                    if self.velX > 0 then
+                        self.x = buildX - self.width
+                    elseif self.velX < 0 then
+                        self.x = buildX + tileSize
+                    end
+                    self.velX = 0
+                end
+                
+                -- Vertical collision
+                if collisionCheck(self.x, self.y + self.velY, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
+                    if self.velY > 0 then
+                        self.y = buildY - self.height
+                    elseif self.velY < 0 then
+                        self.y = buildY + tileSize
+                    end
+                    self.velY = 0
+                end
+                
             end
         end
     end
