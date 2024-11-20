@@ -35,7 +35,6 @@ function projectileManager:update(dt)
         -- Collisions with buildables
         if p.type == "nut" then
             -- Collisions with buildables
-            -- Updates buildables within the player's view
             local grid = mapManager.grid
             local tileSize = mapManager.tileSize
             local searchRadius = 2 -- Adjust this based on how many tiles around the player should be checked

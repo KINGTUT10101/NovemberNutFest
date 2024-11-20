@@ -106,18 +106,18 @@ function Player:update(dt)
     local endX = math.min(mapManager.mapSize, playerTileX + searchRadius)
     local startY = math.max(1, playerTileY - searchRadius)
     local endY = math.min(mapManager.mapSize, playerTileY + searchRadius)
-    
+
     -- Iterate over the reduced grid range
     for i = startX, endX do
         local firstPart = grid[i]
-        
+
         for j = startY, endY do
             local buildable = firstPart[j].building
-            
+
             if buildable ~= nil then
                 local buildX, buildY = (i * tileSize) - tileSize, (j * tileSize) - tileSize
                 table.insert(Builds, {x = buildX, y = buildY})
-    
+
                 local epsilon = 3 -- Small value to allow slight overlap
 
                 -- Horizontal collision
@@ -129,7 +129,7 @@ function Player:update(dt)
                     end
                     self.velX = 0
                 end
-                
+
                 -- Vertical collision
                 if collisionCheck(self.x, self.y + self.velY, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
                     if self.velY > 0 then
@@ -139,7 +139,6 @@ function Player:update(dt)
                     end
                     self.velY = 0
                 end
-                
             end
         end
     end
