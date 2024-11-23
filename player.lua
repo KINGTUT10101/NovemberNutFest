@@ -12,13 +12,13 @@ Player.velX = 0
 Player.velY = 0
 Player.width = 32
 Player.height = 32
-Player.speed = 340
+Player.speed = 5000
 Player.runSpeed = 1.5 -- Isn't the actual run speed it's just a multiplier
 Player.maxHealth = 100
 Player.health = Player.maxHealth
 Player.maxImmunityTimer = 0.8 -- The max amount of time in the immunity timer
 Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immunity timer
---Player.flashTimer = 0 -- The timer that dictates what flash your on based on framerate
+Player.class = "player"
 Player.dead = false
 
 
@@ -30,11 +30,20 @@ function Player.load()
     SpriteSheets.Player = love.graphics.newImage("Graphics/player.png")
     SpriteSheets.Player:setFilter("nearest", "nearest")
 
+    -- Add the player to the physics world
+    Player.body = love.physics.newBody(GameWorld, Player.x, Player.y, "dynamic")
+    Player.shape = love.physics.newRectangleShape(Player.width, Player.height)
+    Player.fixture = love.physics.newFixture(Player.body, Player.shape)
+    --Player.fixture:setSensor(true)
+    Player.body:setMass(1)
+    Player.fixture:setUserData(Player)
+    Player.body:setLinearDamping(10)
 end
 
 Builds = {}
 
 function Player:update(dt)
+    self.x, self.y = self.body:getPosition()
 
     -- Change active inventory section
     if love.keyboard.isDown("1") then
@@ -69,26 +78,34 @@ function Player:update(dt)
         self.immunityTimer = self.immunityTimer + dt
     end
 
-    local dtSpeed = self.speed*dt
+    self.velX, self.velY = 0, 0
 
     -- Control
     if love.keyboard.isDown("w") then
-        self.velY = self.velY - dtSpeed
+        self.velY = self.velY - self.speed
     end
     if love.keyboard.isDown("s") then
-        self.velY = self.velY + dtSpeed
+        self.velY = self.velY + self.speed
     end
     if love.keyboard.isDown("a") then
-        self.velX = self.velX - dtSpeed
+        self.velX = self.velX - self.speed
     end
     if love.keyboard.isDown("d") then
-        self.velX = self.velX + dtSpeed
+        self.velX = self.velX + self.speed
     end
 
     if love.keyboard.isDown("lshift") then
         self.velX = self.velX * self.runSpeed
         self.velY = self.velY * self.runSpeed
     end
+
+    if math.abs(self.velX) > 0 and math.abs(self.velY) > 0 then
+        self.velX = self.velX/1.44
+        self.velY = self.velY/1.44
+    end
+
+    self.body:applyForce(self.velX, self.velY)
+    self.velX, self.velY = 0, 0
 
 
     -- Collisions with buildables

@@ -20,6 +20,10 @@ local flip = false -- Will swap between two different enemies
 function thisScene:load (...)
     sceneMan = ...
 
+    -- Physics World
+    GameWorld = love.physics.newWorld(0, 0, true)
+    GameWorld:setCallbacks(nil, nil, self.preSolve)
+
     -- Load Assets
     Player.load()
     ProjectileManager:load()
@@ -62,6 +66,7 @@ function thisScene:update (dt)
     EnemyManager.updateEnemies(dt)
     hitmarkerManager:update(dt)
     gameUI:update()
+    GameWorld:update(dt)
     camera:lookAt(Player.x, Player.y)
 end
 
@@ -87,6 +92,24 @@ function thisScene:draw ()
         end
 
 end
+
+function thisScene.preSolve(a, b)
+
+    local idA, idB = a:getUserData(), b:getUserData()
+    
+    -- Spread fire if both enemies are oiled
+    if idA.class == "enemy" and idB.class == "enemy" then
+        if idA.statusEffects.onFire and idB.statusEffects.oiled then
+            idB.statusEffects.oiled = false
+            idB.statusEffects.onFire = true
+        end
+    end
+    -- Collisions between the player and enemy
+    if idA.class == "player" and idB.class == "enemy" then
+        idA:hit(idB.damage)
+    end
+end
+
 
 function thisScene:keypressed (key, scancode, isrepeat)
 
