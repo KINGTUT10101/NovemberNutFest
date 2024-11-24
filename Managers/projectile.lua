@@ -55,10 +55,10 @@ function projectileManager:update(dt)
 
                 for j = startY, endY do
                     local buildable = firstPart[j].building
+                    --firstPart[j].setActive(true)
 
                     if buildable ~= nil then
                         local buildX, buildY = (i * tileSize) - tileSize, (j * tileSize) - tileSize
-                        table.insert(Builds, {x = buildX, y = buildY})
 
                         -- Collision
                         if collisionCheck(p.x, p.y, self.projectileSize, self.projectileSize, buildX, buildY, tileSize, tileSize) then
@@ -89,7 +89,7 @@ function projectileManager:update(dt)
 end
 
 function projectileManager:add(startX, startY, endX, endY, projectile)
-    
+
     -- Initialize the rotation
     projectile.rotation = 0
 

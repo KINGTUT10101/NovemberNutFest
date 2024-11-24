@@ -1,3 +1,4 @@
+local physics = require "physics"
 -- Set RNG seed
 math.randomseed (os.time ())
 
@@ -32,9 +33,12 @@ function love.load ()
 
     -- Set up Push
     push:setupScreen(GAMEWIDTH, GAMEHEIGHT, WindowWidth, WindowHeight, {fullscreen = false})
-    
+
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {GAMEWIDTH, GAMEHEIGHT}
+
+    -- Load in the physics world
+    physics:load()
 
     -- Set up scenes and SceneMan
     sceneMan:newScene ("noiseTest", require ("Scenes.noiseTest"))
@@ -49,6 +53,7 @@ function love.load ()
 end
 
 function love.update (dt)
+    require("Libraries.lurker").update()
 	tux.callbacks.update (dt)
     sceneMan:event ("update", dt)
 

@@ -10,6 +10,7 @@ local ItemManager = require("Managers.item")
 local gameUI = require("UI/gameUI")
 local camera = require("Libraries.hump.camera")
 local push = require("Libraries.push")
+local physics = require("physics")
 
 -- Enemy Spawn Timer
 local spawnTimer = 0
@@ -20,10 +21,6 @@ local flip = false -- Will swap between two different enemies
 function thisScene:load (...)
     sceneMan = ...
 
-    -- Physics World
-    GameWorld = love.physics.newWorld(0, 0, true)
-    GameWorld:setCallbacks(nil, nil, self.preSolve)
-
     -- Load Assets
     Player.load()
     ProjectileManager:load()
@@ -33,7 +30,7 @@ function thisScene:load (...)
     -- Spawn enemy test
     EnemyManager.spawnEnemy(0, 0, "generic")
     EnemyManager.spawnEnemy(0, 100, "generic")
-    --EnemyManager.spawnEnemy(200, 1200, "witch")
+    EnemyManager.spawnEnemy(200, 1200, "witch")
 
     gameUI:load()
     camera:zoom(2)
@@ -41,7 +38,6 @@ end
 
 function thisScene:delete (...)
     local args = {...}
-    
 end
 
 
@@ -66,7 +62,7 @@ function thisScene:update (dt)
     EnemyManager.updateEnemies(dt)
     hitmarkerManager:update(dt)
     gameUI:update()
-    GameWorld:update(dt)
+    physics.gameWorld:update(dt)
     camera:lookAt(Player.x, Player.y)
 end
 
@@ -85,29 +81,6 @@ function thisScene:draw ()
     camera:detach()
 
     gameUI:draw()
-
-        -- TEST ** 
-        for i=#Builds, 1, -1 do
-            table.remove(Builds, i)
-        end
-
-end
-
-function thisScene.preSolve(a, b)
-
-    local idA, idB = a:getUserData(), b:getUserData()
-    
-    -- Spread fire if both enemies are oiled
-    if idA.class == "enemy" and idB.class == "enemy" then
-        if idA.statusEffects.onFire and idB.statusEffects.oiled then
-            idB.statusEffects.oiled = false
-            idB.statusEffects.onFire = true
-        end
-    end
-    -- Collisions between the player and enemy
-    if idA.class == "player" and idB.class == "enemy" then
-        idA:hit(idB.damage)
-    end
 end
 
 

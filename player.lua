@@ -2,6 +2,7 @@ local inventoryHandler = require("Core.inventoryHandler")
 local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
 local push = require("Libraries.push")
+local physics = require("physics")
 Player = {}
 
 local spriteSheet
@@ -20,6 +21,7 @@ Player.maxImmunityTimer = 0.8 -- The max amount of time in the immunity timer
 Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immunity timer
 Player.class = "player"
 Player.dead = false
+Player.god = true -- God mode
 
 
 -- Sound Effedts
@@ -31,16 +33,14 @@ function Player.load()
     SpriteSheets.Player:setFilter("nearest", "nearest")
 
     -- Add the player to the physics world
-    Player.body = love.physics.newBody(GameWorld, Player.x, Player.y, "dynamic")
+    Player.body = love.physics.newBody(physics.gameWorld, Player.x, Player.y, "dynamic")
     Player.shape = love.physics.newRectangleShape(Player.width, Player.height)
     Player.fixture = love.physics.newFixture(Player.body, Player.shape)
-    --Player.fixture:setSensor(true)
     Player.body:setMass(1)
     Player.fixture:setUserData(Player)
     Player.body:setLinearDamping(10)
 end
 
-Builds = {}
 
 function Player:update(dt)
     self.x, self.y = self.body:getPosition()
@@ -133,7 +133,6 @@ function Player:update(dt)
 
             if buildable ~= nil then
                 local buildX, buildY = (i * tileSize) - tileSize, (j * tileSize) - tileSize
-                table.insert(Builds, {x = buildX, y = buildY})
 
                 local epsilon = 3 -- Small value to allow slight overlap
 
@@ -208,7 +207,7 @@ end
 
 -- Something hitting the player
 function Player:hit(damage)
-    if self.immunityTimer >= self.maxImmunityTimer then
+    if self.immunityTimer >= self.maxImmunityTimer and not self.god then
         hurtSound:play()
         self.health = self.health - damage
         Player:giveImmunity()
@@ -229,14 +228,6 @@ function Player:draw()
             love.graphics.draw(SpriteSheets.Player, self.x, self.y)
             love.graphics.setColor(1, 1, 1, 1)
         end
-    end
-
-    -- TEST **
-    for _, b in ipairs(Builds) do
-        --print("Player X: " .. self.x, "Player Y:" .. self.y)
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.rectangle("line", b.x, b.y, mapManager.tileSize, mapManager.tileSize)
-        love.graphics.setColor(1, 1, 1)
     end
 end
 

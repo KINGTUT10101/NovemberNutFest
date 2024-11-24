@@ -1,7 +1,6 @@
 local hitmarkerManager = require "Managers.hitmarker"
 local contains = require "Helpers.contains"
-local mapManager = require("Core.mapManager")
-local collisionCheck = require("Helpers.collisionCheck")
+local physics = require "physics"
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -20,8 +19,8 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.velY = 0
     enemy.width = 32
     enemy.height = 32
-    enemy.speed = 200
-    enemy.friction = 3
+    enemy.speed = 3000
+    enemy.friction = 10
     enemy.dead = false
     enemy.damage = 5
     enemy.stunned = false -- When true the enemy won't go after the player
@@ -31,7 +30,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.immunityTimer = enemy.maxImmunityTimer
 
     -- Physics
-    enemy.body = love.physics.newBody(GameWorld, x, y, "dynamic")
+    enemy.body = love.physics.newBody(physics.gameWorld, x, y, "dynamic")
     enemy.shape = love.physics.newRectangleShape(enemy.width, enemy.height)
     enemy.fixture = love.physics.newFixture(enemy.body, enemy.shape)
     enemy.body:setMass(1)
@@ -108,40 +107,9 @@ function EnemyManager.spawnEnemy(x, y, type)
             self.velX = self.velX/1.44
             self.velY = self.velY/1.44
         end
-    
+
         self.body:applyForce(self.velX, self.velY)
         self.velX, self.velY = 0, 0
-
-
-        -- Movement based on velocity
-        if self.velX ~= 0 and self.velY ~= 0 then
-            self.x = self.x + (self.velX/1.44)
-            self.y = self.y + (self.velY/1.44)
-        elseif self.velX ~= 0 or self.velY ~= 0 then
-            self.x = self.x + self.velX
-            self.y = self.y + self.velY
-        end
-
-        -- Taking away velocity based on the enemies speed
-        if self.velX < 0 then
-            self.velX = self.velX + self.speed
-        elseif self.velX > 0 then
-            self.velX = self.velX - self.speed
-        end
-        if self.velY < 0 then
-            self.velY = self.velY + self.speed
-        elseif self.velY > 0 then
-            self.velY = self.velY - self.speed
-        end
-
-        -- Clamp the speed to avoid shaking or sparatic movement
-        -- This should be "and" not "or"
-        if self.velX >= -self.speed/3 or self.velX <= self.speed/3 then
-            self.velX = 0
-        end
-        if self.velY >= -self.speed/3 or self.velY <= self.speed/3 then
-            self.velY = 0
-        end
 
         -- Damaged by nuts
         for i = #Projectiles, 1, -1 do -- Is in reverse to stop the table from becoming sparse
@@ -171,7 +139,7 @@ function EnemyManager.spawnEnemy(x, y, type)
             self.statusEffects.oiled = false
             self.fireTimer = self.fireTimer + dt
             self.fireHitTimer = self.fireHitTimer + dt
-            
+
             if self.fireHitTimer > 1 then -- Fire hurts the enemy every second
                 self.fireHitTimer = 0
                 self:hit(2, 0, 0, 0)
@@ -242,31 +210,30 @@ function EnemyManager.spawnEnemy(x, y, type)
             local dirY = velY / magnitude
     
             if dirX < 0 then
-                self:knockback(strength * math.abs(dirX), "left")
+                self:knockback((strength * math.abs(dirX))*1000, "left")
             elseif dirX > 0 then
-                self:knockback(strength * math.abs(dirX), "right")
+                self:knockback((strength * math.abs(dirX))*1000, "right")
             end
     
             if dirY < 0 then
-                self:knockback(strength * math.abs(dirY), "up")
+                self:knockback((strength * math.abs(dirY))*1000, "up")
             elseif dirY > 0 then
-                self:knockback(strength * math.abs(dirY), "down")
+                self:knockback((strength * math.abs(dirY))*1000, "down")
             end
         end
     end
 
     function enemy:knockback(strength, direction)
-    
+
         if direction == "up" then
-            self.velY = -strength
+            self.body:applyForce(0, -strength)
         elseif direction == "down" then
-            self.velY = strength
+            self.body:applyForce(0, strength)
         elseif direction == "left" then
-            self.velX = -strength
+            self.body:applyForce(-strength, 0)
         elseif direction == "right" then
-            self.velX = strength
+            self.body:applyForce(strength, 0)
         end
-        enemy.stunned = true
     end
 
     table.insert(Enemies, enemy)
@@ -276,7 +243,7 @@ end
 
 function EnemyManager.updateEnemies(dt)
     for i = #Enemies, 1, -1 do
-        
+
         local e = Enemies[i]
         e:genericUpdate(dt)
         e:update(dt)
@@ -295,7 +262,7 @@ function EnemyManager.drawEnemies()
             love.graphics.setColor(.5,.5,0)
         end
         e:draw()
-        love.graphics.setColor(1,1, 1)
+        love.graphics.setColor(1, 1, 1)
     end
 end
 
