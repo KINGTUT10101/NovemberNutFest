@@ -54,18 +54,27 @@ end
 
 -- Renders tiles that are within the player's view
 function mapManager:draw()
-    local startX, startY = self:screenToMap(-10, -10)
-    local endX, endY = self:screenToMap(GAMEWIDTH + 10, GAMEHEIGHT + 10)
-    
+
     local grid = self.grid
+    local searchRadius = 25
+
     local camX, camY, zoom = self.cam.x, self.cam.y, self.cam.zoom
     local scaledTileSize = self.tileSize * zoom
 
+    -- Calculate player's grid position
+    local playerTileX = math.floor(Player.x / self.tileSize) + 1
+    local playerTileY = math.floor(Player.y / self.tileSize) + 1
+    -- Determine the bounds to search
+    local startX = math.max(1, playerTileX - searchRadius)
+    local endX = math.min(mapManager.mapSize, playerTileX + searchRadius)
+    local startY = math.max(1, playerTileY - searchRadius)
+    local endY = math.min(mapManager.mapSize, playerTileY + searchRadius)
+
     love.graphics.setColor(1, 1, 1, 1)
-    for i = 1, self.mapSize do
+    for i = startX, endX do
         local firstPart = grid[i]
 
-        for j = 1, self.mapSize do
+        for j = startY, endY do
             local tile = firstPart[j]
 
             love.graphics.draw(
