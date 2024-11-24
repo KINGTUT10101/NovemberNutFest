@@ -70,8 +70,6 @@ function mapManager:draw()
     local startY = math.max(1, playerTileY - searchRadius)
     local endY = math.min(mapManager.mapSize, playerTileY + searchRadius)
 
-    print (startX, startY, endX, endY)
-
     love.graphics.setColor(1, 1, 1, 1)
     for i = startX, endX do
         local firstPart = grid[i]
