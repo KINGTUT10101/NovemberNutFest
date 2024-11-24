@@ -13,6 +13,7 @@ local sectionEditor = require ("UI.sectionEditor")
 local buildMenu = require ("UI.buildMenu")
 local requiredMaterials = require ("UI.requiredMaterials")
 local throwableInventory = require ("UI.throwableInventory")
+local consumableInventory = require ("UI.consumableInventory")
 
 local pauseMenu = require ("UI.pauseMenu")
 
@@ -25,7 +26,7 @@ function thisScene:load (...)
 end
 
 function thisScene:update (dt)
-    throwableInventory (15, 575)
+    consumableInventory (15, 575)
 end
 
 function thisScene:draw ()
@@ -39,8 +40,12 @@ end
 function thisScene:keypressed (key, scancode, isrepeat)
     if key == "p" then
         inventoryHandler:addNut (testNut)
+
     elseif key == "o" then
         inventoryHandler:addItem(ItemManager:newItem("nut oil"))
+
+    elseif key == "i" then
+        inventoryHandler:addItem(ItemManager:newItem("cashew apple"))
     end
 end
 

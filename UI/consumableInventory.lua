@@ -10,8 +10,8 @@ local rowsPerPage = 5
 local lastSectionIndex = nil
 local page = 1
 
-local function throwableInventory (x, y)
-    local maxPage = math.ceil (#Throwables / (itemsPerRow * rowsPerPage))
+local function consumableInventory (x, y)
+    local maxPage = math.ceil (#Consumables / (itemsPerRow * rowsPerPage))
 
     -- Page buttons
     if tux.show.button ({
@@ -45,20 +45,20 @@ local function throwableInventory (x, y)
 
     for i = 1, rowsPerPage do
         for j = 1, itemsPerRow do
-            local throwObj = Throwables[(i - 1) * itemsPerRow + j + invIndexOffset]
+            local consumeObj = Consumables[(i - 1) * itemsPerRow + j + invIndexOffset]
 
-            if throwObj == nil then
+            if consumeObj == nil then
                 break
             else
                 if tux.show.button ({
-                    image = throwObj.sprite,
+                    image = consumeObj.sprite,
                     iscale = 2,
                 }, layout:down (70, 70)) == "end" then
                     print ((i - 1) * itemsPerRow + j + invIndexOffset)
                 end
 
                 if tux.show.label ({
-                    text = throwObj.object,
+                    text = consumeObj.object,
                     fsize = 24,
                     align = "left",
                     padding = {padX = 10},
@@ -79,10 +79,10 @@ local function throwableInventory (x, y)
 
     -- Background
     tux.show.label ({
-        text = "Throwables",
+        text = "Consumables",
         valign = "top",
         padding = {padAll = 5}
     }, x, y, compW, compH)
 end
 
-return ammoInventory
+return consumableInventory
