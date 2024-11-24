@@ -1,7 +1,6 @@
 local hitmarkerManager = require "Managers.hitmarker"
 local contains = require "Helpers.contains"
-local mapManager = require("Core.mapManager")
-local collisionCheck = require("Helpers.collisionCheck")
+local physics = require "physics"
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -20,14 +19,24 @@ function EnemyManager.spawnEnemy(x, y, type)
     enemy.velY = 0
     enemy.width = 32
     enemy.height = 32
-    enemy.speed = 125
+    enemy.speed = 3000
+    enemy.friction = 10
     enemy.dead = false
     enemy.damage = 5
     enemy.stunned = false -- When true the enemy won't go after the player
     enemy.type = type
+    enemy.class = "enemy"
     enemy.maxImmunityTimer = .15
     enemy.immunityTimer = enemy.maxImmunityTimer
-    enemy.slickness = 1 -- How fast the enemy is able to descliate it's speed
+
+    -- Physics
+    enemy.body = love.physics.newBody(physics.gameWorld, x, y, "dynamic")
+    enemy.shape = love.physics.newRectangleShape(enemy.width, enemy.height)
+    enemy.fixture = love.physics.newFixture(enemy.body, enemy.shape)
+    enemy.body:setMass(1)
+    enemy.fixture:setUserData(enemy)
+    enemy.body:setLinearDamping(enemy.friction)
+
 
     -- Sound Effects
     enemy.deathSound = love.audio.newSource("SoundEffects/enemy_killed.wav", "static")
@@ -61,144 +70,46 @@ function EnemyManager.spawnEnemy(x, y, type)
 
     function enemy:genericUpdate(dt)
 
+        self.x, self.y = self.body:getPosition()
+
         if self.immunityTimer < self.maxImmunityTimer then
             self.immunityTimer = self.immunityTimer + dt
         end
 
-        local dtSpeed = self.speed*dt
         local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
         if self.stunned and self.velX == 0 and self.velY == 0 then
             self.stunned = false
         end
 
+        self.velX, self.velY  = 0, 0
         -- Move towards the player
         if not self.stunned then
             if math.abs(self.x - Player.x) > threshold then
                 if self.x < Player.x then
-                    self.velX = self.velX + dtSpeed
+                    self.velX = self.speed
                 end
                 if self.x > Player.x then
-                    self.velX = self.velX - dtSpeed
+                    self.velX = -self.speed
                 end
             end
             if math.abs(self.y - Player.y) > threshold then
                 if self.y < Player.y then
-                    self.velY = self.velY + dtSpeed
+                    self.velY = self.speed
                 end
                 if self.y > Player.y then
-                    self.velY = self.velY - dtSpeed
+                    self.velY = -self.speed
                 end
             end
         end
 
-
-        -- Go through all enemies
-        for _, e in pairs(Enemies) do
-
-            -- Set oiled enemies on fire
-            if e~=self and e:collisionCheck(self.x-5, self.y-5, self.width+10, self.height+10) then
-                if e.statusEffects.oiled and self.statusEffects.onFire then
-                    e.statusEffects.onFire = true
-                    e.statusEffects.oiled = false
-                end
-            end
-            -- TODO ** Spacial hashing :)
-            -- Collisions with other enemies
-            if e ~= self and e:collisionCheck(self.x + self.velX, self.y + self.velY, self.width, self.height) then
-                -- Calculate overlap
-                local overlapX = math.min(self.x + self.width, e.x + e.width) - math.max(self.x, e.x)
-                local overlapY = math.min(self.y + self.height, e.y + e.height) - math.max(self.y, e.y)
-
-                if overlapX < overlapY then
-                    self.velX = 0
-                    self.x = self.x + (self.x < e.x and -overlapX or overlapX)
-                else
-                    self.velY = 0
-                    self.y = self.y + (self.y < e.y and -overlapY or overlapY)
-                end
-            end
-
-            -- Collisions with buildables
-            local grid = mapManager.grid
-            local tileSize = mapManager.tileSize
-            local searchRadius = 2 -- Adjust this based on how many tiles around the player should be checked
-
-            -- Calculate player's grid position
-            local enemyTileX = math.floor(e.x / tileSize) + 1
-            local enemyTileY = math.floor(e.y / tileSize) + 1
-
-            -- Determine the bounds to search
-            local startX = math.max(1, enemyTileX - searchRadius)
-            local endX = math.min(mapManager.mapSize, enemyTileX + searchRadius)
-            local startY = math.max(1, enemyTileY - searchRadius)
-            local endY = math.min(mapManager.mapSize, enemyTileY + searchRadius)
-
-            -- Iterate over the reduced grid range
-            for i = startX, endX do
-                local firstPart = grid[i]
-
-                for j = startY, endY do
-                    local buildable = firstPart[j].building
-
-                    if buildable ~= nil then
-                        local buildX, buildY = (i * tileSize) - tileSize, (j * tileSize) - tileSize
-                        table.insert(Builds, {x = buildX, y = buildY})
-
-                        local epsilon = .1 -- Small value to allow slight overlap
-
-                        -- Horizontal collision
-                        if collisionCheck(self.x + self.velX, self.y, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
-                            if self.velX > 0 then
-                                self.x = buildX - self.width
-                            elseif self.velX < 0 then
-                                self.x = buildX + tileSize
-                            end
-                            self.velX = 0
-                        end
-
-                        -- Vertical collision
-                        if collisionCheck(self.x, self.y + self.velY, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
-                            if self.velY > 0 then
-                                self.y = buildY - self.height
-                            elseif self.velY < 0 then
-                                self.y = buildY + tileSize
-                            end
-                            self.velY = 0
-                        end
-                    end
-                end
-            end
+        if math.abs(self.velX) > 0 and math.abs(self.velY) > 0 then
+            self.velX = self.velX/1.44
+            self.velY = self.velY/1.44
         end
 
-        -- Movement based on velocity
-        if self.velX ~= 0 and self.velY ~= 0 then
-            self.x = self.x + (self.velX/1.44)
-            self.y = self.y + (self.velY/1.44)
-        elseif self.velX ~= 0 or self.velY ~= 0 then
-            self.x = self.x + self.velX
-            self.y = self.y + self.velY
-        end
-
-        -- Taking away velocity based on the enemies speed
-        if self.velX < 0 then
-            self.velX = self.velX + self.speed
-        elseif self.velX > 0 then
-            self.velX = self.velX - self.speed
-        end
-        if self.velY < 0 then
-            self.velY = self.velY + self.speed
-        elseif self.velY > 0 then
-            self.velY = self.velY - self.speed
-        end
-
-        -- Clamp the speed to avoid shaking or sparatic movement
-        if self.velX >= -self.speed/3 or self.velX <= self.speed/3 then
-            self.velX = 0
-        end
-        if self.velY >= -self.speed/3 or self.velY <= self.speed/3 then
-            self.velY = 0
-        end
+        self.body:applyForce(self.velX, self.velY)
+        self.velX, self.velY = 0, 0
 
         -- Damaged by nuts
         for i = #Projectiles, 1, -1 do -- Is in reverse to stop the table from becoming sparse
@@ -228,7 +139,7 @@ function EnemyManager.spawnEnemy(x, y, type)
             self.statusEffects.oiled = false
             self.fireTimer = self.fireTimer + dt
             self.fireHitTimer = self.fireHitTimer + dt
-            
+
             if self.fireHitTimer > 1 then -- Fire hurts the enemy every second
                 self.fireHitTimer = 0
                 self:hit(2, 0, 0, 0)
@@ -252,14 +163,6 @@ function EnemyManager.spawnEnemy(x, y, type)
             self.statusEffects.oiled = false
         end
 
-        -- Touch Attack
-        if Player:collisionCheck(self.x, self.y, self.width, self.height) then
-            if not self.statusEffects.oiled then
-                Player:hit(self.damage)
-            else
-                Player:hit(math.floor(self.damage/1.4))
-            end
-        end
 
         -- Death logic
         if self.health <= 0 then
@@ -279,6 +182,7 @@ function EnemyManager.spawnEnemy(x, y, type)
     function enemy:genericKill()
         self.dead = true
         self.health = 0
+        self.body:destroy()
         self.deathSound:play()
 
         if self.kill ~= nil then
@@ -306,31 +210,30 @@ function EnemyManager.spawnEnemy(x, y, type)
             local dirY = velY / magnitude
     
             if dirX < 0 then
-                self:knockback(strength * math.abs(dirX), "left")
+                self:knockback((strength * math.abs(dirX))*1000, "left")
             elseif dirX > 0 then
-                self:knockback(strength * math.abs(dirX), "right")
+                self:knockback((strength * math.abs(dirX))*1000, "right")
             end
     
             if dirY < 0 then
-                self:knockback(strength * math.abs(dirY), "up")
+                self:knockback((strength * math.abs(dirY))*1000, "up")
             elseif dirY > 0 then
-                self:knockback(strength * math.abs(dirY), "down")
+                self:knockback((strength * math.abs(dirY))*1000, "down")
             end
         end
     end
 
     function enemy:knockback(strength, direction)
-    
+
         if direction == "up" then
-            self.velY = -strength
+            self.body:applyForce(0, -strength)
         elseif direction == "down" then
-            self.velY = strength
+            self.body:applyForce(0, strength)
         elseif direction == "left" then
-            self.velX = -strength
+            self.body:applyForce(-strength, 0)
         elseif direction == "right" then
-            self.velX = strength
+            self.body:applyForce(strength, 0)
         end
-        enemy.stunned = true
     end
 
     table.insert(Enemies, enemy)
@@ -339,12 +242,14 @@ end
 
 
 function EnemyManager.updateEnemies(dt)
-    for i, e in pairs(Enemies) do
+    for i = #Enemies, 1, -1 do
+
+        local e = Enemies[i]
         e:genericUpdate(dt)
         e:update(dt)
 
         if e.dead then
-            Enemies[i] = nil
+            table.remove(Enemies, i)
         end
     end
 end
@@ -357,7 +262,7 @@ function EnemyManager.drawEnemies()
             love.graphics.setColor(.5,.5,0)
         end
         e:draw()
-        love.graphics.setColor(1,1, 1)
+        love.graphics.setColor(1, 1, 1)
     end
 end
 

@@ -10,6 +10,7 @@ local ItemManager = require("Managers.item")
 local gameUI = require("UI/gameUI")
 local camera = require("Libraries.hump.camera")
 local push = require("Libraries.push")
+local physics = require("physics")
 
 -- Enemy Spawn Timer
 local spawnTimer = 0
@@ -29,7 +30,7 @@ function thisScene:load (...)
     -- Spawn enemy test
     EnemyManager.spawnEnemy(0, 0, "generic")
     EnemyManager.spawnEnemy(0, 100, "generic")
-    --EnemyManager.spawnEnemy(200, 1200, "witch")
+    EnemyManager.spawnEnemy(200, 1200, "witch")
 
     gameUI:load()
     camera:zoom(2)
@@ -37,7 +38,6 @@ end
 
 function thisScene:delete (...)
     local args = {...}
-    
 end
 
 
@@ -62,6 +62,7 @@ function thisScene:update (dt)
     EnemyManager.updateEnemies(dt)
     hitmarkerManager:update(dt)
     gameUI:update()
+    physics.gameWorld:update(dt)
     camera:lookAt(Player.x, Player.y)
 end
 
@@ -80,13 +81,8 @@ function thisScene:draw ()
     camera:detach()
 
     gameUI:draw()
-
-        -- TEST ** 
-        for i=#Builds, 1, -1 do
-            table.remove(Builds, i)
-        end
-
 end
+
 
 function thisScene:keypressed (key, scancode, isrepeat)
 

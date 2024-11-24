@@ -109,11 +109,11 @@ end
 -- Creates a buildable object at the specified tile if it is not already occupied
 function mapManager:build (tileX, tileY, buildID)
     local result = false
-    
+
     if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
         local tile = self.grid[tileX][tileY]
         local newBuildable = buildableManager:generate (buildID)
-        result = tile:setBuilding (newBuildable)
+        result = tile:setBuilding (newBuildable, tileX, tileY)
     end
 
     return result
