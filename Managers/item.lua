@@ -6,7 +6,8 @@ local consumables = require("Data.consumables")
 local projectileManager = require("Managers.projectile")
 local copyTable = require("Helpers/copyTable")
 local inventoryHandler = require("Core.inventoryHandler")
-
+local push = require("Libraries.push")
+local camera = require("Libraries.hump.camera")
 
 local eatSound = love.audio.newSource("SoundEffects/eating.wav", "static")
 local collectSound = love.audio.newSource("SoundEffects/collect.wav", "static")
@@ -56,7 +57,10 @@ function ItemManager:update()
 
     -- Throwables
     if love.keyboard.isDown("e") and #Throwables > 0 and not ePressed then
-        projectileManager:add(Player.relX+(Player.width/2), Player.relY+(Player.height/2), (love.mouse.getX()/1.333)+Player.x, (love.mouse.getY()/1.333)+Player.y, Throwables[1])
+        local mouseGameX, mouseGameY = push:toGame(love.mouse.getPosition())
+        local targetX = (Player.x-(push:getWidth()/2) + mouseGameX)-(mouseGameX-(push:getWidth()/2))/2
+        local targetY = (Player.y-(push:getHeight()/2) + mouseGameY)-(mouseGameY-(push:getHeight()/2))/2
+        projectileManager:add(Player.x+(Player.width/2), Player.y+(Player.height/2), targetX, targetY, Throwables[1])
         table.remove(Throwables, 1)
         ePressed = false
     end
@@ -87,7 +91,7 @@ function ItemManager:draw()
     
     for i=#Items, 1, -1 do
         local item = Items[i]
-        love.graphics.draw(item.sprite, item.x-Player.x, item.y-Player.y)
+        love.graphics.draw(item.sprite, item.x, item.y)
     end
 end
 

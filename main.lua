@@ -13,14 +13,13 @@ local lovelyToasts = require ("Libraries.lovelyToasts")
 local tux = require ("Libraries.tux")
 
 -- Declares / initializes the local variables
-local windowWidth, windowHeight = 854, 480
+
 
 -- Declares / initializes the global variables
-Scale = 3
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
+WindowWidth, WindowHeight = 854, 480
 DevMode = true
-ScaledGameWidth, ScaledGameHeight = GAMEWIDTH/Scale, GAMEHEIGHT/Scale
 
 -- Defines the functions
 local Player = require("player")
@@ -37,7 +36,7 @@ function love.load ()
     windowWidth, windowHeight = config.window[1], config.window[2]
 
     -- Set up Push
-    push:setupScreen(GAMEWIDTH, GAMEHEIGHT, windowWidth, windowHeight, {fullscreen = false})
+    push:setupScreen(GAMEWIDTH, GAMEHEIGHT, WindowWidth, WindowHeight, {fullscreen = false})
     
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {GAMEWIDTH, GAMEHEIGHT}
@@ -76,6 +75,7 @@ function love.load ()
     sceneMan:newScene("sideMenus", require("Scenes.sideMenus"))
 
     sceneMan:push ("backgroundMap")
+    sceneMan:push ("game")
     sceneMan:push ("sideMenus")
     sceneMan:push ("gameMenu")
     sceneMan:push ("debug")
@@ -111,3 +111,22 @@ end
 function love.mousereleased (x, y, button)
     sceneMan:event ("mousereleased", x, y, button)
 end
+
+-- Convert game coordinates to window coordinates
+function GameXToWindow(x_game)
+    local scaleX = WindowWidth / GAMEWIDTH
+
+    local x_window = x_game * scaleX
+
+    return x_window
+end
+function GameYToWindow(y_game)
+    local scaleY = WindowHeight / GAMEHEIGHT
+
+    local y_window = y_game * scaleY
+
+    return y_window
+end
+
+-- Convert window coordinates to game coordinates
+

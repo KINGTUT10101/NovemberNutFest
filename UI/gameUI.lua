@@ -2,9 +2,10 @@ local gameUI = {}
 
 local drawTextWithBorder = require("Helpers/drawTextWithBorder")
 local inventoryHandler = require("Core.inventoryHandler")
-local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 32)
+local push = require("Libraries.push")
+local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 96)
 
-DarknessLevel = 0.8
+DarknessLevel = 0
 
 function gameUI:load()
     -- Darkness
@@ -46,25 +47,6 @@ function gameUI:load()
             return pixel * color;
         }
     ]])
-
-    LightSources = {
-        {x = (Player.camX*Scale)+((Player.width/2)*Scale), y = (Player.camY*Scale)+((Player.height/2)*Scale), radius = 150, r=0, g=0, b=0}
-    }
-end
-
-    -- Send light positions and radii to the shader
-    local positions = {}
-    local radii = {}
-
-function gameUI:addLight(x, y, strength, r, g, b)
-    LightSources[#LightSources+1] = {
-        x = x,
-        y = y,
-        radius = strength,
-        r = r,
-        g = g,
-        b = b,
-    }
 end
 
 function gameUI:update()
@@ -81,35 +63,35 @@ function gameUI:update()
     local lights = {}
     local lightAmount = 0
 
+    -- Add the players position as a light
+    --[[
+    table.insert(lights, ((Player.x-camera.x)*camera.zoom)+((Player.width/2)*camera.zoom))
+    table.insert(lights, ((Player.y-camera.y)*camera.zoom)+((Player.height/2)*camera.zoom))
+    table.insert(lights, 65*camera.zoom)
+    table.insert(lights, 0)
+    table.insert(lights, 0)
+    table.insert(lights, 0)
+    lightAmount = lightAmount + 1
+
     -- Add on fire enemies as a light
     for i, e in ipairs(Enemies) do
         if e.statusEffects.onFire then
-            table.insert(lights, ((e.x-Player.x)*Scale)+(e.width*Scale)/2)
-            table.insert(lights, ((e.y-Player.y)*Scale)+(e.height*Scale)/2)
-            table.insert(lights, 125)
+            table.insert(lights, (e.camX*camera.zoom)+((e.width/2)*camera.zoom))
+            table.insert(lights, (e.camY*camera.zoom)+((e.height/2)*camera.zoom))
+            table.insert(lights, 60*camera.zoom)
             table.insert(lights, 1) -- Make it red
             table.insert(lights, 0.1)
             table.insert(lights, 0.1)
             lightAmount = lightAmount + 1
         end
     end
-
-    -- Prepare combined light data array for the shader
     
-    for _, light in ipairs(LightSources) do
-        table.insert(lights, light.x)
-        table.insert(lights, light.y)
-        table.insert(lights, light.radius)
-        table.insert(lights, light.r)
-        table.insert(lights, light.g)
-        table.insert(lights, light.b)
-        lightAmount = lightAmount + 1
-    end
 
     -- Update shader variables
     Darkness:send("base_opacity", DarknessLevel)
     Darkness:send("lights", unpack(lights))
     Darkness:send("num_lights", lightAmount)
+    --]]
 end
 
 function gameUI:draw()
@@ -118,17 +100,18 @@ function gameUI:draw()
     love.graphics.setShader(Darkness)
 
     -- Draw a black rectangle covering the screen
-    love.graphics.rectangle("fill", 0, 0, ScaledGameWidth, ScaledGameHeight)
+    love.graphics.rectangle("fill", 0, 0, GAMEWIDTH, GAMEHEIGHT)
 
     -- Reset the shader
     love.graphics.setShader()
-    
+
 
     -- Health
     drawTextWithBorder("Health: " .. Player.health, 5, 5, {1,1,1}, {0,0,0}, font)
 
     -- Invetory Sections
-    drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, ScaledGameHeight-37, {1,1,1}, {0,0,0}, font)
+    drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, push:getHeight()-99, {1,1,1}, {0,0,0}, font)
+
 end
 
 

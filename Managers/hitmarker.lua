@@ -1,6 +1,8 @@
 local hitmarkerManager = {}
 local hitmarkers = {}
 
+local camera = require("Libraries.hump.camera")
+
 local gravity = .7
 local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 20)
 
@@ -25,6 +27,9 @@ function hitmarkerManager:new(value, x, y)
     hitmarker.timeToFade = .5
 
     hitmarker.color = {1, 0, 0}
+
+    hitmarker.velX = hitmarker.velX/camera.scale
+    hitmarker.velY = hitmarker.velY/camera.scale
 
     table.insert(hitmarkers, hitmarker)
 end
@@ -72,7 +77,7 @@ function hitmarkerManager:draw()
     for _, h in pairs(hitmarkers) do
         love.graphics.setFont(font)
         love.graphics.setColor(h.color)
-        love.graphics.print(h.value, h.x-Player.x, h.y-Player.y)
+        love.graphics.print(h.value, h.x, h.y)
         love.graphics.setColor(1, 1, 1, 1)
     end
 end

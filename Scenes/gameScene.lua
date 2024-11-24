@@ -8,6 +8,8 @@ local ProjectileManager = require("Managers.projectile")
 local hitmarkerManager = require("Managers.hitmarker")
 local ItemManager = require("Managers.item")
 local gameUI = require("UI/gameUI")
+local camera = require("Libraries.hump.camera")
+local push = require("Libraries.push")
 
 -- Enemy Spawn Timer
 local spawnTimer = 0
@@ -25,12 +27,12 @@ function thisScene:load (...)
     Gun:load()
 
     -- Spawn enemy test
-    EnemyManager.spawnEnemy(100, 100, "generic")
-    EnemyManager.spawnEnemy(160, 100, "generic")
+    EnemyManager.spawnEnemy(0, 0, "generic")
+    EnemyManager.spawnEnemy(0, 100, "generic")
     --EnemyManager.spawnEnemy(200, 1200, "witch")
 
     gameUI:load()
-    --gameUI:addLight(1600, 300, 200)
+    camera:zoom(2)
 end
 
 function thisScene:delete (...)
@@ -60,9 +62,13 @@ function thisScene:update (dt)
     EnemyManager.updateEnemies(dt)
     hitmarkerManager:update(dt)
     gameUI:update()
+    camera:lookAt(Player.x, Player.y)
 end
 
 function thisScene:draw ()
+
+    camera:attach(nil, nil, push:getWidth(), push:getHeight())
+    love.graphics.setScissor(0, 0, push:getWidth(), push:getHeight())
     -- Draw Entities
     EnemyManager.drawEnemies()
     Player:draw()
@@ -70,12 +76,20 @@ function thisScene:draw ()
     ItemManager:draw()
     ProjectileManager:draw()
     hitmarkerManager:draw()
+
+    camera:detach()
+
     gameUI:draw()
+
+        -- TEST ** 
+        for i=#Builds, 1, -1 do
+            table.remove(Builds, i)
+        end
 
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)
-    
+
 end
 
 function thisScene:mousereleased (x, y, button)

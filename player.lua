@@ -1,10 +1,13 @@
 local inventoryHandler = require("Core.inventoryHandler")
+local mapManager = require("Core.mapManager")
+local collisionCheck = require("Helpers.collisionCheck")
+local push = require("Libraries.push")
 Player = {}
 
 local spriteSheet
 
-Player.x = 250
-Player.y = 250
+Player.x = 0
+Player.y = 0
 Player.velX = 0
 Player.velY = 0
 Player.width = 32
@@ -18,13 +21,6 @@ Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immu
 --Player.flashTimer = 0 -- The timer that dictates what flash your on based on framerate
 Player.dead = false
 
--- Where the player is based on the camera's position
-Player.camX = (ScaledGameWidth/2)-(Player.width/2)
-Player.camY = (ScaledGameHeight/2)-(Player.height/2)
-
--- Position with the center of the screen offset
-Player.relX = Player.x + Player.camX
-Player.relY = Player.y + Player.camY
 
 -- Sound Effedts
 local hurtSound = love.audio.newSource("SoundEffects/player_hurt.wav", "static")
@@ -33,7 +29,10 @@ function Player.load()
 
     SpriteSheets.Player = love.graphics.newImage("Graphics/player.png")
     SpriteSheets.Player:setFilter("nearest", "nearest")
+
 end
+
+Builds = {}
 
 function Player:update(dt)
 
@@ -57,8 +56,8 @@ function Player:update(dt)
     elseif love.keyboard.isDown("9") then
         inventoryHandler.activeSection = 9
     end
-        
-    
+
+
 
     -- Deathcheck
     if Player.health <= 0 then
@@ -91,6 +90,59 @@ function Player:update(dt)
         self.velY = self.velY * self.runSpeed
     end
 
+
+    -- Collisions with buildables
+    -- Updates buildables within the player's view
+    local grid = mapManager.grid
+    local tileSize = mapManager.tileSize
+    local searchRadius = 2 -- Adjust this based on how many tiles around the player should be checked
+    
+    -- Calculate player's grid position
+    local playerTileX = math.floor(self.x / tileSize) + 1
+    local playerTileY = math.floor(self.y / tileSize) + 1
+    
+    -- Determine the bounds to search
+    local startX = math.max(1, playerTileX - searchRadius)
+    local endX = math.min(mapManager.mapSize, playerTileX + searchRadius)
+    local startY = math.max(1, playerTileY - searchRadius)
+    local endY = math.min(mapManager.mapSize, playerTileY + searchRadius)
+
+    -- Iterate over the reduced grid range
+    for i = startX, endX do
+        local firstPart = grid[i]
+
+        for j = startY, endY do
+            local buildable = firstPart[j].building
+
+            if buildable ~= nil then
+                local buildX, buildY = (i * tileSize) - tileSize, (j * tileSize) - tileSize
+                table.insert(Builds, {x = buildX, y = buildY})
+
+                local epsilon = 3 -- Small value to allow slight overlap
+
+                -- Horizontal collision
+                if collisionCheck(self.x + self.velX, self.y, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
+                    if self.velX > 0 then
+                        self.x = buildX - self.width
+                    elseif self.velX < 0 then
+                        self.x = buildX + tileSize
+                    end
+                    self.velX = 0
+                end
+
+                -- Vertical collision
+                if collisionCheck(self.x, self.y + self.velY, self.width - epsilon, self.height - epsilon, buildX, buildY, tileSize, tileSize) then
+                    if self.velY > 0 then
+                        self.y = buildY - self.height
+                    elseif self.velY < 0 then
+                        self.y = buildY + tileSize
+                    end
+                    self.velY = 0
+                end
+            end
+        end
+    end
+
     -- Adding velocity to the player's position
     if self.velX ~= 0 and self.velY ~= 0 then
         self.x = self.x + (self.velX/1.44)
@@ -101,7 +153,7 @@ function Player:update(dt)
     end
 
 
-    -- Taking off velocity based on the playsrs speed
+    -- Taking off velocity based on the player's speed
     if self.velX < 0 then
         self.velX = self.velX + self.speed
     elseif self.velX > 0 then
@@ -121,8 +173,6 @@ function Player:update(dt)
         self.velY = 0
     end
 
-    self.relX = self.x + ((638/2)-(Player.width/2))
-    self.relY = self.y + ((358/2)-(Player.height/2))
 end
 
 function Player:kill()
@@ -133,10 +183,10 @@ end
 
 function Player:collisionCheck(x, y, width, height)
     return
-    self.relX < x + width and
-    self.relX + self.width > x and
-    self.relY < y + height and
-    self.relY + self.height > y
+    self.x < x + width and
+    self.x + self.width > x and
+    self.y < y + height and
+    self.y + self.height > y
 end
 
 -- Something hitting the player
@@ -153,15 +203,23 @@ function Player:giveImmunity()
 end
 
 
-function Player:draw() 
+function Player:draw()
     if not self.dead then
         if self.immunityTimer >= self.maxImmunityTimer then
-            love.graphics.draw(SpriteSheets.Player, self.camX, self.camY)
+            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
         else
             love.graphics.setColor(1, 1, 1, 0.85)
-            love.graphics.draw(SpriteSheets.Player, self.camX, self.camY)
+            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
             love.graphics.setColor(1, 1, 1, 1)
         end
+    end
+
+    -- TEST **
+    for _, b in ipairs(Builds) do
+        --print("Player X: " .. self.x, "Player Y:" .. self.y)
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.rectangle("line", b.x, b.y, mapManager.tileSize, mapManager.tileSize)
+        love.graphics.setColor(1, 1, 1)
     end
 end
 
