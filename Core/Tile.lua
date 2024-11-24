@@ -18,6 +18,7 @@ local defaultTile = {
             self.building = buildObj
 
             -- Physics body
+            --[[
             buildObj.body = love.physics.newBody(physics.gameWorld, x, y, "static") -- TODO ** x and y don't exist so I can't multipy them by 32
             buildObj.shape = love.physics.newRectangleShape(32, 32) -- TILESIZE
             buildObj.fixture = love.physics.newFixture(buildObj.body, buildObj.shape)
@@ -25,7 +26,7 @@ local defaultTile = {
             print("Buildable's Loaded:", amount)
             buildObj.fixture:setUserData(buildObj)
             buildObj.body:setActive(false)
-
+            ]]--
             buildObj.lastUpdate = love.timer.getTime()
             buildObj:start ()
 
