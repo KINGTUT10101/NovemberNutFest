@@ -1,4 +1,6 @@
-local numSections = 9
+local icons = require ("Helpers.icons")
+
+local numSections = 10
 
 Throwables = {}
 Consumables = {}
@@ -8,15 +10,61 @@ local inventoryHandler = {
     currentStorage = 0,
     maxStorage = 500,
     sections = {}, -- Array of queues that store nut objects
+    sectionInfo = {}, -- Holds information about each section, like name and icon
     activeSection = 1,
 }
 
--- Set up inventory sections
-for i = 1, numSections do
-    inventoryHandler.sections[i] = {}
+function inventoryHandler:init ()
+    -- Create sections for nuts
+    for i = 1, numSections do
+        inventoryHandler.sections[i] = {}
+    end
+
+    -- Create section info
+    for i = 1, numSections do
+        inventoryHandler.sectionInfo[i] = {
+            name = "Section " .. i,
+            icon = icons.inverseStar,
+        }
+    end
+end
+inventoryHandler:init ()
+
+function inventoryHandler:setSectionIcon (sectionIndex, icon)
+    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+
+    self.sectionInfo[sectionIndex].icon = icon
 end
 
-function inventoryHandler:setActiveSection (section)
+function inventoryHandler:getSectionIcon (sectionIndex)
+    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+
+    return self.sectionInfo[sectionIndex].icon
+end
+
+function inventoryHandler:setSectionName (sectionIndex, name)
+    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+
+    self.sectionInfo[sectionIndex].name = name
+end
+
+function inventoryHandler:getSectionName (sectionIndex)
+    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+
+    return self.sectionInfo[sectionIndex].name
+end
+
+function inventoryHandler:getSectionStorage (sectionIndex)
+    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+
+    return self.sections[sectionIndex]
+end
+
+function inventoryHandler:getActiveSectionIndex ()
+    return self.activeSection
+end
+
+function inventoryHandler:setActiveSectionIndex (section)
     assert (section >= 1 and section <= numSections, "Section index is out of bounds")
 
     self.activeSection = section
