@@ -1,6 +1,6 @@
 local copyTable = require ("Helpers.copyTable")
 local average = require ("Helpers.average")
-local clamp = require ("Helpers.clamp")
+local clamp = require ("Libraries.lume").clamp
 local mapToScale = require ("Helpers.mapToScale")
 local setDefaults = require ("Helpers.setDefaults")
 
@@ -18,7 +18,8 @@ local defaultNut = {
     yield = 5, -- The base amount of nuts a fully-grown crop will produce
     variation = 1, -- How much the yield can vary in either direction
     specialEffects = {}, -- A list of tables, each with an effect and a probability
-    type = "nut" -- What type of projectile
+    type = "nut", -- What type of projectile
+    bgColor = {0.5, 0.5, 0.5, 1},
 }
 -- Defines min/max value pairs for each nut attribute
 -- TODO: Adjust these values later when balancing the game
@@ -43,9 +44,6 @@ end
 local function clampNutAttributes (nutObj)
     for key, value in pairs (nutAttributeRanges) do
         if nutObj[key] < value[1] or nutObj[key] > value[2] then
-            -- print ("Warning: Provided nut attribute " .. key .. " was out of range and has been clamped")
-            -- print (key, nutObj[key])
-    
             nutObj[key] = clamp (nutObj[key], value[1], value[2])
         end
     end
@@ -102,11 +100,13 @@ function Nut:new (...)
             local attributeRange = rangePair[2] - rangePair[1]
             local mutation = mapToScale (love.math.randomNormal (1, 0), -3, 3, -5, 7) / 100 * attributeRange
             newNutObj[key] = newNutObj[key] + mutation
-            print (key, mutation, newNutObj[key])
         end
-        print ()
 
-        -- Round level down to nearest integer and increments it
+        -- Mutate color values
+        local colorIndex = math.random (1, 3)
+        newNutObj.bgColor[colorIndex] = clamp (newNutObj.bgColor[colorIndex] + 0.1 * (math.random () < 0.5 and 1 or -1), 0, 1)
+
+        -- Round level down to nearest integer and increment it
         newNutObj.level = math.min (newNutObj.level) + 1
     else
         error ("Too many arguments provided to constructor")

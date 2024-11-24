@@ -2,7 +2,6 @@ local thisScene = {}
 local sceneMan = require ("Libraries.sceneMan")
 
 function thisScene:load (...)
-    sceneMan = ...
     
 end
 

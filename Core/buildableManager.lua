@@ -8,9 +8,13 @@ local buildableManager = {
 local defaultClassDef = {
     -- Attributes
     id = nil,
+    name = "None",
+    desc = "None",
     health = 100,
     frame = nil,
     lastUpdate = 0,
+    addToMenu = false, -- If true, the buildable will be added to the buildables menu
+    requiredMaterials = {}, -- Contains a list of resource ID/quantity pairs
 
     -- Methods
     start = function (self) end,
