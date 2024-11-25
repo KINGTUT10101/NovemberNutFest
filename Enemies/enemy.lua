@@ -7,8 +7,11 @@ local collisionCheck = require "Helpers.collisionCheck"
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
 
-local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
+-- Stats
+EnemyManager.totalKills = 0
 
+-- Sound Effects
+local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
 
 function EnemyManager:spawnEnemy(x, y, type)
     local enemy = {}
@@ -71,7 +74,6 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy:load()
 
     function enemy:genericUpdate(dt)
-
         self.x, self.y = self.body:getPosition()
 
         if self.immunityTimer < self.maxImmunityTimer then
@@ -84,7 +86,7 @@ function EnemyManager:spawnEnemy(x, y, type)
             self.stunned = false
         end
 
-        self.velX, self.velY  = 0, 0
+        self.velX, self.velY = 0, 0
         -- Move towards the player
         if not self.stunned then
             if math.abs(self.x - Player.x) > threshold then
@@ -106,8 +108,8 @@ function EnemyManager:spawnEnemy(x, y, type)
         end
 
         if math.abs(self.velX) > 0 and math.abs(self.velY) > 0 then
-            self.velX = self.velX/1.44
-            self.velY = self.velY/1.44
+            self.velX = self.velX / 1.44
+            self.velY = self.velY / 1.44
         end
 
         self.body:applyForce(self.velX, self.velY)
@@ -178,13 +180,12 @@ function EnemyManager:spawnEnemy(x, y, type)
         end
     end
 
-
     function enemy:collisionCheck(x, y, width, height)
         return
-        self.x < x + width and
-        self.x + self.width > x and
-        self.y < y + height and
-        self.y + self.height > y
+            self.x < x + width and
+            self.x + self.width > x and
+            self.y < y + height and
+            self.y + self.height > y
     end
 
     function enemy:genericKill()
@@ -200,39 +201,37 @@ function EnemyManager:spawnEnemy(x, y, type)
 
     -- Something hitting the enemy
     function enemy:hit(damage, strength, velX, velY)
-
         enemyHitSound:play()
 
         -- Scale knockback based on enemy size
-        if (self.width * self.height) < 1024 then strength = strength*6 end
+        if (self.width * self.height) < 1024 then strength = strength * 6 end
         if strength < 0 then strength = 0 end
 
         self.health = self.health - damage
 
-        hitmarkerManager:new(damage, self.x+(self.width/2), self.y)
+        hitmarkerManager:new(damage, self.x + (self.width / 2), self.y)
 
         local magnitude = math.sqrt(velX * velX + velY * velY)
-    
+
         if magnitude > 0 then
             local dirX = velX / magnitude
             local dirY = velY / magnitude
-    
+
             if dirX < 0 then
-                self:knockback((strength * math.abs(dirX))*1000, "left")
+                self:knockback((strength * math.abs(dirX)) * 1000, "left")
             elseif dirX > 0 then
-                self:knockback((strength * math.abs(dirX))*1000, "right")
+                self:knockback((strength * math.abs(dirX)) * 1000, "right")
             end
-    
+
             if dirY < 0 then
-                self:knockback((strength * math.abs(dirY))*1000, "up")
+                self:knockback((strength * math.abs(dirY)) * 1000, "up")
             elseif dirY > 0 then
-                self:knockback((strength * math.abs(dirY))*1000, "down")
+                self:knockback((strength * math.abs(dirY)) * 1000, "down")
             end
         end
     end
 
     function enemy:knockback(strength, direction)
-
         if direction == "up" then
             self.body:applyForce(0, -strength)
         elseif direction == "down" then
@@ -247,16 +246,14 @@ function EnemyManager:spawnEnemy(x, y, type)
     table.insert(Enemies, enemy)
 end
 
-
-
-function EnemyManager.updateEnemies(dt)
+function EnemyManager:updateEnemies(dt)
     for i = #Enemies, 1, -1 do
-
         local e = Enemies[i]
         e:genericUpdate(dt)
         e:update(dt)
 
         if e.dead then
+            EnemyManager.totalKills = EnemyManager.totalKills + 1
             table.remove(Enemies, i)
         end
     end
@@ -265,9 +262,9 @@ end
 function EnemyManager.drawEnemies()
     for _, e in pairs(Enemies) do
         if e.statusEffects.onFire then
-            love.graphics.setColor(.5,0,0)
+            love.graphics.setColor(.5, 0, 0)
         elseif e.statusEffects.oiled then
-            love.graphics.setColor(.5,.5,0)
+            love.graphics.setColor(.5, .5, 0)
         end
         e:draw()
         love.graphics.setColor(1, 1, 1)
@@ -287,6 +284,7 @@ function EnemyManager:getWidth(type)
         error(type .. " is not an enemy type.")
     end
 end
+
 function EnemyManager:getHeight(type)
     if type == "generic" then
         return 32

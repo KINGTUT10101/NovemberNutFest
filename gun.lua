@@ -17,18 +17,17 @@ gun.flipped = 1 -- -1 will flip it
 local shootSound = love.audio.newSource("SoundEffects/shoot.wav", "static")
 
 function gun:update(dt)
-
     local mouseGameX, mouseGameY = push:toGame(love.mouse.getPosition())
 
     -- Set the gun's position based on the player
-    gun.x = Player.x+(Player.width-5)
-    gun.y = Player.y+(Player.height/2)
+    gun.x = Player.x + (Player.width - 5)
+    gun.y = Player.y + (Player.height / 2)
 
-    gun.camX = Player.camX+(Player.width-5)
-    gun.camY = Player.camY+(Player.height/2)
+    gun.camX = Player.camX + (Player.width - 5)
+    gun.camY = Player.camY + (Player.height / 2)
 
     -- Set the gun's rotation based on the cursor
-    gun.rotation =  math.atan2(mouseGameY - gun.camY, mouseGameX - gun.camX)
+    gun.rotation = math.atan2(mouseGameY - gun.camY, mouseGameX - gun.camX)
 
     if mouseGameX < gun.camX then
         gun.flipped = -1
@@ -43,7 +42,6 @@ function gun:update(dt)
 
     -- Fire the gun
     if love.mouse.isDown(1) then
-
         local targetX = Player.x + (mouseGameX - gun.camX)
         local targetY = Player.y + (mouseGameY - gun.camY)
         gun:shoot(targetX, targetY)
@@ -58,19 +56,17 @@ function gun:update(dt)
     end
     -- TEST ** adds nut oil into the inventory
     if love.keyboard.isDown("t") then
-       inventoryHandler:addItem(ItemManager:newItem("nut oil"))
+        inventoryHandler:addItem(ItemManager:newItem("nut oil"))
     end
     -- TEST ** adds cashew apples into the inventory
     if love.keyboard.isDown("y") then
         inventoryHandler:addItem(ItemManager:newItem("cashew apple"))
-     end
+    end
 end
 
 function gun:shoot(x, y)
-
     local activeSection = inventoryHandler.sections[inventoryHandler.activeSection]
     if #activeSection > 0 and self.cooldownTimer >= self.cooldownMax then
-
         shootSound:play()
 
         -- Find where the end of the gun is
@@ -91,7 +87,7 @@ function gun:load()
 end
 
 function gun:draw()
-    love.graphics.draw(SpriteSheets.gun, self.x, self.y, gun.rotation, 1, gun.flipped, 0, gun.height/2)
+    love.graphics.draw(SpriteSheets.gun, self.x, self.y, gun.rotation, 1, gun.flipped, 0, gun.height / 2)
 end
 
 return gun

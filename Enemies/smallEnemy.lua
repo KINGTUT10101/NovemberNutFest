@@ -1,5 +1,4 @@
 local function genericInit(enemy, x, y)
-
     enemy.speed = 175
     enemy.health = 50
     enemy.damge = 5
@@ -12,7 +11,7 @@ local function genericInit(enemy, x, y)
     end
 
     function enemy:update(dt)
-        
+
     end
 
     function enemy:kill()
@@ -21,7 +20,7 @@ local function genericInit(enemy, x, y)
 
     function enemy:draw()
         -- Add death animations ect.
-        love.graphics.draw(self.sprite, enemy.x-Player.x, enemy.y-Player.y)
+        love.graphics.draw(self.sprite, enemy.x - Player.x, enemy.y - Player.y)
     end
 
     return enemy
