@@ -50,6 +50,7 @@ function projectileManager:update(dt)
             local endY = math.min(mapManager.mapSize, projectileTileY + searchRadius)
 
             -- Iterate over the reduced grid range
+            --[[
             for i = startX, endX do
                 local firstPart = grid[i]
 
@@ -67,6 +68,7 @@ function projectileManager:update(dt)
                     end
                 end
             end
+            --]]
         end
 
         -- Nuts

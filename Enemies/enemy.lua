@@ -10,6 +10,7 @@ EnemyManager = {}
 
 -- Stats
 EnemyManager.totalKills = 0
+EnemyManager.enemyTypes = 3
 
 -- Sound Effects
 local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")

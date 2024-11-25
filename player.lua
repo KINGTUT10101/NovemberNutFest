@@ -22,7 +22,7 @@ Player.maxImmunityTimer = 0.8                  -- The max amount of time in the 
 Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immunity timer
 Player.class = "player"
 Player.dead = false
-Player.god = true -- God mode
+Player.god = false -- God mode
 
 
 -- Sound Effedts

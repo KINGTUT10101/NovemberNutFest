@@ -14,7 +14,7 @@ hoardManager.waveCount = 0          -- Amount of waves the player has gone throu
 hoardManager.inProgress = false -- Is true if a wave is currently happening
 
 hoardManager.spawnTimer = 0         -- Counting up till another enemy spawns
-hoardManager.maxSpawnTimer = .1      -- The time it takes for another enemy to spawn
+hoardManager.maxSpawnTimer = 2      -- The time it takes for another enemy to spawn
 
 function hoardManager:update(dt)
     if not self.inProgress then
@@ -31,7 +31,21 @@ function hoardManager:update(dt)
         -- Spawner
         self.spawnTimer = self.spawnTimer + dt
         if self.spawnTimer >= self.maxSpawnTimer then
-            self:HoardSpawn("generic")
+            -- Scale enemies based on curent wave
+            local enemyType = math.random(1, self.waveCount+1)
+            if enemyType > EnemyManager.enemyTypes then enemyType = math.random(1, EnemyManager.enemyTypes) end
+   
+            if enemyType == 1 then
+                self:HoardSpawn("generic")
+            elseif enemyType == 2 then
+                self:HoardSpawn("small")
+            elseif enemyType == 3 then
+                self:HoardSpawn("witch")
+            else
+                error(enemyType .. " is not a valid number for an enemy.")
+            end
+
+
             self.spawnTimer = 0
         end
 
