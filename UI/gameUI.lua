@@ -3,14 +3,18 @@ local gameUI = {}
 local drawTextWithBorder = require("Helpers/drawTextWithBorder")
 local inventoryHandler = require("Core.inventoryHandler")
 local push = require("Libraries.push")
+local camera = require("Libraries.hump.camera")
+local hoard = require("Managers.hoard")
 local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 96)
 
-DarknessLevel = 0
+gameUI.darknessLevel = 0
+gameUI.maxDarkness = .9
+gameUI.manualControl = false
 
 function gameUI:load()
     -- Darkness
     Darkness = love.graphics.newShader([[
-        extern number lights[384]; // Up to 64 lights, each with x, y, radius, r, g, b
+        extern number lights[768]; // Up to 128 lights, each with x, y, radius, r, g, b
         extern number num_lights;
         extern number base_opacity;
 
@@ -51,23 +55,30 @@ end
 
 function gameUI:update()
 
-    -- Day
-    if love.keyboard.isDown("m") then
-        DarknessLevel = 0
+    -- Day night cycle
+    if not hoard.inProgress and not self.manualControl then
+        self.darknessLevel = 0
+    elseif hoard.inProgress and not self.manualControl then
+        self.darknessLevel = self.maxDarkness
     end
-    -- Night
+
+    -- DEBUG ** Manual day night cycle
     if love.keyboard.isDown("n") then
-        DarknessLevel = .9
+        self.manualControl = true
+        self.darknessLevel = self.maxDarkness
+    end
+    if love.keyboard.isDown("m") then
+        self.manualControl = true
+        self.darknessLevel = 0
     end
 
     local lights = {}
     local lightAmount = 0
 
     -- Add the players position as a light
-    --[[
-    table.insert(lights, ((Player.x-camera.x)*camera.zoom)+((Player.width/2)*camera.zoom))
-    table.insert(lights, ((Player.y-camera.y)*camera.zoom)+((Player.height/2)*camera.zoom))
-    table.insert(lights, 65*camera.zoom)
+    table.insert(lights, Player.camX+Player.width)
+    table.insert(lights, Player.camY+Player.height)
+    table.insert(lights, 150)
     table.insert(lights, 0)
     table.insert(lights, 0)
     table.insert(lights, 0)
@@ -76,9 +87,9 @@ function gameUI:update()
     -- Add on fire enemies as a light
     for i, e in ipairs(Enemies) do
         if e.statusEffects.onFire then
-            table.insert(lights, (e.camX*camera.zoom)+((e.width/2)*camera.zoom))
-            table.insert(lights, (e.camY*camera.zoom)+((e.height/2)*camera.zoom))
-            table.insert(lights, 60*camera.zoom)
+            table.insert(lights, e.camX+e.width)
+            table.insert(lights, e.camY+e.height)
+            table.insert(lights, 120)
             table.insert(lights, 1) -- Make it red
             table.insert(lights, 0.1)
             table.insert(lights, 0.1)
@@ -88,10 +99,9 @@ function gameUI:update()
     
 
     -- Update shader variables
-    Darkness:send("base_opacity", DarknessLevel)
+    Darkness:send("base_opacity", self.darknessLevel)
     Darkness:send("lights", unpack(lights))
     Darkness:send("num_lights", lightAmount)
-    --]]
 end
 
 function gameUI:draw()

@@ -13,9 +13,13 @@ function physics.preSolveGame(a, b)
     -- Spread fire if both enemies are oiled
     if idA ~= nil and idB ~= nil then
         if idA.class == "enemy" and idB.class == "enemy" then
+            -- Set oiled enemies on fire
             if idA.statusEffects.onFire and idB.statusEffects.oiled then
                 idB.statusEffects.oiled = false
                 idB.statusEffects.onFire = true
+            elseif idA.statusEffects.oiled and idB.statusEffects.onFire then
+                idA.statusEffects.oiled = false
+                idA.statusEffects.onFire = true
             end
         end
 

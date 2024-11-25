@@ -14,7 +14,7 @@ hoardManager.waveCount = 0          -- Amount of waves the player has gone throu
 hoardManager.inProgress = false -- Is true if a wave is currently happening
 
 hoardManager.spawnTimer = 0         -- Counting up till another enemy spawns
-hoardManager.maxSpawnTimer = 2      -- The time it takes for another enemy to spawn
+hoardManager.maxSpawnTimer = .1      -- The time it takes for another enemy to spawn
 
 function hoardManager:update(dt)
     if not self.inProgress then
@@ -25,6 +25,7 @@ function hoardManager:update(dt)
             self.spawnTimer = 0
             self.kills = 0
             self.previousTotalKills = EnemyManager.totalKills
+            print("WAVE " .. self.waveCount+1 .. " HAS BEGUN!!!")
         end
     else
         -- Spawner
@@ -39,6 +40,8 @@ function hoardManager:update(dt)
         -- Hoard end check
         if self.kills >= self.maxKills then
             self.inProgress = false
+            self.waveCount = self.waveCount + 1
+            print("You fended off wave " .. self.waveCount .. " succesfully!")
         end
     end
 end

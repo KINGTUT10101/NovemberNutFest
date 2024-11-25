@@ -3,6 +3,7 @@ local contains = require "Helpers.contains"
 local physics = require "physics"
 local mapManager = require "Core.mapManager"
 local collisionCheck = require "Helpers.collisionCheck"
+local camera = require "Libraries.hump.camera"
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -75,6 +76,9 @@ function EnemyManager:spawnEnemy(x, y, type)
 
     function enemy:genericUpdate(dt)
         self.x, self.y = self.body:getPosition()
+
+        self.camX = select(1, camera:cameraCoords(self.x, self.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
+        self.camY = select(2, camera:cameraCoords(self.x, self.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
 
         if self.immunityTimer < self.maxImmunityTimer then
             self.immunityTimer = self.immunityTimer + dt
@@ -167,12 +171,6 @@ function EnemyManager:spawnEnemy(x, y, type)
             self.statusEffects.oiled = false
         end
 
-        -- Enemy out of bounds check
-        if not collisionCheck(self.x, self.y, self.width, self.height, 0, 0, mapManager.realSize, mapManager.realSize) then
-            print("Enemy \"" .. self.type .. "\" out of bounds at, " .. self.x .. ", " .. self.y)
-            self.dead = true
-        end
-
 
         -- Death logic
         if self.health <= 0 then
@@ -252,6 +250,13 @@ function EnemyManager:updateEnemies(dt)
         e:genericUpdate(dt)
         e:update(dt)
 
+        -- Enemy out of bounds check
+        if not collisionCheck(e.x, e.y, e.width, e.height, 0, 0, mapManager.realSize, mapManager.realSize) then
+            print("Enemy \"" .. e.type .. "\" out of bounds at, " .. e.x .. ", " .. e.y)
+            table.remove(Enemies, i)
+        end
+
+        -- Get rid of dead enemies
         if e.dead then
             EnemyManager.totalKills = EnemyManager.totalKills + 1
             table.remove(Enemies, i)
