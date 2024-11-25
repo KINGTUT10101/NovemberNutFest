@@ -3,6 +3,7 @@ local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
 local push = require("Libraries.push")
 local physics = require("physics")
+local camera = require("Libraries.hump.camera")
 Player = {}
 
 local spriteSheet
@@ -44,6 +45,9 @@ end
 
 function Player:update(dt)
     self.x, self.y = self.body:getPosition()
+
+    self.camX = select(1, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
+    self.camY = select(2, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
 
     -- Change active inventory section
     if love.keyboard.isDown("1") then

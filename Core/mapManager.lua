@@ -24,6 +24,7 @@ function mapManager:resetMap (size)
 
     self.mapSize = size -- Set size
     self.grid = mapGenerator (size)
+    self.realSize = self.mapSize*self.tileSize
 end
 
 -- Updates the map and its tiles
@@ -57,8 +58,8 @@ end
 function mapManager:draw()
 
     local grid = self.grid
-    local searchRadiusX = 15
-    local searchRadiusY = 9
+    local renderRadiusX = 15
+    local renderRadiusY = 9
 
     local camX, camY, zoom = self.cam.x, self.cam.y, self.cam.zoom
     local scaledTileSize = self.tileSize * zoom
@@ -67,10 +68,10 @@ function mapManager:draw()
     local playerTileX = math.floor(realCamera.x / self.tileSize) + 1
     local playerTileY = math.floor(realCamera.y / self.tileSize) + 1
     -- Determine the bounds to search
-    local startX = math.max(1, playerTileX - searchRadiusX)
-    local endX = math.min(mapManager.mapSize, playerTileX + searchRadiusX)
-    local startY = math.max(1, playerTileY - searchRadiusY)
-    local endY = math.min(mapManager.mapSize, playerTileY + searchRadiusY)
+    local startX = math.max(1, playerTileX - renderRadiusX)
+    local endX = math.min(mapManager.mapSize, playerTileX + renderRadiusX)
+    local startY = math.max(1, playerTileY - renderRadiusY)
+    local endY = math.min(mapManager.mapSize, playerTileY + renderRadiusY)
 
     love.graphics.setColor(1, 1, 1, 1)
     for i = startX, endX do

@@ -2,6 +2,7 @@ local hitmarkerManager = require "Managers.hitmarker"
 local contains = require "Helpers.contains"
 local physics = require "physics"
 local mapManager = require "Core.mapManager"
+local collisionCheck = require "Helpers.collisionCheck"
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -165,7 +166,7 @@ function EnemyManager:spawnEnemy(x, y, type)
         end
 
         -- Enemy out of bounds check
-        if self.x+self.width < 0 or self.x > mapManager.mapSize*mapManager.tileSize or self.y < 0 or self.y > mapManager.mapSize*mapManager.tileSize then
+        if not collisionCheck(self.x, self.y, self.width, self.height, 0, 0, mapManager.realSize, mapManager.realSize) then
             print("Enemy \"" .. self.type .. "\" out of bounds at, " .. self.x .. ", " .. self.y)
             self.dead = true
         end
@@ -274,7 +275,8 @@ function EnemyManager.drawEnemies()
 end
 
 -- https://www.youtube.com/watch?v=BXLAqEchBW0
-function EnemyManager:getEnemyWidth(type)
+-- I could take everything from the init function and just return the size but that would take up too much cpu time, it's easier to do this
+function EnemyManager:getWidth(type)
     if type == "generic" then
         return 32
     elseif type == "small" then
@@ -282,10 +284,10 @@ function EnemyManager:getEnemyWidth(type)
     elseif type == "witch" then
         return 32
     else
-        error(type + "is not an enemy type.")
+        error(type .. " is not an enemy type.")
     end
 end
-function EnemyManager:getEnemyHeight(type)
+function EnemyManager:getHeight(type)
     if type == "generic" then
         return 32
     elseif type == "small" then
@@ -293,7 +295,7 @@ function EnemyManager:getEnemyHeight(type)
     elseif type == "witch" then
         return 32
     else
-        error(type + "is not an enemy type.")
+        error(type .. " is not an enemy type.")
     end
 end
 

@@ -24,8 +24,8 @@ function gun:update(dt)
     gun.x = Player.x+(Player.width-5)
     gun.y = Player.y+(Player.height/2)
 
-    gun.camX = select(1, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))+(Player.width-5)
-    gun.camY = select(2, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))+(Player.height/2)
+    gun.camX = Player.camX+(Player.width-5)
+    gun.camY = Player.camY+(Player.height/2)
 
     -- Set the gun's rotation based on the cursor
     gun.rotation =  math.atan2(mouseGameY - gun.camY, mouseGameX - gun.camX)

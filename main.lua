@@ -12,6 +12,7 @@ local push = require ("Libraries.push")
 local sceneMan = require ("Libraries.sceneMan")
 local lovelyToasts = require ("Libraries.lovelyToasts")
 local tux = require ("Libraries.tux")
+local camera = require ("Libraries.hump.camera")
 
 -- Declares / initializes the local variables
 
@@ -38,6 +39,7 @@ function love.load ()
 
     -- Set up Push
     push:setupScreen(GAMEWIDTH, GAMEHEIGHT, WindowWidth, WindowHeight, {fullscreen = false})
+    TRUEGAMEWIDTH, TRUEGAMEHEIGHT = push:getWidth()/camera.scale, push:getHeight()/camera.scale
 
     -- Set up Lovely Toasts
     lovelyToasts.canvasSize = {GAMEWIDTH, GAMEHEIGHT}
@@ -89,6 +91,7 @@ end
 function love.update (dt)
 
     --require("Libraries.lurker").update()
+
     tux.callbacks.update (dt, push:toGame(love.mouse.getPosition ()))
 
     sceneMan:event ("update", dt)
