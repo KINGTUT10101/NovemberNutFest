@@ -3,6 +3,7 @@ local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
 local push = require("Libraries.push")
 local physics = require("physics")
+local camera = require("Libraries.hump.camera")
 Player = {}
 
 local spriteSheet
@@ -17,18 +18,17 @@ Player.speed = 5000
 Player.runSpeed = 1.5 -- Isn't the actual run speed it's just a multiplier
 Player.maxHealth = 100
 Player.health = Player.maxHealth
-Player.maxImmunityTimer = 0.8 -- The max amount of time in the immunity timer
+Player.maxImmunityTimer = 0.8                  -- The max amount of time in the immunity timer
 Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immunity timer
 Player.class = "player"
 Player.dead = false
-Player.god = true -- God mode
+Player.god = false -- God mode
 
 
 -- Sound Effedts
 local hurtSound = love.audio.newSource("SoundEffects/player_hurt.wav", "static")
 
 function Player.load()
-
     SpriteSheets.Player = love.graphics.newImage("Graphics/player.png")
     SpriteSheets.Player:setFilter("nearest", "nearest")
 
@@ -41,9 +41,11 @@ function Player.load()
     Player.body:setLinearDamping(10)
 end
 
-
 function Player:update(dt)
     self.x, self.y = self.body:getPosition()
+
+    self.camX = select(1, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
+    self.camY = select(2, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
 
     -- Change active inventory section
     if love.keyboard.isDown("1") then
@@ -100,8 +102,8 @@ function Player:update(dt)
     end
 
     if math.abs(self.velX) > 0 and math.abs(self.velY) > 0 then
-        self.velX = self.velX/1.44
-        self.velY = self.velY/1.44
+        self.velX = self.velX / 1.44
+        self.velY = self.velY / 1.44
     end
 
     self.body:applyForce(self.velX, self.velY)
@@ -113,11 +115,11 @@ function Player:update(dt)
     local grid = mapManager.grid
     local tileSize = mapManager.tileSize
     local searchRadius = 2 -- Adjust this based on how many tiles around the player should be checked
-    
+
     -- Calculate player's grid position
     local playerTileX = math.floor(self.x / tileSize) + 1
     local playerTileY = math.floor(self.y / tileSize) + 1
-    
+
     -- Determine the bounds to search
     local startX = math.max(1, playerTileX - searchRadius)
     local endX = math.min(mapManager.mapSize, playerTileX + searchRadius)
@@ -161,8 +163,8 @@ function Player:update(dt)
 
     -- Adding velocity to the player's position
     if self.velX ~= 0 and self.velY ~= 0 then
-        self.x = self.x + (self.velX/1.44)
-        self.y = self.y + (self.velY/1.44)
+        self.x = self.x + (self.velX / 1.44)
+        self.y = self.y + (self.velY / 1.44)
     elseif self.velX ~= 0 or self.velY ~= 0 then
         self.x = self.x + self.velX
         self.y = self.y + self.velY
@@ -182,13 +184,12 @@ function Player:update(dt)
     end
 
     -- Clamp the speed to avoid shaking or sparatic movement
-    if self.velX >= -self.speed/3 or self.velX <= self.speed/3 then
+    if self.velX >= -self.speed / 3 or self.velX <= self.speed / 3 then
         self.velX = 0
     end
-    if self.velY >= -self.speed/3 or self.velY <= self.speed/3 then
+    if self.velY >= -self.speed / 3 or self.velY <= self.speed / 3 then
         self.velY = 0
     end
-
 end
 
 function Player:kill()
@@ -199,10 +200,10 @@ end
 
 function Player:collisionCheck(x, y, width, height)
     return
-    self.x < x + width and
-    self.x + self.width > x and
-    self.y < y + height and
-    self.y + self.height > y
+        self.x < x + width and
+        self.x + self.width > x and
+        self.y < y + height and
+        self.y + self.height > y
 end
 
 -- Something hitting the player
@@ -217,7 +218,6 @@ end
 function Player:giveImmunity()
     self.immunityTimer = 0
 end
-
 
 function Player:draw()
     if not self.dead then

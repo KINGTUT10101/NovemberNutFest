@@ -1,6 +1,5 @@
 local function genericInit(enemy, x, y)
-
-    enemy.speed = 175
+    enemy.speed = enemy.speed+2000
     enemy.health = 50
     enemy.damge = 5
     enemy.width = 16
@@ -9,10 +8,11 @@ local function genericInit(enemy, x, y)
     function enemy:load()
         self.sprite = love.graphics.newImage("Graphics/smallEnemy.png")
         self.sprite:setFilter("nearest", "nearest")
+        enemy.body:setMass(.7)
     end
 
     function enemy:update(dt)
-        
+
     end
 
     function enemy:kill()
@@ -21,7 +21,7 @@ local function genericInit(enemy, x, y)
 
     function enemy:draw()
         -- Add death animations ect.
-        love.graphics.draw(self.sprite, enemy.x-Player.x, enemy.y-Player.y)
+        love.graphics.draw(self.sprite, enemy.x, enemy.y)
     end
 
     return enemy

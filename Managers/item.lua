@@ -16,7 +16,6 @@ local ePressed = false -- Has e been pressed?
 local hPressed = false -- Has h been pressed?
 
 function ItemManager:newItem(type)
-
     local item = {}
 
     -- I miss switches :(
@@ -36,16 +35,13 @@ function ItemManager:newItem(type)
 end
 
 function ItemManager:placeThrowable(item, x, y)
-
     item.x = x
     item.y = y
 
     table.insert(Items, item)
 end
 
-
 function ItemManager:placeConsumable(item, x, y)
-
     item.x = x
     item.y = y
 
@@ -54,13 +50,13 @@ end
 
 -- This will probally be reduntant later. It's just to test throwing throwables and consuming consumables
 function ItemManager:update()
-
     -- Throwables
     if love.keyboard.isDown("e") and #Throwables > 0 and not ePressed then
         local mouseGameX, mouseGameY = push:toGame(love.mouse.getPosition())
-        local targetX = (Player.x-(push:getWidth()/2) + mouseGameX)-(mouseGameX-(push:getWidth()/2))/2
-        local targetY = (Player.y-(push:getHeight()/2) + mouseGameY)-(mouseGameY-(push:getHeight()/2))/2
-        projectileManager:add(Player.x+(Player.width/2), Player.y+(Player.height/2), targetX, targetY, Throwables[1])
+        local targetX = (Player.x - Player.camX + mouseGameX) - (mouseGameX - Player.camX) / 2
+        local targetY = (Player.y - Player.camY + mouseGameY) - (mouseGameY - Player.camY) / 2
+        projectileManager:add(Player.x + (Player.width / 2), Player.y + (Player.height / 2), targetX, targetY,
+            Throwables[1])
         table.remove(Throwables, 1)
         ePressed = false
     end
@@ -76,20 +72,19 @@ function ItemManager:update()
     hPressed = love.keyboard.isDown("h")
 
     -- Detect collision with placed items
-    for i=#Items, 1, -1 do
+    for i = #Items, 1, -1 do
         local item = Items[i]
-       if Player:collisionCheck(item.x, item.y, item.width, item.height) then
+        if Player:collisionCheck(item.x, item.y, item.width, item.height) then
             collectSound:play()
             inventoryHandler:addItem(item)
             table.remove(Items, i)
-       end
+        end
     end
 end
 
 -- Only draws placed items
 function ItemManager:draw()
-    
-    for i=#Items, 1, -1 do
+    for i = #Items, 1, -1 do
         local item = Items[i]
         love.graphics.draw(item.sprite, item.x, item.y)
     end
