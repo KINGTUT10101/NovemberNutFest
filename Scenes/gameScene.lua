@@ -11,12 +11,14 @@ local gameUI = require("UI/gameUI")
 local camera = require("Libraries.hump.camera")
 local push = require("Libraries.push")
 local physics = require("physics")
+local mapManager = require("Core.mapManager")
 
 -- Enemy Spawn Timer
 local spawnTimer = 0
 local maxSpawnTimer = 30
 local flip = false -- Will swap between two different enemies
 
+local boundaries = {} -- Boundries around the map
 
 function thisScene:load (...)
     sceneMan = ...
@@ -28,9 +30,27 @@ function thisScene:load (...)
     Gun:load()
 
     -- Spawn enemy test
-    EnemyManager.spawnEnemy(0, 0, "generic")
-    EnemyManager.spawnEnemy(0, 100, "generic")
-    EnemyManager.spawnEnemy(200, 1200, "witch")
+    --EnemyManager.spawnEnemy(0, 0, "generic")
+    --EnemyManager.spawnEnemy(0, 100, "generic")
+    --EnemyManager.spawnEnemy(200, 1200, "witch")
+
+    -- Map borders
+    -- Top
+    boundaries.topBody = love.physics.newBody(physics.gameWorld, (mapManager.mapSize*mapManager.tileSize)/2, (-mapManager.tileSize/2)-5, "static")
+    boundaries.topShape = love.physics.newRectangleShape(mapManager.mapSize*mapManager.tileSize, 10)
+    boundaries.topFixture = love.physics.newFixture(boundaries.topBody, boundaries.topShape)
+    -- Bottom
+    boundaries.topBody = love.physics.newBody(physics.gameWorld, (mapManager.mapSize*mapManager.tileSize)/2, (mapManager.mapSize*mapManager.tileSize)-10, "static")
+    boundaries.topShape = love.physics.newRectangleShape(mapManager.mapSize*mapManager.tileSize, 10)
+    boundaries.topFixture = love.physics.newFixture(boundaries.topBody, boundaries.topShape)
+    -- Left
+    boundaries.topBody = love.physics.newBody(physics.gameWorld, (-mapManager.tileSize/2)-7, (mapManager.mapSize*mapManager.tileSize)/2, "static")
+    boundaries.topShape = love.physics.newRectangleShape(10, mapManager.mapSize*mapManager.tileSize)
+    boundaries.topFixture = love.physics.newFixture(boundaries.topBody, boundaries.topShape)
+    -- Right
+    boundaries.topBody = love.physics.newBody(physics.gameWorld, (mapManager.mapSize*mapManager.tileSize)-10, (mapManager.mapSize*mapManager.tileSize)/2, "static")
+    boundaries.topShape = love.physics.newRectangleShape(10, mapManager.mapSize*mapManager.tileSize)
+    boundaries.topFixture = love.physics.newFixture(boundaries.topBody, boundaries.topShape)
 
     gameUI:load()
     camera:zoom(2)
@@ -63,7 +83,23 @@ function thisScene:update (dt)
     hitmarkerManager:update(dt)
     gameUI:update()
     physics.gameWorld:update(dt)
+
     camera:lookAt(Player.x, Player.y)
+    -- Stop the camera from going off the sides of the map
+    -- left
+    if camera.x < GAMEWIDTH/4 then
+        camera.x = GAMEWIDTH/4
+    -- right
+    elseif camera.x > (mapManager.mapSize*mapManager.tileSize)-GAMEWIDTH/4 then
+        camera.x = (mapManager.mapSize*mapManager.tileSize)-GAMEWIDTH/4
+    end
+    -- top
+    if camera.y < GAMEHEIGHT/4 then
+        camera.y = GAMEHEIGHT/4
+    -- bottom
+    elseif camera.y > (mapManager.mapSize*mapManager.tileSize)-GAMEHEIGHT/4 then
+        camera.y = (mapManager.mapSize*mapManager.tileSize)-GAMEHEIGHT/4
+    end
 end
 
 function thisScene:draw ()

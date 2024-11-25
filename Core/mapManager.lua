@@ -2,6 +2,7 @@ local Tile = require ("Core.Tile")
 local buildableManager = require ("Core.buildableManager")
 local biomes = require ("Data.biomes")
 local mapGenerator = require ("Core.mapGenerator")
+local realCamera = require("Libraries.hump.camera")
 
 -- MAJOR TODO: Create and update active buildings
 
@@ -56,19 +57,20 @@ end
 function mapManager:draw()
 
     local grid = self.grid
-    local searchRadius = 15
+    local searchRadiusX = 15
+    local searchRadiusY = 9
 
     local camX, camY, zoom = self.cam.x, self.cam.y, self.cam.zoom
     local scaledTileSize = self.tileSize * zoom
 
     -- Calculate player's grid position
-    local playerTileX = math.floor(Player.x / self.tileSize) + 1
-    local playerTileY = math.floor(Player.y / self.tileSize) + 1
+    local playerTileX = math.floor(realCamera.x / self.tileSize) + 1
+    local playerTileY = math.floor(realCamera.y / self.tileSize) + 1
     -- Determine the bounds to search
-    local startX = math.max(1, playerTileX - searchRadius)
-    local endX = math.min(mapManager.mapSize, playerTileX + searchRadius)
-    local startY = math.max(1, playerTileY - searchRadius)
-    local endY = math.min(mapManager.mapSize, playerTileY + searchRadius)
+    local startX = math.max(1, playerTileX - searchRadiusX)
+    local endX = math.min(mapManager.mapSize, playerTileX + searchRadiusX)
+    local startY = math.max(1, playerTileY - searchRadiusY)
+    local endY = math.min(mapManager.mapSize, playerTileY + searchRadiusY)
 
     love.graphics.setColor(1, 1, 1, 1)
     for i = startX, endX do

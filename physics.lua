@@ -12,17 +12,19 @@ function physics.preSolveGame(a, b)
 
     local idA, idB = a:getUserData(), b:getUserData()
 
-    -- Spread fire if both enemies are oiled
-    if idA.class == "enemy" and idB.class == "enemy" then
-        if idA.statusEffects.onFire and idB.statusEffects.oiled then
-            idB.statusEffects.oiled = false
-            idB.statusEffects.onFire = true
+        -- Spread fire if both enemies are oiled
+    if idA ~= nil and idB ~= nil then
+        if idA.class == "enemy" and idB.class == "enemy" then
+            if idA.statusEffects.onFire and idB.statusEffects.oiled then
+                idB.statusEffects.oiled = false
+                idB.statusEffects.onFire = true
+            end
         end
-    end
 
-    -- Collisions between the player and enemy
-    if idA.class == "player" and idB.class == "enemy" then
-        idA:hit(idB.damage)
+        -- Collisions between the player and enemy
+        if idA.class == "player" and idB.class == "enemy" then
+            idA:hit(idB.damage)
+        end
     end
 end
 

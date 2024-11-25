@@ -88,7 +88,7 @@ end
 
 function love.update (dt)
 
-  require("Libraries.lurker").update()
+  --require("Libraries.lurker").update()
 	tux.callbacks.update (dt, push:toGame(love.mouse.getPosition ()))
 
   sceneMan:event ("update", dt)
@@ -119,22 +119,3 @@ end
 function love.mousereleased (x, y, button)
     sceneMan:event ("mousereleased", x, y, button)
 end
-
--- Convert game coordinates to window coordinates
-function GameXToWindow(x_game)
-    local scaleX = WindowWidth / GAMEWIDTH
-
-    local x_window = x_game * scaleX
-
-    return x_window
-end
-function GameYToWindow(y_game)
-    local scaleY = WindowHeight / GAMEHEIGHT
-
-    local y_window = y_game * scaleY
-
-    return y_window
-end
-
--- Convert window coordinates to game coordinates
-
