@@ -1,6 +1,7 @@
 local hitmarkerManager = require "Managers.hitmarker"
 local contains = require "Helpers.contains"
 local physics = require "physics"
+local mapManager = require "Core.mapManager"
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -8,7 +9,7 @@ EnemyManager = {}
 local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
 
 
-function EnemyManager.spawnEnemy(x, y, type)
+function EnemyManager:spawnEnemy(x, y, type)
     local enemy = {}
 
     -- Default stats
@@ -163,6 +164,12 @@ function EnemyManager.spawnEnemy(x, y, type)
             self.statusEffects.oiled = false
         end
 
+        -- Enemy out of bounds check
+        if self.x+self.width < 0 or self.x > mapManager.mapSize*mapManager.tileSize or self.y < 0 or self.y > mapManager.mapSize*mapManager.tileSize then
+            print("Enemy \"" .. self.type .. "\" out of bounds at, " .. self.x .. ", " .. self.y)
+            self.dead = true
+        end
+
 
         -- Death logic
         if self.health <= 0 then
@@ -263,6 +270,30 @@ function EnemyManager.drawEnemies()
         end
         e:draw()
         love.graphics.setColor(1, 1, 1)
+    end
+end
+
+-- https://www.youtube.com/watch?v=BXLAqEchBW0
+function EnemyManager:getEnemyWidth(type)
+    if type == "generic" then
+        return 32
+    elseif type == "small" then
+        return 16
+    elseif type == "witch" then
+        return 32
+    else
+        error(type + "is not an enemy type.")
+    end
+end
+function EnemyManager:getEnemyHeight(type)
+    if type == "generic" then
+        return 32
+    elseif type == "small" then
+        return 16
+    elseif type == "witch" then
+        return 32
+    else
+        error(type + "is not an enemy type.")
     end
 end
 

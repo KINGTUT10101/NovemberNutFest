@@ -12,6 +12,7 @@ local camera = require("Libraries.hump.camera")
 local push = require("Libraries.push")
 local physics = require("physics")
 local mapManager = require("Core.mapManager")
+local hoardManager = require("Managers.hoard")
 
 -- Enemy Spawn Timer
 local spawnTimer = 0
@@ -29,10 +30,6 @@ function thisScene:load (...)
     Nut:load()
     Gun:load()
 
-    -- Spawn enemy test
-    --EnemyManager.spawnEnemy(0, 0, "generic")
-    --EnemyManager.spawnEnemy(0, 100, "generic")
-    --EnemyManager.spawnEnemy(200, 1200, "witch")
 
     -- Map borders
     -- Top
@@ -81,6 +78,7 @@ function thisScene:update (dt)
     ProjectileManager:update(dt)
     EnemyManager.updateEnemies(dt)
     hitmarkerManager:update(dt)
+    hoardManager:update(dt)
     gameUI:update()
     physics.gameWorld:update(dt)
 
