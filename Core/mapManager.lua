@@ -166,8 +166,8 @@ end
 
 -- Translates a position on the screen to on the map
 function mapManager:screenToMap(screenX, screenY)
-    local mapX = screenX - (camera.x-TRUEGAMEWIDTH/(2*camera.scale))
-    local mapY = screenY - (camera.x-TRUEGAMEWIDTH/(2*camera.scale))
+    local mapX = (camera.x-GAMEWIDTH/4) + screenX
+    local mapY = (camera.y-GAMEHEIGHT/4) + screenY
 
     return mapX, mapY
 end
