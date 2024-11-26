@@ -20,7 +20,7 @@ local camera = require("Libraries.hump.camera")
 -- Declares / initializes the global variables
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
-WindowWidth, WindowHeight = 854, 480
+WindowWidth, WindowHeight = 1280, 720
 DevMode = true
 
 -- Defines the functions
@@ -31,12 +31,6 @@ local Gun = require("gun")
 local ProjectileManager = require("Managers.projectile")
 
 function love.load()
-    -- TEMP
-    -- Loads personal config changes
-    -- You can change these by editing personalConfig.lua
-    local config = require("personalConfig")
-    windowWidth, windowHeight = config.window[1], config.window[2]
-
     -- Set up Push
     push:setupScreen(GAMEWIDTH, GAMEHEIGHT, WindowWidth, WindowHeight, { fullscreen = false })
     TRUEGAMEWIDTH, TRUEGAMEHEIGHT = push:getWidth() / camera.scale, push:getHeight() / camera.scale
