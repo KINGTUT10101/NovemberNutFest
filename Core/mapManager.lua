@@ -2,7 +2,7 @@ local Tile = require("Core.Tile")
 local buildableManager = require("Core.buildableManager")
 local biomes = require("Data.biomes")
 local mapGenerator = require("Core.mapGenerator")
-local realCamera = require("Libraries.hump.camera")
+local camera = require("Libraries.hump.camera")
 
 -- MAJOR TODO: Create and update active buildings
 
@@ -64,8 +64,8 @@ function mapManager:draw()
     local scaledTileSize = self.tileSize * zoom
 
     -- Calculate player's grid position
-    local playerTileX = math.floor(realCamera.x / self.tileSize) + 1
-    local playerTileY = math.floor(realCamera.y / self.tileSize) + 1
+    local playerTileX = math.floor(camera.x / self.tileSize) + 1
+    local playerTileY = math.floor(camera.y / self.tileSize) + 1
     -- Determine the bounds to search
     local startX = math.max(1, playerTileX - renderRadiusX)
     local endX = math.min(mapManager.mapSize, playerTileX + renderRadiusX)
@@ -164,14 +164,10 @@ function mapManager:adjustHealth(tileX, tileY, health)
     return result
 end
 
+-- Translates a position on the screen to on the map
 function mapManager:screenToMap(screenX, screenY)
-    local contMapX = (screenX + self.cam.x) / self.cam.zoom
-    -- local mapX = math.floor (contMapX / self.tileSize) + 1
-    local mapX = (contMapX - (contMapX % self.tileSize)) / self.tileSize + 1
-
-    local contMapY = (screenY + self.cam.y) / self.cam.zoom
-    -- local mapY = math.floor (contMapY / self.tileSize) + 1
-    local mapY = (contMapY - (contMapY % self.tileSize)) / self.tileSize + 1
+    local mapX = screenX - (camera.x-TRUEGAMEWIDTH/(2*camera.scale))
+    local mapY = screenY - (camera.x-TRUEGAMEWIDTH/(2*camera.scale))
 
     return mapX, mapY
 end
