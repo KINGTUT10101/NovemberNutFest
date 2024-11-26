@@ -6,7 +6,7 @@ local function genericInit(enemy, x, y)
     enemy.height = 16
 
     function enemy:load()
-        self.sprite = love.graphics.newImage("Graphics/smallEnemy.png")
+        self.sprite = love.graphics.newImage("Graphics/enemies/smallEnemy.png")
         self.sprite:setFilter("nearest", "nearest")
         enemy.body:setMass(.7)
     end

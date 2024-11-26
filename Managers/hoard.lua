@@ -6,7 +6,7 @@ local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
 
 hoardManager.waveTimer = 0          -- Time counting up to next wave
-hoardManager.maxWaveTimer = 5       -- Seconds to before next wave
+hoardManager.maxWaveTimer = 0       -- Seconds to before next wave
 hoardManager.kills = 0      -- Amount of kills during the current wave
 hoardManager.maxKills = 5   -- Amount of kills needed to end the wave
 hoardManager.previousTotalKills = 0   -- Amound of total kills at the start of the wave 
@@ -36,10 +36,12 @@ function hoardManager:update(dt)
             if enemyType > EnemyManager.enemyTypes then enemyType = math.random(1, EnemyManager.enemyTypes) end
    
             if enemyType == 1 then
-                self:HoardSpawn("generic")
+                self:HoardSpawn("armored")
             elseif enemyType == 2 then
                 self:HoardSpawn("small")
             elseif enemyType == 3 then
+                self:HoardSpawn("armored")
+            elseif enemyType == 4 then
                 self:HoardSpawn("witch")
             else
                 error(enemyType .. " is not a valid number for an enemy.")

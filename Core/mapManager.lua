@@ -30,6 +30,7 @@ end
 -- Updates the map and its tiles
 -- The camera position basically defines where the player is in the map
 function mapManager:update(dt, camX, camY, camZoom)
+    --[[
     self.cam.x = camX
     self.cam.y = camY
     self.cam.zoom = camZoom
@@ -51,7 +52,7 @@ function mapManager:update(dt, camX, camY, camZoom)
                 buildable.lastUpdate = updateStartTime
             end
         end
-    end
+    end--]]
 end
 
 -- Renders tiles that are within the player's view
@@ -166,10 +167,20 @@ end
 
 -- Translates a position on the screen to on the map
 function mapManager:screenToMap(screenX, screenY)
-    local mapX = (camera.x-GAMEWIDTH/4) + screenX
-    local mapY = (camera.y-GAMEHEIGHT/4) + screenY
+    local gameX = (camera.x-GAMEWIDTH/4) + screenX
+    local gameY = (camera.y-GAMEHEIGHT/4) + screenY
+
+    local mapX = math.floor(gameX/self.tileSize) + 1
+    local mapY = math.floor(gameY/self.tileSize) + 1
 
     return mapX, mapY
+end
+
+function mapManager:screenToGame(screenX, screenY)
+    local gameX = (camera.x-GAMEWIDTH/4) + screenX
+    local gameY = (camera.y-GAMEHEIGHT/4) + screenY
+
+    return gameX, gameY
 end
 
 function mapManager:interact(tileX, tileY)

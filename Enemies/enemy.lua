@@ -10,7 +10,7 @@ EnemyManager = {}
 
 -- Stats
 EnemyManager.totalKills = 0
-EnemyManager.enemyTypes = 3
+EnemyManager.enemyTypes = 4
 
 -- Sound Effects
 local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
@@ -68,6 +68,8 @@ function EnemyManager:spawnEnemy(x, y, type)
         init = require("Enemies/smallEnemy")
     elseif type == "witch" then
         init = require("Enemies/witch")
+    elseif type == "armored" then
+        init = require("Enemies.armored")
     else
         error(type + "is not an enemy type.")
     end
@@ -206,7 +208,11 @@ function EnemyManager:spawnEnemy(x, y, type)
         if (self.width * self.height) < 1024 then strength = strength * 6 end
         if strength < 0 then strength = 0 end
 
-        self.health = self.health - damage
+        if self.hasNewOnHit then
+            self:newOnHit(damage)
+        else
+            self:onHit(damage)
+        end
 
         hitmarkerManager:new(damage, self.x + (self.width / 2), self.y)
 
@@ -240,6 +246,10 @@ function EnemyManager:spawnEnemy(x, y, type)
         elseif direction == "right" then
             self.body:applyForce(strength, 0)
         end
+    end
+
+    function enemy:onHit(damage)
+        self.health = self.health - damage
     end
 
     table.insert(Enemies, enemy)
@@ -286,6 +296,8 @@ function EnemyManager:getWidth(type)
         return 16
     elseif type == "witch" then
         return 32
+    elseif type == "armored" then
+        return 32
     else
         error(type .. " is not an enemy type.")
     end
@@ -297,6 +309,8 @@ function EnemyManager:getHeight(type)
     elseif type == "small" then
         return 16
     elseif type == "witch" then
+        return 32
+    elseif type == "armored" then
         return 32
     else
         error(type .. " is not an enemy type.")
