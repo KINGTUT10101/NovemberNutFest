@@ -1,4 +1,5 @@
 local tangereen = require ("Libraries.tangereen")
+local tux = require ("Libraries.tux")
 
 -- filepath (string) A folder containing three slices: normal, hovered, and active
 local function loadSlices (filepath)
@@ -12,6 +13,7 @@ local function loadSlices (filepath)
 end
 
 local slices = {
+    rect = tux.utils.getDefaultSlices (),
     default = loadSlices ("Graphics/Slices/Default"),
 }
 

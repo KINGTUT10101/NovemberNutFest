@@ -22,6 +22,7 @@ local tileImages = {
 -- buildables: List of buildables objects/probability pairs, placed into tables
 local biomes = {
     default = {
+        name = "Default",
         weight = 0,
         temp = 0,
         fertility = 0,
@@ -47,6 +48,7 @@ local biomes = {
     -- Level 2 temperature
     -- ===================
     desert = {
+        name = "Desert",
         weight = 0.75,
         temp = 2,
         fertility = 0.5,
@@ -68,6 +70,7 @@ local biomes = {
         }
     },
     bloodDesert = {
+        name = "Blood Desert",
         weight = 0.35,
         temp = 2,
         fertility = 0.5,
@@ -89,6 +92,7 @@ local biomes = {
         }
     },
     savana = {
+        name = "Savana",
         weight = 0.75,
         temp = 2,
         fertility = 1,
@@ -114,6 +118,7 @@ local biomes = {
     -- Level 1 temperature
     -- ===================
     swamp = {
+        name = "Swamp",
         weight = 0.75,
         temp = 1,
         fertility = 1,
@@ -135,6 +140,7 @@ local biomes = {
         }
     },
     beach = {
+        name = "Beach",
         weight = 0.65,
         temp = 1,
         fertility = 0.5,
@@ -160,6 +166,7 @@ local biomes = {
     -- Level 0 temperature
     -- ===================
     plains = {
+        name = "Plains",
         weight = 0.75,
         temp = 0,
         fertility = 1,
@@ -181,6 +188,7 @@ local biomes = {
         }
     },
     flowerPlains = {
+        name = "Flower Plains",
         weight = 0.45,
         temp = 0,
         fertility = 1,
@@ -202,6 +210,7 @@ local biomes = {
         }
     },
     forest = {
+        name = "Forest",
         weight = 0.75,
         temp = 0,
         fertility = 1,
@@ -227,6 +236,7 @@ local biomes = {
     -- Level -1 temperature
     -- ===================
     tiaga = {
+        name = "Tiaga",
         weight = 0.65,
         temp = -1,
         fertility = 1,
@@ -248,6 +258,7 @@ local biomes = {
         }
     },
     glacialPlains = {
+        name = "Glacial Plains",
         weight = 0.65,
         temp = -1,
         fertility = 1,
@@ -273,6 +284,7 @@ local biomes = {
     -- Level -2 temperature
     -- ===================
     frozenOcean = {
+        name = "Frozen Ocean",
         weight = 0.85,
         temp = -2,
         fertility = 1,
@@ -294,6 +306,7 @@ local biomes = {
         }
     },
     permafrost = {
+        name = "Permafrost",
         weight = 0.45,
         temp = -2,
         fertility = 1,

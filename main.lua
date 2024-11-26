@@ -20,7 +20,8 @@ local camera = require("Libraries.hump.camera")
 -- Declares / initializes the global variables
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
-WindowWidth, WindowHeight = 1280, 720
+WindowWidth, WindowHeight = 854, 480
+-- WindowWidth, WindowHeight = 1280, 720
 DevMode = true
 
 -- Defines the functions
@@ -42,9 +43,7 @@ function love.load()
     physics:load()
 
     -- Set up Tux
-    -- tux.utils.setDefaultSlices ()
-    local test = require("Helpers.slices").default
-    tux.utils.setDefaultSlices(test)
+    tux.utils.setDefaultSlices(require("Helpers.slices").default)
     tux.utils.setDefaultFontSize(32)
     tux.utils.setTooltipFont("default", 24)
     tux.utils.setDefaultColors(
@@ -77,7 +76,7 @@ function love.load()
 
     sceneMan:push("backgroundMap")
     sceneMan:push("game")
-    sceneMan:push("sideMenus")
+    -- sceneMan:push("sideMenus")
     sceneMan:push("gameMenu")
     sceneMan:push("debug")
 end

@@ -3,11 +3,15 @@ local sceneMan = require ("Libraries.sceneMan")
 local push = require ("Libraries.push")
 local tux = require ("Libraries.tux")
 local lovelyToasts = require ("Libraries.lovelyToasts")
+local mapManager = require ("Core.mapManager")
+local camera = require ("Libraries.hump.camera")
 
 local biggerFont = love.graphics.newFont (32)
 
 local showFPS = true
 local showCursorPos = true
+local showMapPos = true
+local showPlayerPos = true
 local showRenderStats = false
 local showScreenCrosshair = false
 local showMouseCrosshair = false
@@ -42,6 +46,9 @@ end
 
 function thisScene:lateDraw ()
     local mx, my = push:toGame(love.mouse.getPosition ())
+    local tx, ty = mapManager:screenToMap (mx, my)
+
+    print (camera.x, camera.y, camera.scale, "-", camera:worldCoords (mx, my))
 
     love.graphics.setFont (biggerFont)
 
@@ -59,6 +66,22 @@ function thisScene:lateDraw ()
         love.graphics.rectangle ("fill", 1720, 0, 200, 50)
         love.graphics.setColor ({1, 1, 1, 1})
         love.graphics.printf (math.floor (mx) .. ", " .. math.floor (my), 1720, 10, 200, "center") -- Mouse position
+    end
+
+    -- Show map position
+    if showMapPos == true then
+        love.graphics.setColor ({0, 0, 0, 0.45})
+        love.graphics.rectangle ("fill", 1720, 50, 200, 50)
+        love.graphics.setColor ({1, 1, 1, 1})
+        love.graphics.printf (math.floor (tx) .. ", " .. math.floor (ty), 1720, 60, 200, "center")
+    end
+
+    -- Show player postion
+    if showPlayerPos == true then
+        love.graphics.setColor ({0, 0, 0, 0.45})
+        love.graphics.rectangle ("fill", 1720, 100, 200, 50)
+        love.graphics.setColor ({1, 1, 1, 1})
+        love.graphics.printf (math.floor (Player.x) .. ", " .. math.floor (Player.y), 1720, 110, 200, "center")
     end
 
     -- Rendering info
@@ -110,14 +133,18 @@ function thisScene:keypressed (key, scancode, isrepeat)
     elseif key == "kp1" then
         showCursorPos = not showCursorPos
     elseif key == "kp2" then
-        showRenderStats = not showRenderStats
+        showMapPos = not showMapPos
     elseif key == "kp3" then
-        tux.utils.setDebugMode (not tux.utils.getDebugMode ())
+        showPlayerPos = not showPlayerPos
     elseif key == "kp4" then
-        showScreenCrosshair = not showScreenCrosshair
+        showRenderStats = not showRenderStats
     elseif key == "kp5" then
-        showMouseCrosshair = not showMouseCrosshair
+        tux.utils.setDebugMode (not tux.utils.getDebugMode ())
     elseif key == "kp6" then
+        showScreenCrosshair = not showScreenCrosshair
+    elseif key == "kp7" then
+        showMouseCrosshair = not showMouseCrosshair
+    elseif key == "kp8" then
         showCursorBox = not showCursorBox
     elseif key == "f3" then
         local w = math.abs (savedCursorPos.x2 - savedCursorPos.x1)
