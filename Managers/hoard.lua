@@ -31,22 +31,8 @@ function hoardManager:update(dt)
         -- Spawner
         self.spawnTimer = self.spawnTimer + dt
         if self.spawnTimer >= self.maxSpawnTimer then
-            -- Scale enemies based on curent wave
-            local enemyType = math.random(1, self.waveCount+1)
-            if enemyType > EnemyManager.enemyTypes then enemyType = math.random(1, EnemyManager.enemyTypes) end
-   
-            if enemyType == 1 then
-                self:HoardSpawn("armored")
-            elseif enemyType == 2 then
-                self:HoardSpawn("small")
-            elseif enemyType == 3 then
-                self:HoardSpawn("armored")
-            elseif enemyType == 4 then
-                self:HoardSpawn("witch")
-            else
-                error(enemyType .. " is not a valid number for an enemy.")
-            end
 
+            hoardManager:HoardSpawn()
 
             self.spawnTimer = 0
         end
@@ -66,6 +52,30 @@ end
 function hoardManager:HoardSpawn(type)
     local enemyX, enemyY
     local count = 0
+    local rare -- This is given a random value to decide if a rare enemy spawns in
+
+    if type == nil then
+        -- Scale enemies based on curent wave
+        local enemyType = math.random(1, self.waveCount+1)
+        if enemyType > EnemyManager.enemyTypes then enemyType = math.random(1, EnemyManager.enemyTypes) end
+        while type == nil do
+            if enemyType == 1 then
+                type = "generic"
+            elseif enemyType == 2 then
+                type = "small"
+            elseif enemyType == 3 then
+                type = "armored"
+            elseif enemyType == 4 then
+                rare = math.random(1, 2)
+                if rare == 2 then type = "screecher" end
+            elseif enemyType == 5 then
+                type = "witch"
+            else
+                error(enemyType .. " is not a valid number for an enemy.")
+            end
+        end
+    end
+
     while true do
         -- Give up on spawning if a spawn position can't be found
         if count > 5 then break end

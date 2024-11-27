@@ -10,7 +10,7 @@ EnemyManager = {}
 
 -- Stats
 EnemyManager.totalKills = 0
-EnemyManager.enemyTypes = 4
+EnemyManager.enemyTypes = 5
 
 -- Sound Effects
 local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
@@ -70,6 +70,8 @@ function EnemyManager:spawnEnemy(x, y, type)
         init = require("Enemies/witch")
     elseif type == "armored" then
         init = require("Enemies.armored")
+    elseif type == "screecher" then
+        init = require("Enemies.screecher")
     else
         error(type + "is not an enemy type.")
     end
@@ -95,21 +97,25 @@ function EnemyManager:spawnEnemy(x, y, type)
 
         self.velX, self.velY = 0, 0
         -- Move towards the player
-        if not self.stunned then
-            if math.abs(self.x - Player.x) > threshold then
-                if self.x < Player.x then
-                    self.velX = self.speed
+        if self.hasNewMove then
+            self:move(threshold)
+        else
+            if not self.stunned then
+                if math.abs(self.x - Player.x) > threshold then
+                    if self.x < Player.x then
+                        self.velX = self.speed
+                    end
+                    if self.x > Player.x then
+                        self.velX = -self.speed
+                    end
                 end
-                if self.x > Player.x then
-                    self.velX = -self.speed
-                end
-            end
-            if math.abs(self.y - Player.y) > threshold then
-                if self.y < Player.y then
-                    self.velY = self.speed
-                end
-                if self.y > Player.y then
-                    self.velY = -self.speed
+                if math.abs(self.y - Player.y) > threshold then
+                    if self.y < Player.y then
+                        self.velY = self.speed
+                    end
+                    if self.y > Player.y then
+                        self.velY = -self.speed
+                    end
                 end
             end
         end
@@ -298,6 +304,8 @@ function EnemyManager:getWidth(type)
         return 32
     elseif type == "armored" then
         return 32
+    elseif type == "screecher" then
+        return 16
     else
         error(type .. " is not an enemy type.")
     end
@@ -311,6 +319,8 @@ function EnemyManager:getHeight(type)
     elseif type == "witch" then
         return 32
     elseif type == "armored" then
+        return 32
+    elseif type == "screecher" then
         return 32
     else
         error(type .. " is not an enemy type.")

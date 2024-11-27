@@ -22,8 +22,6 @@ local function genericInit(enemy, x, y)
 
     function enemy:newOnHit(damage)
 
-        print("HELLOOOO")
-
         if enemy.hasArmor then
             enemy.amHealth = enemy.amHealth - damage
         else

@@ -170,8 +170,8 @@ function mapManager:screenToMap(screenX, screenY)
     local gameX = (camera.x-GAMEWIDTH/4) + screenX
     local gameY = (camera.y-GAMEHEIGHT/4) + screenY
 
-    local mapX = math.floor(gameX/self.tileSize) + 1
-    local mapY = math.floor(gameY/self.tileSize) + 1
+    local mapX = math.floor(gameX/(self.tileSize*2)) + 1
+    local mapY = math.floor(gameY/(self.tileSize*2)) + 1
 
     return mapX, mapY
 end
