@@ -3,7 +3,7 @@ local function genericInit(enemy, x, y)
     enemy.health = 125
 
     function enemy:load()
-        self.sprite = love.graphics.newImage("Graphics/genericEnemy.png")
+        self.sprite = love.graphics.newImage("Graphics/enemies/genericEnemy.png")
         self.sprite:setFilter("nearest", "nearest")
     end
 

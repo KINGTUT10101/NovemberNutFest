@@ -69,6 +69,22 @@ baseNuts.candleNut = {
     type = "nut"
 }
 
+-- This is for debugging
+baseNuts.deathNut = {
+    damage = 10,
+    projSpeed = 6,
+    projSize = 4,
+    range = 11,
+    knockback = 4,
+    magSize = 1,
+    spread = 0,
+    growthTime = 18000, -- Ticks
+    cropYeild = 8,
+    cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
+    specialEffects = {"fire", "pierce"},
+    type = "nut"
+}
+
 
 -- This is an example of how to make a buildable class
 buildableManager:create ("peanut", {
