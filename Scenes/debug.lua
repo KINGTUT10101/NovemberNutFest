@@ -48,7 +48,7 @@ function thisScene:lateDraw ()
     local mx, my = push:toGame(love.mouse.getPosition ())
     local tx, ty = mapManager:screenToMap (mx, my)
 
-    print (camera.x, camera.y, camera.scale, "-", camera:worldCoords (mx, my))
+    -- print (camera.x, camera.y, camera.scale, "-", camera:worldCoords (mx, my))
 
     love.graphics.setFont (biggerFont)
 
