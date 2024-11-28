@@ -6,7 +6,18 @@ local inventoryHandler = {
     maxSlots = 10, -- Max number of hotbar slots
     maxAmmmo  = 500, -- Max amount of ammo
     currAmmo = 0, -- Current amount of ammo
+    activeSlot = 1, -- Currently selected hotbar slot
 }
+
+function inventoryHandler:getActiveSlot ()
+    return self.activeSlot
+end
+
+function inventoryHandler:setActiveSlot (hotbarIndex)
+    assert (hotbarIndex >= 1 and hotbarIndex <= self.maxSlots, "Hotbar index out of bounds")
+
+    self.activeSlot = hotbarIndex
+end
 
 function inventoryHandler:replaceNut (nutObj, hotbarIndex)
     assert (type (nutObj) == "table", "Provided nut object is an invalid data type")
