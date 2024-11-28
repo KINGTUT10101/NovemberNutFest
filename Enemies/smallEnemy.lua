@@ -1,14 +1,14 @@
 local function genericInit(enemy, x, y)
-    enemy.speed = enemy.speed+2000
+    enemy.speed = 1650
     enemy.health = 50
     enemy.damge = 5
-    enemy.width = 16
+    enemy.width = 11
     enemy.height = 16
 
     function enemy:load()
         self.sprite = love.graphics.newImage("Graphics/enemies/smallEnemy.png")
         self.sprite:setFilter("nearest", "nearest")
-        enemy.body:setMass(.7)
+        enemy.body:setMass(.5)
     end
 
     function enemy:update(dt)

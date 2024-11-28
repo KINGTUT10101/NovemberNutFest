@@ -154,7 +154,7 @@ function EnemyManager:spawnEnemy(x, y, type)
         for i = #Projectiles, 1, -1 do -- Is in reverse to stop the table from becoming sparse
             local p = Projectiles[i]
             if p ~= nil and self.immunityTimer >= self.maxImmunityTimer then
-                if p.type == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
+                if p.class == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
                     enemy:hit(p.damage, p.knockback, p.velX, p.velY)
                     self.immunityTimer = 0
                     if contains(p.specialEffects, "fire") then
@@ -345,15 +345,15 @@ end
 -- I could take everything from the init function and just return the size but that would take up too much cpu time, it's easier to do this
 function EnemyManager:getWidth(type)
     if type == "generic" then
-        return 32
+        return 31
     elseif type == "small" then
-        return 16
+        return 11
     elseif type == "witch" then
-        return 32
+        return 29
     elseif type == "armored" then
-        return 32
+        return 19
     elseif type == "screecher" then
-        return 16
+        return 24
     else
         error(type .. " is not an enemy type.")
     end
@@ -361,15 +361,15 @@ end
 
 function EnemyManager:getHeight(type)
     if type == "generic" then
-        return 32
+        return 27
     elseif type == "small" then
         return 16
     elseif type == "witch" then
-        return 32
+        return 29
     elseif type == "armored" then
-        return 32
+        return 31
     elseif type == "screecher" then
-        return 32
+        return 30
     else
         error(type .. " is not an enemy type.")
     end

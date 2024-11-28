@@ -49,7 +49,7 @@ function gun:update(dt)
 
     -- TEST ** adds nut to section 1 of inventory
     if love.keyboard.isDown("space") then
-        inventoryHandler:addNut(nut:new(baseNuts.deathNut))
+        inventoryHandler:addNut(nut:new(baseNuts.coconut))
     end
     if love.keyboard.isDown("f") then
         inventoryHandler:addNut(nut:new(baseNuts.candleNut))

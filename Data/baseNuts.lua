@@ -22,7 +22,8 @@ baseNuts.peanut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    type = "nut"
+    class = "nut",
+    type = "peanut"
 }
 
 baseNuts.coconut = {
@@ -37,7 +38,8 @@ baseNuts.coconut = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"stun"},
-    type = "nut"
+    class = "nut",
+    type = "coconut"
 }
 
 baseNuts.macadamia = {
@@ -51,7 +53,8 @@ baseNuts.macadamia = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    type = "nut"
+    class = "nut",
+    type = "macadamia"
 }
 
 
@@ -67,7 +70,8 @@ baseNuts.almond = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"pierce"},
-    type = "nut"
+    class = "nut",
+    type = "almond"
 }
 
 baseNuts.candleNut = {
@@ -82,7 +86,8 @@ baseNuts.candleNut = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"fire"},
-    type = "nut"
+    class = "nut",
+    type = "candle"
 }
 
 baseNuts.pine = {
@@ -97,7 +102,8 @@ baseNuts.pine = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"freeze"},
-    type = "nut"
+    class = "nut",
+    type = "pine"
 }
 
 -- This is for debugging
@@ -113,7 +119,8 @@ baseNuts.deathNut = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"pierce"},
-    type = "nut"
+    class = "nut",
+    type = "peanut"
 }
 
 

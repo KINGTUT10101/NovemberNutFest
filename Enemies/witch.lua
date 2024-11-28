@@ -1,10 +1,10 @@
 local function genericInit(enemy, x, y)
 
-    enemy.speed = 3000
+    enemy.speed = 22500
     enemy.health = 550
     enemy.damage = 20
-    enemy.width = 32
-    enemy.height = 32
+    enemy.width = 29
+    enemy.height = 29
     enemy.deathSound = love.audio.newSource("SoundEffects/witch_death.wav", "static")
     enemy.friction = 5
 
@@ -13,6 +13,7 @@ local function genericInit(enemy, x, y)
         self.sprite = love.graphics.newImage("Graphics/enemies/witch.png")
         self.sprite:setFilter("nearest", "nearest")
         enemy.body:setLinearDamping(enemy.friction)
+        enemy.body:setMass(8)
     end
 
     function enemy:update(dt)
