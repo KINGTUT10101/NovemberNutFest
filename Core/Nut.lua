@@ -20,7 +20,7 @@ local defaultNut = {
     -- yield = 5, -- The base amount of nuts a fully-grown crop will produce
     -- variation = 1, -- How much the yield can vary in either direction
     specialEffects = {}, -- A list of tables, each with an effect and a probability
-    type = "nut", -- What type of projectile
+    class = "nut", -- What type of projectile
     bgColor = {0.5, 0.5, 0.5, 1},
     ancestry = {}, -- Tracks the nut's genetic lineage
 }

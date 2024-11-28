@@ -22,7 +22,9 @@ baseNuts.peanut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    type = "nut",
+    specialEffects = {"hyperburst"}, -- Less time between this nut and the next nut shot
+    class = "nut",
+    type = "peanut",
     ancestry = {peanut = 1},
 }
 
@@ -40,7 +42,9 @@ baseNuts.coconut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    type = "nut",
+    specialEffects = {"stun"},
+    class = "nut",
+    type = "coconut",
     ancestry = {coconut = 1},
 }
 
@@ -58,7 +62,8 @@ baseNuts.macadamia = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    type = "nut",
+    class = "nut",
+    type = "macadamia",
     ancestry = {macadamia = 1},
 }
 
@@ -78,7 +83,8 @@ baseNuts.almond = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"pierce"},
-    type = "nut",
+    class = "nut",
+    type = "almond",
     ancestry = {almond = 1},
 }
 
@@ -97,7 +103,8 @@ baseNuts.candleNut = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"fire"},
-    type = "nut",
+    class = "nut",
+    type = "candle",
     ancestry = {candleNut = 1},
 }
 
@@ -116,7 +123,8 @@ baseNuts.pine = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"freeze"},
-    type = "nut",
+    class = "nut",
+    type = "pine",
     ancestry = {pine = 1},
 }
 
@@ -135,8 +143,9 @@ baseNuts.deathNut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"fire", "pierce"},
-    type = "nut",
+    specialEffects = {"pierce"},
+    class = "nut",
+    type = "peanut",
     ancestry = {deathNut = 1},
 }
 

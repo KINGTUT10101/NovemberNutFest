@@ -117,10 +117,10 @@ function gameUI:draw()
 
 
     -- Health
-    drawTextWithBorder("Health: " .. Player.health, 5, 5, {1,1,1}, {0,0,0}, font)
+    --drawTextWithBorder("Health: " .. Player.health, 5, 5, {1,1,1}, {0,0,0}, font)
 
     -- Invetory Sections
-    drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, push:getHeight()-99, {1,1,1}, {0,0,0}, font)
+    --drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, push:getHeight()-99, {1,1,1}, {0,0,0}, font)
 
 end
 
