@@ -2,7 +2,7 @@ local Tile = require("Core.Tile")
 local buildableManager = require("Core.buildableManager")
 local biomes = require("Data.biomes")
 local mapGenerator = require("Core.mapGenerator")
-local realCamera = require("Libraries.hump.camera")
+local camera = require("Libraries.hump.camera")
 
 -- MAJOR TODO: Create and update active buildings
 
@@ -47,7 +47,7 @@ function mapManager:update(dt)
                 buildable.lastUpdate = updateStartTime
             end
         end
-    end
+    end--]]
 end
 
 -- Renders tiles that are within the player's view
@@ -60,8 +60,8 @@ function mapManager:draw()
     local scaledTileSize = self.tileSize * zoom
 
     -- Calculate player's grid position
-    local playerTileX = math.floor(realCamera.x / self.tileSize) + 1
-    local playerTileY = math.floor(realCamera.y / self.tileSize) + 1
+    local playerTileX = math.floor(camera.x / self.tileSize) + 1
+    local playerTileY = math.floor(camera.y / self.tileSize) + 1
     -- Determine the bounds to search
     local startX = math.max(1, playerTileX - renderRadiusX)
     local endX = math.min(mapManager.mapSize, playerTileX + renderRadiusX)
@@ -160,16 +160,22 @@ function mapManager:adjustHealth(tileX, tileY, health)
     return result
 end
 
+-- Translates a position on the screen to on the map
 function mapManager:screenToMap(screenX, screenY)
-    local contMapX = (screenX + self.cam.x) / self.cam.zoom
-    -- local mapX = math.floor (contMapX / self.tileSize) + 1
-    local mapX = (contMapX - (contMapX % self.tileSize)) / self.tileSize + 1
+    local gameX = (camera.x-GAMEWIDTH/4) + screenX
+    local gameY = (camera.y-GAMEHEIGHT/4) + screenY
 
-    local contMapY = (screenY + self.cam.y) / self.cam.zoom
-    -- local mapY = math.floor (contMapY / self.tileSize) + 1
-    local mapY = (contMapY - (contMapY % self.tileSize)) / self.tileSize + 1
+    local mapX = math.floor(gameX/(self.tileSize*2)) + 1
+    local mapY = math.floor(gameY/(self.tileSize*2)) + 1
 
     return mapX, mapY
+end
+
+function mapManager:screenToGame(screenX, screenY)
+    local gameX = (camera.x-GAMEWIDTH/4) + screenX
+    local gameY = (camera.y-GAMEHEIGHT/4) + screenY
+
+    return gameX, gameY
 end
 
 function mapManager:interact(tileX, tileY)

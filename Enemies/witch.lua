@@ -10,7 +10,7 @@ local function genericInit(enemy, x, y)
 
 
     function enemy:load()
-        self.sprite = love.graphics.newImage("Graphics/witch.png")
+        self.sprite = love.graphics.newImage("Graphics/enemies/witch.png")
         self.sprite:setFilter("nearest", "nearest")
         enemy.body:setLinearDamping(enemy.friction)
     end

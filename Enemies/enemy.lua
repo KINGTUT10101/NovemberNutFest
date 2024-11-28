@@ -10,7 +10,7 @@ EnemyManager = {}
 
 -- Stats
 EnemyManager.totalKills = 0
-EnemyManager.enemyTypes = 3
+EnemyManager.enemyTypes = 5
 
 -- Sound Effects
 local enemyHitSound = love.audio.newSource("SoundEffects/enemy_hit.wav", "static")
@@ -52,9 +52,13 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.statusEffects = {}
     -- Fire
     enemy.statusEffects.onFire = false
-    enemy.maxFireTimer = 7
+    enemy.maxFireTimer = 10
     enemy.fireTimer = enemy.maxFireTimer
     enemy.fireHitTimer = 0
+    -- Frozen
+    enemy.statusEffects.frozen = false
+    enemy.freezeTimer = 0
+    enemy.maxFreezeTimer = 10
     -- Oiled... oiled nuts... heh
     enemy.statusEffects.oiled = false
     enemy.maxOiledTimer = 13
@@ -68,6 +72,10 @@ function EnemyManager:spawnEnemy(x, y, type)
         init = require("Enemies/smallEnemy")
     elseif type == "witch" then
         init = require("Enemies/witch")
+    elseif type == "armored" then
+        init = require("Enemies.armored")
+    elseif type == "screecher" then
+        init = require("Enemies.screecher")
     else
         error(type + "is not an enemy type.")
     end
@@ -85,6 +93,15 @@ function EnemyManager:spawnEnemy(x, y, type)
             self.immunityTimer = self.immunityTimer + dt
         end
 
+        -- Enemies can't be on fire and frozen at the same time
+        if enemy.statusEffects.onFire then enemy.statusEffects.frozen = false end
+
+        -- Half the enemies speed if they're frozen
+        local originalSpeed = self.speed
+        if enemy.statusEffects.frozen then
+            self.speed = self.speed / 2
+        end
+
         local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
         if self.stunned and self.velX == 0 and self.velY == 0 then
@@ -93,24 +110,31 @@ function EnemyManager:spawnEnemy(x, y, type)
 
         self.velX, self.velY = 0, 0
         -- Move towards the player
-        if not self.stunned then
-            if math.abs(self.x - Player.x) > threshold then
-                if self.x < Player.x then
-                    self.velX = self.speed
+        if self.hasNewMove then
+            self:move(threshold)
+        else
+            if not self.stunned then
+                if math.abs(self.x - Player.x) > threshold then
+                    if self.x < Player.x then
+                        self.velX = self.speed
+                    end
+                    if self.x > Player.x then
+                        self.velX = -self.speed
+                    end
                 end
-                if self.x > Player.x then
-                    self.velX = -self.speed
-                end
-            end
-            if math.abs(self.y - Player.y) > threshold then
-                if self.y < Player.y then
-                    self.velY = self.speed
-                end
-                if self.y > Player.y then
-                    self.velY = -self.speed
+                if math.abs(self.y - Player.y) > threshold then
+                    if self.y < Player.y then
+                        self.velY = self.speed
+                    end
+                    if self.y > Player.y then
+                        self.velY = -self.speed
+                    end
                 end
             end
         end
+
+        -- Set the speed back if the enemy's frozen
+        if self.statusEffects.frozen then self.speed = originalSpeed end
 
         if math.abs(self.velX) > 0 and math.abs(self.velY) > 0 then
             self.velX = self.velX / 1.44
@@ -131,6 +155,10 @@ function EnemyManager:spawnEnemy(x, y, type)
                         self.statusEffects.onFire = true
                         self.fireTimer = 0
                     end
+                    if contains(p.specialEffects, "freeze") then
+                        self.statusEffects.frozen = true
+                        self.freezeTimer = 0
+                    end
                     if contains(p.specialEffects, "pierce") then
                         if p.pierces >= 2 then
                             table.remove(Projectiles, i)
@@ -144,7 +172,8 @@ function EnemyManager:spawnEnemy(x, y, type)
         end
 
         -- Status effects
-        if self.statusEffects.onFire and self.fireTimer < self.maxFireTimer then
+        -- On Fire
+        if self.statusEffects.onFire and self.fireTimer <= self.maxFireTimer then
             self.statusEffects.oiled = false
             self.fireTimer = self.fireTimer + dt
             self.fireHitTimer = self.fireHitTimer + dt
@@ -154,14 +183,29 @@ function EnemyManager:spawnEnemy(x, y, type)
                 self:hit(2, 0, 0, 0)
             end
 
-            if self.fireTimer > self.maxFireTimer then
+            -- Damage the player over time
+            if self.fireTimer >= self.maxFireTimer then
                 self.fireHitTimer = 0
                 self.fireTimer = 0
                 self.statusEffects.onFire = false
             end
+        -- If the enemy suddenly loses the on fire status effect the timers will reset
         elseif self.fireTimer ~= 0 and self.statusEffects.onFire == false then
             self.fireTimer = 0
             self.fireHitTimer = 0
+        end
+
+        -- Frozen
+        if self.statusEffects.frozen and self.freezeTimer <= self.maxFreezeTimer then
+            self.freezeTimer = self.freezeTimer + dt
+
+            if self.freezeTimer >= self.maxFreezeTimer then
+                self.freezeTimer = 0
+                self.statusEffects.frozen = false
+            end
+        -- If the enemy suddenly loses the on freeze status effect the timers will reset
+        elseif self.freezeTimer ~= 0 and self.statusEffects.frozen == false then
+            self.freezeTimer = 0
         end
 
         -- Oiled
@@ -206,7 +250,11 @@ function EnemyManager:spawnEnemy(x, y, type)
         if (self.width * self.height) < 1024 then strength = strength * 6 end
         if strength < 0 then strength = 0 end
 
-        self.health = self.health - damage
+        if self.hasNewOnHit then
+            self:newOnHit(damage)
+        else
+            self:onHit(damage)
+        end
 
         hitmarkerManager:new(damage, self.x + (self.width / 2), self.y)
 
@@ -242,6 +290,10 @@ function EnemyManager:spawnEnemy(x, y, type)
         end
     end
 
+    function enemy:onHit(damage)
+        self.health = self.health - damage
+    end
+
     table.insert(Enemies, enemy)
 end
 
@@ -271,6 +323,8 @@ function EnemyManager.drawEnemies()
             love.graphics.setColor(.5, 0, 0)
         elseif e.statusEffects.oiled then
             love.graphics.setColor(.5, .5, 0)
+        elseif e.statusEffects.frozen then
+            love.graphics.setColor(.2, .2, 1)
         end
         e:draw()
         love.graphics.setColor(1, 1, 1)
@@ -286,6 +340,10 @@ function EnemyManager:getWidth(type)
         return 16
     elseif type == "witch" then
         return 32
+    elseif type == "armored" then
+        return 32
+    elseif type == "screecher" then
+        return 16
     else
         error(type .. " is not an enemy type.")
     end
@@ -297,6 +355,10 @@ function EnemyManager:getHeight(type)
     elseif type == "small" then
         return 16
     elseif type == "witch" then
+        return 32
+    elseif type == "armored" then
+        return 32
+    elseif type == "screecher" then
         return 32
     else
         error(type .. " is not an enemy type.")
