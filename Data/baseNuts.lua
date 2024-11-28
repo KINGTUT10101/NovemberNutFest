@@ -111,7 +111,7 @@ baseNuts.deathNut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"fire", "pierce"},
+    specialEffects = {"pierce"},
     type = "nut"
 }
 

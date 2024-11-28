@@ -1,5 +1,4 @@
 local icons = require ("Helpers.icons")
-local copyTable = require ("helpers.copyTable")
 
 Throwables = {}
 Consumables = {}
