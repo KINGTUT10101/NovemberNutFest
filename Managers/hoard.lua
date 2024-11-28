@@ -30,7 +30,7 @@ function hoardManager:update(dt)
     if not self.inProgress then
         self.waveTimer = self.waveTimer + dt
         -- Only has a timer for the first wave
-        if self.waveTimer >= self.maxWaveTimer and self.waveCount == 0 then
+        if self.waveTimer >= self.maxWaveTimer then
             self:startWave()
         end
     else
@@ -62,9 +62,9 @@ function hoardManager:HoardSpawn(type)
 
     if type == nil then
         -- Scale enemies based on curent wave
-        local enemyType = math.random(1, self.waveCount+1)
-        if enemyType > EnemyManager.enemyTypes then enemyType = math.random(1, EnemyManager.enemyTypes) end
         while type == nil do
+            local enemyType = math.random(1, self.waveCount+1)
+            if enemyType > EnemyManager.enemyTypes then enemyType = math.random(1, EnemyManager.enemyTypes) end
             if enemyType == 1 then
                 type = "generic"
             elseif enemyType == 2 then
@@ -72,10 +72,10 @@ function hoardManager:HoardSpawn(type)
             elseif enemyType == 3 then
                 type = "armored"
             elseif enemyType == 4 then
-                rare = math.random(1, 7)
+                rare = math.random(1, 3)
                 if rare == 1 then type = "screecher" end
             elseif enemyType == 5 then
-                rare = math.random(1, 10)
+                rare = math.random(1, 5)
                 if rare == 1 then type = "witch" end
             else
                 error(enemyType .. " is not a valid number for an enemy.")
