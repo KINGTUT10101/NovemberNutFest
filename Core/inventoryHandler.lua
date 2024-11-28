@@ -1,6 +1,5 @@
 local icons = require ("Helpers.icons")
-
-local numSections = 10
+local copyTable = require ("helpers.copyTable")
 
 Throwables = {}
 Consumables = {}
@@ -14,7 +13,7 @@ local inventoryHandler = {
     activeSection = 1,
 }
 
-function inventoryHandler:init ()
+function inventoryHandler:init (numSections)
     -- Create sections for nuts
     for i = 1, numSections do
         inventoryHandler.sections[i] = {}
@@ -27,37 +26,53 @@ function inventoryHandler:init ()
             icon = icons.inverseStar,
         }
     end
+
+    self.numSections = numSections
 end
-inventoryHandler:init ()
+inventoryHandler:init (10)
+
+function inventoryHandler:getNumSections ()
+    return self.numSections
+end
+
+function inventoryHandler:getMaxStorage ()
+    return self.maxStorage
+end
 
 function inventoryHandler:setSectionIcon (sectionIndex, icon)
-    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+    assert (sectionIndex >= 1 and sectionIndex <= self.numSections, "Section index is out of bounds")
 
     self.sectionInfo[sectionIndex].icon = icon
 end
 
 function inventoryHandler:getSectionIcon (sectionIndex)
-    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+    assert (sectionIndex >= 1 and sectionIndex <= self.numSections, "Section index is out of bounds")
 
     return self.sectionInfo[sectionIndex].icon
 end
 
 function inventoryHandler:setSectionName (sectionIndex, name)
-    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+    assert (sectionIndex >= 1 and sectionIndex <= self.numSections, "Section index is out of bounds")
 
     self.sectionInfo[sectionIndex].name = name
 end
 
 function inventoryHandler:getSectionName (sectionIndex)
-    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+    assert (sectionIndex >= 1 and sectionIndex <= self.numSections, "Section index is out of bounds")
 
     return self.sectionInfo[sectionIndex].name
 end
 
 function inventoryHandler:getSectionStorage (sectionIndex)
-    assert (sectionIndex >= 1 and sectionIndex <= numSections, "Section index is out of bounds")
+    assert (sectionIndex >= 1 and sectionIndex <= self.numSections, "Section index is out of bounds")
 
     return self.sections[sectionIndex]
+end
+
+function inventoryHandler:getSectionSize (sectionIndex)
+    assert (sectionIndex >= 1 and sectionIndex <= self.numSections, "Section index is out of bounds")
+
+    return #self.sections[sectionIndex]
 end
 
 function inventoryHandler:getActiveSectionIndex ()
@@ -65,7 +80,7 @@ function inventoryHandler:getActiveSectionIndex ()
 end
 
 function inventoryHandler:setActiveSectionIndex (section)
-    assert (section >= 1 and section <= numSections, "Section index is out of bounds")
+    assert (section >= 1 and section <= self.numSections, "Section index is out of bounds")
 
     self.activeSection = section
 end
@@ -113,7 +128,7 @@ function inventoryHandler:consumeNut ()
 end
 
 function inventoryHandler:dropNut (sectionNum, index)
-    assert (sectionNum >= 1 and sectionNum <= numSections, "Section index is out of bounds")
+    assert (sectionNum >= 1 and sectionNum <= self.numSections, "Section index is out of bounds")
     
     local section = self.sections[sectionNum]
     

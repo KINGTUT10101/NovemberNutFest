@@ -29,12 +29,7 @@ end
 
 -- Updates the map and its tiles
 -- The camera position basically defines where the player is in the map
-function mapManager:update(dt, camX, camY, camZoom)
-    --[[
-    self.cam.x = camX
-    self.cam.y = camY
-    self.cam.zoom = camZoom
-
+function mapManager:update(dt)
     -- Updates buildables within the player's view
     local updateStartTime = love.timer.getTime()
     local startX, startY = self:screenToMap(-10, -10)
@@ -198,6 +193,12 @@ function mapManager:interact(tileX, tileY)
     end
 
     return result
+end
+
+function mapManager:getBiome (tileX, tileY)
+    if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
+        return self.grid[tileX][tileY].biome
+    end
 end
 
 return mapManager
