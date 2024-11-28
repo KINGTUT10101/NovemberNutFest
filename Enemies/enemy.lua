@@ -52,9 +52,13 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.statusEffects = {}
     -- Fire
     enemy.statusEffects.onFire = false
-    enemy.maxFireTimer = 7
+    enemy.maxFireTimer = 10
     enemy.fireTimer = enemy.maxFireTimer
     enemy.fireHitTimer = 0
+    -- Frozen
+    enemy.statusEffects.frozen = false
+    enemy.freezeTimer = 0
+    enemy.maxFreezeTimer = 10
     -- Oiled... oiled nuts... heh
     enemy.statusEffects.oiled = false
     enemy.maxOiledTimer = 13
@@ -89,6 +93,15 @@ function EnemyManager:spawnEnemy(x, y, type)
             self.immunityTimer = self.immunityTimer + dt
         end
 
+        -- Enemies can't be on fire and frozen at the same time
+        if enemy.statusEffects.onFire then enemy.statusEffects.frozen = false end
+
+        -- Half the enemies speed if they're frozen
+        local originalSpeed = self.speed
+        if enemy.statusEffects.frozen then
+            self.speed = self.speed / 2
+        end
+
         local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
         if self.stunned and self.velX == 0 and self.velY == 0 then
@@ -120,6 +133,9 @@ function EnemyManager:spawnEnemy(x, y, type)
             end
         end
 
+        -- Set the speed back if the enemy's frozen
+        if self.statusEffects.frozen then self.speed = originalSpeed end
+
         if math.abs(self.velX) > 0 and math.abs(self.velY) > 0 then
             self.velX = self.velX / 1.44
             self.velY = self.velY / 1.44
@@ -139,6 +155,10 @@ function EnemyManager:spawnEnemy(x, y, type)
                         self.statusEffects.onFire = true
                         self.fireTimer = 0
                     end
+                    if contains(p.specialEffects, "freeze") then
+                        self.statusEffects.frozen = true
+                        self.freezeTimer = 0
+                    end
                     if contains(p.specialEffects, "pierce") then
                         if p.pierces >= 2 then
                             table.remove(Projectiles, i)
@@ -152,7 +172,8 @@ function EnemyManager:spawnEnemy(x, y, type)
         end
 
         -- Status effects
-        if self.statusEffects.onFire and self.fireTimer < self.maxFireTimer then
+        -- On Fire
+        if self.statusEffects.onFire and self.fireTimer <= self.maxFireTimer then
             self.statusEffects.oiled = false
             self.fireTimer = self.fireTimer + dt
             self.fireHitTimer = self.fireHitTimer + dt
@@ -162,14 +183,29 @@ function EnemyManager:spawnEnemy(x, y, type)
                 self:hit(2, 0, 0, 0)
             end
 
-            if self.fireTimer > self.maxFireTimer then
+            -- Damage the player over time
+            if self.fireTimer >= self.maxFireTimer then
                 self.fireHitTimer = 0
                 self.fireTimer = 0
                 self.statusEffects.onFire = false
             end
+        -- If the enemy suddenly loses the on fire status effect the timers will reset
         elseif self.fireTimer ~= 0 and self.statusEffects.onFire == false then
             self.fireTimer = 0
             self.fireHitTimer = 0
+        end
+
+        -- Frozen
+        if self.statusEffects.frozen and self.freezeTimer <= self.maxFreezeTimer then
+            self.freezeTimer = self.freezeTimer + dt
+
+            if self.freezeTimer >= self.maxFreezeTimer then
+                self.freezeTimer = 0
+                self.statusEffects.frozen = false
+            end
+        -- If the enemy suddenly loses the on freeze status effect the timers will reset
+        elseif self.freezeTimer ~= 0 and self.statusEffects.frozen == false then
+            self.freezeTimer = 0
         end
 
         -- Oiled
@@ -287,6 +323,8 @@ function EnemyManager.drawEnemies()
             love.graphics.setColor(.5, 0, 0)
         elseif e.statusEffects.oiled then
             love.graphics.setColor(.5, .5, 0)
+        elseif e.statusEffects.frozen then
+            love.graphics.setColor(.2, .2, 1)
         end
         e:draw()
         love.graphics.setColor(1, 1, 1)

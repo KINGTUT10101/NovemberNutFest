@@ -6,7 +6,7 @@ local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
 
 hoardManager.waveTimer = 0          -- Time counting up to next wave
-hoardManager.maxWaveTimer = 0       -- Seconds to before next wave
+hoardManager.maxWaveTimer = 3       -- Seconds to before next wave
 hoardManager.kills = 0      -- Amount of kills during the current wave
 hoardManager.maxKills = 5   -- Amount of kills needed to end the wave
 hoardManager.previousTotalKills = 0   -- Amound of total kills at the start of the wave 
@@ -16,16 +16,22 @@ hoardManager.inProgress = false -- Is true if a wave is currently happening
 hoardManager.spawnTimer = 0         -- Counting up till another enemy spawns
 hoardManager.maxSpawnTimer = 2      -- The time it takes for another enemy to spawn
 
+function hoardManager:startWave()
+
+    self.inProgress = true
+    self.waveTimer = 0
+    self.spawnTimer = 0
+    self.kills = 0
+    self.previousTotalKills = EnemyManager.totalKills
+    print("WAVE " .. self.waveCount+1 .. " HAS BEGUN!!!")
+end
+
 function hoardManager:update(dt)
     if not self.inProgress then
         self.waveTimer = self.waveTimer + dt
-        if self.waveTimer >= self.maxWaveTimer then
-            self.inProgress = true
-            self.waveTimer = 0
-            self.spawnTimer = 0
-            self.kills = 0
-            self.previousTotalKills = EnemyManager.totalKills
-            print("WAVE " .. self.waveCount+1 .. " HAS BEGUN!!!")
+        -- Only has a timer for the first wave
+        if self.waveTimer >= self.maxWaveTimer and self.waveCount == 0 then
+            self:startWave()
         end
     else
         -- Spawner
