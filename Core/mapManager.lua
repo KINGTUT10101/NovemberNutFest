@@ -193,4 +193,10 @@ function mapManager:interact(tileX, tileY)
     return result
 end
 
+function mapManager:getBiome (tileX, tileY)
+    if tileX >= 1 and tileX <= self.mapSize and tileY >= 1 and tileY <= self.mapSize then
+        return self.grid[tileX][tileY].biome
+    end
+end
+
 return mapManager
