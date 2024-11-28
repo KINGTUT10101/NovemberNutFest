@@ -36,6 +36,7 @@ baseNuts.coconut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
+    specialEffects = {"stun"},
     type = "nut"
 }
 

@@ -30,7 +30,6 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.friction = 10
     enemy.dead = false
     enemy.damage = 5
-    enemy.stunned = false -- When true the enemy won't go after the player
     enemy.type = type
     enemy.class = "enemy"
     enemy.maxImmunityTimer = .15
@@ -59,6 +58,10 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.statusEffects.frozen = false
     enemy.freezeTimer = 0
     enemy.maxFreezeTimer = 10
+    -- Stunned
+    enemy.stunned = false -- When true the enemy won't go after the player
+    enemy.maxStunTimer = 1
+    enemy.stunTimer = enemy.maxStunTimer
     -- Oiled... oiled nuts... heh
     enemy.statusEffects.oiled = false
     enemy.maxOiledTimer = 13
@@ -104,8 +107,11 @@ function EnemyManager:spawnEnemy(x, y, type)
 
         local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
-        if self.stunned and self.velX == 0 and self.velY == 0 then
+        if self.stunned and self.velX == 0 and self.velY == 0 and self.stunTimer >= self.maxStunTimer then
             self.stunned = false
+        end
+        if self.stunned and self.stunTimer < self.maxStunTimer then
+            self.stunTimer = self.stunTimer + dt
         end
 
         self.velX, self.velY = 0, 0
@@ -158,6 +164,10 @@ function EnemyManager:spawnEnemy(x, y, type)
                     if contains(p.specialEffects, "freeze") then
                         self.statusEffects.frozen = true
                         self.freezeTimer = 0
+                    end
+                    if contains(p.specialEffects, "stun") then
+                        self.stunned = true
+                        self.stunTimer = 0
                     end
                     if contains(p.specialEffects, "pierce") then
                         if p.pierces >= 2 then
