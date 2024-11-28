@@ -20,19 +20,11 @@ function thisScene:delete (...)
 end
 
 function thisScene:update (dt)
-
-    if love.keyboard.isDown("[") then
-        camera:zoom(camera.scale-zoomVelocity * dt)
-    elseif love.keyboard.isDown("]") then
-        camera:zoom(camera.scale+zoomVelocity * dt)
-    end
-
-    mapManager:update (dt, 0, 0, 1)
+    mapManager:update (dt)
 end
 
 function thisScene:draw ()
     camera:attach(nil, nil, push:getWidth(), push:getHeight())
-    love.graphics.setScissor(0, 0, push:getWidth(), push:getHeight())
     mapManager:draw()
     camera:detach()
 end
