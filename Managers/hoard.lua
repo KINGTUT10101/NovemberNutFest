@@ -30,7 +30,7 @@ function hoardManager:update(dt)
     if not self.inProgress then
         self.waveTimer = self.waveTimer + dt
         -- Only has a timer for the first wave
-        if self.waveTimer >= self.maxWaveTimer then
+        if self.waveTimer >= self.maxWaveTimer and self.waveCount == 0 then
             self:startWave()
         end
     else
