@@ -7,6 +7,7 @@ local ItemManager = require("Managers.item")
 local baseNuts = require("Data.baseNuts")
 local push = require("Libraries.push")
 local contains = require "Helpers.contains"
+local copyTable= require "Helpers.copyTable"
 
 gun.cooldownMax = .2 -- in seconds
 gun.orginCooldownMax = gun.cooldownMax
@@ -62,14 +63,33 @@ function gun:shoot(x, y)
         local startX = gun.x + math.cos(gun.rotation) * gun.width
         local startY = gun.y + math.sin(gun.rotation) * gun.width
 
-        if contains(currentNut.specialEffects, "hyperburst") then
+        local newNut = copyTable(currentNut)
+
+        -- Pick a random attribute to come out with the gun
+        if #newNut.specialEffects > 0 then
+            local tribNum = math.random(1, #currentNut.specialEffects)
+            local rare = math.random(1, 4) -- Chance of getting multiple attibutes
+
+            newNut.specialEffects = {currentNut.specialEffects[tribNum]}
+
+            if rare == 1 and #currentNut.specialEffects > 1 then
+                while true do
+                    local tribNum2 = math.random(1, #currentNut.specialEffects)
+                    if tribNum ~= tribNum2 then tribNum = tribNum2; break; end
+                end
+                newNut.specialEffects[2] = currentNut.specialEffects[tribNum]
+            end
+        end
+
+        -- Lower the gun's cooldown for hyperburst
+        if contains(newNut.specialEffects, "hyperburst") then
             self.cooldownMax = self.orginCooldownMax/2
         else
             self.cooldownMax = self.orginCooldownMax
         end
 
         -- Shoot the nut
-        ProjectileManager:add(startX, startY, x, y, currentNut)
+        ProjectileManager:add(startX, startY, x, y, newNut)
         self.cooldownTimer = 0
 
         inventoryHandler:setAmmoCount(inventoryHandler:getAmmoCount()-1)
