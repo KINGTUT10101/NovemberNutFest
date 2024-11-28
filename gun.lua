@@ -28,7 +28,7 @@ function gun:update(dt)
     gun.camY = Player.camY + (Player.height / 2)
 
     -- Set the gun's rotation based on the cursor
-    gun.rotation = math.atan2(mouseGameY - gun.camY, mouseGameX - gun.camX)
+    gun.rotation = math.atan2(mouseGameY - (gun.camY+self.height), mouseGameX - (gun.camX+self.width))
 
     if mouseGameX < gun.camX then
         gun.flipped = -1
@@ -48,15 +48,14 @@ function gun:update(dt)
         gun:shoot(targetX, targetY)
     end
 
-    -- TEST ** Sets the hotbar to be full of nuts
+    -- TEST ** Sets nuts to the hotbar
     inventoryHandler:replaceNut(nut:new(baseNuts.deathNut), 1)
     inventoryHandler:replaceNut(nut:new(baseNuts.macadamia), 2)
-
 end
 
 function gun:shoot(x, y)
     local currentNut = inventoryHandler:getNut(inventoryHandler:getActiveSlot())
-    if currentNut ~= nil and self.cooldownTimer >= self.cooldownMax then
+    if currentNut ~= nil and inventoryHandler:getAmmoCount() > 0 and self.cooldownTimer >= self.cooldownMax then
         shootSound:play()
 
         -- Find where the end of the gun is
@@ -72,6 +71,8 @@ function gun:shoot(x, y)
         -- Shoot the nut
         ProjectileManager:add(startX, startY, x, y, currentNut)
         self.cooldownTimer = 0
+
+        inventoryHandler:setAmmoCount(inventoryHandler:getAmmoCount()-1)
     end
 end
 
