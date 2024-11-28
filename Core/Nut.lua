@@ -28,7 +28,7 @@ local defaultNut = {
 -- TODO: Adjust these values later when balancing the game
 local nutAttributeRanges = {
     level = {1, 10},
-    damage = {0, 10},
+    damage = {0, 100},
     projVelocity = {0, 25},
     projScale = {0.1, 10},
     range = {0, 25},
@@ -61,9 +61,7 @@ end
 
 local function clampNutAttributes (nutObj)
     for key, value in pairs (nutAttributeRanges) do
-        if nutObj[key] < value[1] or nutObj[key] > value[2] then
-            nutObj[key] = clamp (nutObj[key], value[1], value[2])
-        end
+        nutObj[key] = clamp (nutObj[key], value[1], value[2])
     end
 end
 
