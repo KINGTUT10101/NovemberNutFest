@@ -94,10 +94,10 @@ function thisScene:draw()
     love.graphics.setScissor(0, 0, push:getWidth(), push:getHeight())
     -- Draw Entities
     EnemyManager.drawEnemies()
-    Player:draw()
-    Gun:draw()
     ItemManager:draw()
     ProjectileManager:draw()
+    Player:draw()
+    Gun:draw()
     hitmarkerManager:draw()
 
     camera:detach()

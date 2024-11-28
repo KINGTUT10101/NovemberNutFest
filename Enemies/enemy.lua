@@ -4,6 +4,7 @@ local physics = require "physics"
 local mapManager = require "Core.mapManager"
 local collisionCheck = require "Helpers.collisionCheck"
 local camera = require "Libraries.hump.camera"
+local inventoryHandler = require("Core.newInventoryHandler")
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -85,6 +86,7 @@ function EnemyManager:spawnEnemy(x, y, type)
 
     enemy = init(enemy, x, y)
     enemy:load()
+    enemy.maxHealth = enemy.health
 
     function enemy:genericUpdate(dt)
         self.x, self.y = self.body:getPosition()
@@ -244,6 +246,7 @@ function EnemyManager:spawnEnemy(x, y, type)
     function enemy:genericKill()
         self.dead = true
         self.health = 0
+        inventoryHandler:addAmmoCount(math.floor(self.maxHealth/50))
         self.body:destroy()
         self.deathSound:play()
 

@@ -24,6 +24,9 @@ Player.class = "player"
 Player.dead = false
 Player.god = false -- God mode
 
+-- Gives more ammo the more it increases, is reset after the player gets hit
+Player.nutTimer = 0
+Player.nutAddTimer = 0
 
 -- Sound Effedts
 local hurtSound = love.audio.newSource("SoundEffects/player_hurt.wav", "static")
@@ -42,33 +45,37 @@ function Player.load()
 end
 
 function Player:update(dt)
+
     self.x, self.y = self.body:getPosition()
 
     self.camX = select(1, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
     self.camY = select(2, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
 
-    -- Change active inventory section
-    if love.keyboard.isDown("1") then
-        inventoryHandler.activeSection = 1
-    elseif love.keyboard.isDown("2") then
-        inventoryHandler.activeSection = 2
-    elseif love.keyboard.isDown("3") then
-        inventoryHandler.activeSection = 3
-    elseif love.keyboard.isDown("4") then
-        inventoryHandler.activeSection = 4
-    elseif love.keyboard.isDown("5") then
-        inventoryHandler.activeSection = 5
-    elseif love.keyboard.isDown("6") then
-        inventoryHandler.activeSection = 6
-    elseif love.keyboard.isDown("7") then
-        inventoryHandler.activeSection = 7
-    elseif love.keyboard.isDown("8") then
-        inventoryHandler.activeSection = 8
-    elseif love.keyboard.isDown("9") then
-        inventoryHandler.activeSection = 9
+    -- Add onto the nut regeneration timer
+    self.nutTimer = self.nutTimer + dt
+    self.nutAddTimer = self.nutAddTimer + dt
+    -- Add more ammo depending on where the timer is
+    if self.nutTimer < 3 then
+        if self.nutAddTimer > 1 then
+            inventoryHandler:addAmmoCount(1)
+            self.nutAddTimer = 0
+        end
+    elseif self.nutTimer < 8 then
+        if self.nutAddTimer > .8 then
+            inventoryHandler:addAmmoCount(1)
+            self.nutAddTimer = 0
+        end
+    elseif self.nutTimer < 15 then
+        if self.nutAddTimer > .6 then
+            inventoryHandler:addAmmoCount(1)
+            self.nutAddTimer = 0
+        end
+    elseif self.nutTimer < 30 then
+        if self.nutAddTimer > .4 then
+            inventoryHandler:addAmmoCount(1)
+            self.nutAddTimer = 0
+        end
     end
-
-
 
     -- Deathcheck
     if Player.health <= 0 then
@@ -213,6 +220,9 @@ function Player:hit(damage)
         self.health = self.health - damage
         Player:giveImmunity()
     end
+
+    self.nutAddTimer = 0
+    self.nutTimer = 0
 end
 
 function Player:giveImmunity()
