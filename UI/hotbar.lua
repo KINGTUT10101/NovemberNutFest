@@ -1,25 +1,32 @@
 local tux = require ("Libraries.tux")
 local layout = require ("Helpers.layout")
 local icons = require ("Helpers.icons")
-local inventoryHandler = require ("Core.inventoryHandler")
+local inventoryHandler = require ("Core.newInventoryHandler")
 local slices = require ("Helpers.slices")
 
+local baseNuts = require ("Data.baseNuts") -- TEMP
+local Nut = require ("Core.Nut")
+
+inventoryHandler:replaceNut (Nut:new (baseNuts.peanut), 1)
+
 local function hotbar ()
-    local activeSection = inventoryHandler:getActiveSectionIndex ()
-    local sectionInfo = inventoryHandler.sectionInfo
+    local activeSection = inventoryHandler:getActiveSlot ()
+    local activeNutName, activeNutImage = Nut:generateDisplayData (inventoryHandler:getNut (inventoryHandler:getActiveSlot ()))
 
     -- HOTBAR
     layout:setParent (0, 0, GAMEWIDTH, GAMEHEIGHT)
     local centeredPos = {layout:center (750, 0)}
     layout:setOrigin (centeredPos[1], 995, 0, 15)
 
-    for i = 1, inventoryHandler:getNumSections () do
+    for i = 1, inventoryHandler:getMaxSlots () do
+        local nutName, nutImage = Nut:generateDisplayData (inventoryHandler:getNut (i))
+
         if tux.show.button ({
-            image = sectionInfo[i].icon,
+            image = nutImage,
             iscale = 2,
             colors = (i == activeSection) and {0.5, 0.5, 0.5, 1} or nil
         }, layout:right (75, 75)) == "end" then
-            inventoryHandler:setActiveSectionIndex (i)
+            inventoryHandler:setActiveSlot (i)
         end
     end
 
@@ -41,9 +48,9 @@ local function hotbar ()
     }, layout:right (750, 36))
 
     -- SECTION INFO
-    local sectionName = inventoryHandler:getSectionName (activeSection)
-    local sectionSize = #inventoryHandler:getSectionStorage (activeSection)
-    local totalSize = inventoryHandler:getMaxStorage ()
+    local sectionName = activeNutName
+    local sectionSize = inventoryHandler:getAmmoCount ()
+    local totalSize = inventoryHandler:getMaxAmmo ()
     local centeredPos = {layout:center (750, 0)}
     layout:setOrigin (centeredPos[1], 900, 0, 15)
 

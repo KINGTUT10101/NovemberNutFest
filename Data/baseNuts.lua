@@ -1,8 +1,5 @@
-local Nut = require ("Core.Nut")
-local buildableManager = require ("Core.buildableManager")
-
-local nutPlantImg = love.graphics.newImage ("Graphics/Plants/nutPlant.png")
-
+-- These are not actual nut objects
+-- They are blueprints that should be used with the Nut class to make actual nut objects
 local baseNuts = {}
 
 --[[
@@ -12,6 +9,9 @@ local baseNuts = {}
 --]]
 
 baseNuts.peanut = {
+    name = "Peanut",
+    image = love.graphics.newImage ("Graphics/Nuts/peanut.png"),
+
     damage = 10,
     projVelocity = 5,
     projSize = 4,
@@ -24,10 +24,14 @@ baseNuts.peanut = {
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"hyperburst"}, -- Less time between this nut and the next nut shot
     class = "nut",
-    type = "peanut"
+    type = "peanut",
+    ancestry = {peanut = 1},
 }
 
 baseNuts.coconut = {
+    name = "Coconut",
+    image = love.graphics.newImage ("Graphics/Nuts/coconut.png"),
+
     damage = 15,
     projVelocity = 3,
     projSize = 4,
@@ -40,10 +44,14 @@ baseNuts.coconut = {
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"stun"},
     class = "nut",
-    type = "coconut"
+    type = "coconut",
+    ancestry = {coconut = 1},
 }
 
 baseNuts.macadamia = {
+    name = "Macadamia Nut",
+    image = love.graphics.newImage ("Graphics/Nuts/macadamia.png"),
+
     damage = 5,
     projVelocity = 10,
     projSize = 2,
@@ -55,11 +63,15 @@ baseNuts.macadamia = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     class = "nut",
-    type = "macadamia"
+    type = "macadamia",
+    ancestry = {macadamia = 1},
 }
 
 
 baseNuts.almond = {
+    name = "Almond",
+    image = love.graphics.newImage ("Graphics/Nuts/almond.png"),
+
     damage = 7,
     projVelocity = 5,
     projSize = 4,
@@ -72,10 +84,14 @@ baseNuts.almond = {
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"pierce"},
     class = "nut",
-    type = "almond"
+    type = "almond",
+    ancestry = {almond = 1},
 }
 
 baseNuts.candleNut = {
+    name = "Candlenut",
+    image = love.graphics.newImage ("Graphics/Nuts/candlenut.png"),
+
     damage = 4,
     projVelocity = 4,
     projSize = 4,
@@ -88,10 +104,14 @@ baseNuts.candleNut = {
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"fire"},
     class = "nut",
-    type = "candle"
+    type = "candle",
+    ancestry = {candleNut = 1},
 }
 
 baseNuts.pine = {
+    name = "Pine Nut",
+    image = love.graphics.newImage ("Graphics/Nuts/pinenut.png"),
+
     damage = 4,
     projVelocity = 4,
     projSize = 4,
@@ -104,11 +124,15 @@ baseNuts.pine = {
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"freeze"},
     class = "nut",
-    type = "pine"
+    type = "pine",
+    ancestry = {pine = 1},
 }
 
 -- This is for debugging
 baseNuts.deathNut = {
+    name = "Coconut",
+    image = love.graphics.newImage ("Graphics/Nuts/coconut.png"),
+
     damage = 10,
     projVelocity = 6,
     projSize = 4,
@@ -121,7 +145,8 @@ baseNuts.deathNut = {
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"pierce"},
     class = "nut",
-    type = "peanut"
+    type = "peanut",
+    ancestry = {deathNut = 1},
 }
 
 return baseNuts

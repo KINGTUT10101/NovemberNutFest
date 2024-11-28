@@ -65,4 +65,7 @@ function buildableManager:generate (id)
     return newObj
 end
 
+-- Register buildables
+buildableManager:create ("bush", require ("Data.Buildables.Bush"))
+
 return buildableManager

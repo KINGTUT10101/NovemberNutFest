@@ -1,13 +1,4 @@
-local baseNuts = require ("Data.baseNuts")
-
--- TEMP
-local tileImages = {
-    default = love.graphics.newImage ("Graphics/Tiles/default.png"),
-    grass = love.graphics.newImage ("Graphics/Tiles/grass.png"),
-    dirt = love.graphics.newImage ("Graphics/Tiles/dirt.png"),
-    sand = love.graphics.newImage ("Graphics/Tiles/sand.png"),
-    snow = love.graphics.newImage ("Graphics/Tiles/snow.png"),
-}
+local bushBuildObj = require ("Core.buildableManager"):generate ("bush")
 
 -- filepath (string) A folder containing three slices: normal, hovered, and active
 local function loadTiles (filepath)
@@ -43,7 +34,7 @@ local biomes = {
         size = 1,
         mapColor = {1, 1, 1, 1},
         groundTiles = {
-            tileImages.default,
+            love.graphics.newImage ("Graphics/Tiles/default.png"),
         },
         weather = {
             thunder = 0.01,
@@ -53,7 +44,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
 
@@ -77,7 +68,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
     bloodDesert = {
@@ -97,7 +88,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
     savana = {
@@ -117,7 +108,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
 
@@ -141,7 +132,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
     beach = {
@@ -161,7 +152,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
 
@@ -185,7 +176,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
     flowerPlains = {
@@ -205,7 +196,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
     forest = {
@@ -225,7 +216,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
 
@@ -249,7 +240,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
     glacialPlains = {
@@ -269,7 +260,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
 
@@ -293,7 +284,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
     permafrost = {
@@ -313,7 +304,7 @@ local biomes = {
         buildableChance = 1,
         buildableThreshold = 0.65,
         buildables = {
-            {baseNuts.peanut, 1}
+            {bushBuildObj, 1}
         }
     },
 }
