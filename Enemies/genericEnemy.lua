@@ -1,6 +1,8 @@
 local function genericInit(enemy, x, y)
 
     enemy.health = 125
+    enemy.width = 27
+    enemy.height = 31
 
     function enemy:load()
         self.sprite = love.graphics.newImage("Graphics/enemies/genericEnemy.png")

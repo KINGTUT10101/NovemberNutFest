@@ -30,7 +30,6 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.friction = 10
     enemy.dead = false
     enemy.damage = 5
-    enemy.stunned = false -- When true the enemy won't go after the player
     enemy.type = type
     enemy.class = "enemy"
     enemy.maxImmunityTimer = .15
@@ -59,6 +58,10 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.statusEffects.frozen = false
     enemy.freezeTimer = 0
     enemy.maxFreezeTimer = 10
+    -- Stunned
+    enemy.stunned = false -- When true the enemy won't go after the player
+    enemy.maxStunTimer = 1
+    enemy.stunTimer = enemy.maxStunTimer
     -- Oiled... oiled nuts... heh
     enemy.statusEffects.oiled = false
     enemy.maxOiledTimer = 13
@@ -104,8 +107,11 @@ function EnemyManager:spawnEnemy(x, y, type)
 
         local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
-        if self.stunned and self.velX == 0 and self.velY == 0 then
+        if self.stunned and self.velX == 0 and self.velY == 0 and self.stunTimer >= self.maxStunTimer then
             self.stunned = false
+        end
+        if self.stunned and self.stunTimer < self.maxStunTimer then
+            self.stunTimer = self.stunTimer + dt
         end
 
         self.velX, self.velY = 0, 0
@@ -148,7 +154,7 @@ function EnemyManager:spawnEnemy(x, y, type)
         for i = #Projectiles, 1, -1 do -- Is in reverse to stop the table from becoming sparse
             local p = Projectiles[i]
             if p ~= nil and self.immunityTimer >= self.maxImmunityTimer then
-                if p.type == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
+                if p.class == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
                     enemy:hit(p.damage, p.knockback, p.velX, p.velY)
                     self.immunityTimer = 0
                     if contains(p.specialEffects, "fire") then
@@ -158,6 +164,10 @@ function EnemyManager:spawnEnemy(x, y, type)
                     if contains(p.specialEffects, "freeze") then
                         self.statusEffects.frozen = true
                         self.freezeTimer = 0
+                    end
+                    if contains(p.specialEffects, "stun") then
+                        self.stunned = true
+                        self.stunTimer = 0
                     end
                     if contains(p.specialEffects, "pierce") then
                         if p.pierces >= 2 then
@@ -335,15 +345,15 @@ end
 -- I could take everything from the init function and just return the size but that would take up too much cpu time, it's easier to do this
 function EnemyManager:getWidth(type)
     if type == "generic" then
-        return 32
+        return 31
     elseif type == "small" then
-        return 16
+        return 11
     elseif type == "witch" then
-        return 32
+        return 29
     elseif type == "armored" then
-        return 32
+        return 19
     elseif type == "screecher" then
-        return 16
+        return 24
     else
         error(type .. " is not an enemy type.")
     end
@@ -351,15 +361,15 @@ end
 
 function EnemyManager:getHeight(type)
     if type == "generic" then
-        return 32
+        return 27
     elseif type == "small" then
         return 16
     elseif type == "witch" then
-        return 32
+        return 29
     elseif type == "armored" then
-        return 32
+        return 31
     elseif type == "screecher" then
-        return 32
+        return 30
     else
         error(type .. " is not an enemy type.")
     end

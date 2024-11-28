@@ -7,14 +7,35 @@ projectileManager.projectileSize = 6
 
 function projectileManager:load()
 
+    self.peanutSprite = love.graphics.newImage("Graphics/Projectiles/peanut.png")
+    self.coconutSprite = love.graphics.newImage("Graphics/Projectiles/coconut.png")
+    self.macadamiaSprite = love.graphics.newImage("Graphics/Projectiles/macadamia.png")
+    self.almondSprite = love.graphics.newImage("Graphics/Projectiles/almond.png")
+    self.candleSprite = love.graphics.newImage("Graphics/Projectiles/candle.png")
+    self.pineSprite = love.graphics.newImage("Graphics/Projectiles/pine.png")
+    self.peanutSprite:setFilter("nearest", "nearest")
 end
 
 function projectileManager:draw()
 
     for _, p in pairs(Projectiles) do
 
-        if p.type == "nut" then
-            love.graphics.draw(SpriteSheets.nuts, p.x, p.y, p.rotation, 1, 1, self.projectileSize/2, self.projectileSize/2) -- all nuts are 6 high and wide
+        if p.class == "nut" then
+            if p.type == "peanut" then
+                love.graphics.draw(self.peanutSprite, p.x, p.y, p.rotation, 1, 1, self.projectileSize/2, self.projectileSize/2) -- all nuts are 6 high and wide
+            elseif p.type == "coconut" then
+                love.graphics.draw(self.coconutSprite, p.x, p.y, p.rotation, 1, 1, self.projectileSize/2, self.projectileSize/2)
+            elseif p.type == "macadamia" then
+                love.graphics.draw(self.macadamiaSprite, p.x, p.y, p.rotation, 1, 1, self.projectileSize/2, self.projectileSize/2)
+            elseif p.type == "almond" then
+                love.graphics.draw(self.almondSprite, p.x, p.y, p.rotation, 1, 1, self.projectileSize/2, self.projectileSize/2)
+            elseif p.type == "candle" then
+                love.graphics.draw(self.candleSprite, p.x, p.y, p.rotation, 1, 1, self.projectileSize/2, self.projectileSize/2)
+            elseif p.type == "pine" then
+                love.graphics.draw(self.pineSprite, p.x, p.y, p.rotation, 1, 1, self.projectileSize/2, self.projectileSize/2)
+            else
+                love.graphics.draw(SpriteSheets.nuts, p.x, p.y, p.rotation, 1, 1, self.projectileSize/2, self.projectileSize/2) -- all nuts are 6 high and wide
+            end
         elseif p.type == "throwable" then
             love.graphics.draw(p.sprite, p.x, p.y, p.rotation, 1, 1, p.width/2, p.height/2)
         end
@@ -33,7 +54,7 @@ function projectileManager:update(dt)
         p.rotation = p.rotation + 3
 
         -- Collisions with buildables
-        if p.type == "nut" then
+        if p.class == "nut" then
             -- Collisions with buildables
             local grid = mapManager.grid
             local tileSize = mapManager.tileSize
@@ -72,7 +93,7 @@ function projectileManager:update(dt)
         end
 
         -- Nuts
-        if p.type == "nut" then
+        if p.class == "nut" then
             -- Delete the projectiles after their range comes up
             if p.timer >= p.range or p.hitTile then
                 table.remove(Projectiles, n)
@@ -116,7 +137,7 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     projectile.velX = directionX * (projectile.projVelocity*65) -- Delta time slows it down
     projectile.velY = directionY * (projectile.projVelocity*65)
 
-    if projectile.type == "nut" then
+    if projectile.class == "nut" then
 
         -- The range needs to scale with the velocity
         projectile.range = (projectile.range/projectile.projVelocity)/1.85

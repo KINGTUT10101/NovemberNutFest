@@ -11,6 +11,9 @@ local function genericInit(enemy, x, y)
     enemy.screechBeginTimer = require("util.timer")
     enemy.screechBeginTimer.max = 5
 
+    enemy.width = 24
+    enemy.height = 30
+
     -- This enemy has a different on move function then the default
     enemy.hasNewMove = true
 

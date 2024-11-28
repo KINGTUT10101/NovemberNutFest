@@ -6,9 +6,10 @@ local ProjectileManager = require("Managers.projectile")
 local ItemManager = require("Managers.item")
 local baseNuts = require("Data.baseNuts")
 local push = require("Libraries.push")
-local camera = require("Libraries.hump.camera")
+local contains = require "Helpers.contains"
 
 gun.cooldownMax = .2 -- in seconds
+gun.orginCooldownMax = gun.cooldownMax
 gun.cooldownTimer = gun.cooldownMax
 gun.width = 16
 gun.height = 8
@@ -49,10 +50,10 @@ function gun:update(dt)
 
     -- TEST ** adds nut to section 1 of inventory
     if love.keyboard.isDown("space") then
-        inventoryHandler:addNut(nut:new(baseNuts.deathNut))
+        inventoryHandler:addNut(nut:new(baseNuts.peanut))
     end
     if love.keyboard.isDown("f") then
-        inventoryHandler:addNut(nut:new(baseNuts.candleNut))
+        inventoryHandler:addNut(nut:new(baseNuts.pine))
     end
     -- TEST ** adds nut oil into the inventory
     if love.keyboard.isDown("t") then
@@ -72,6 +73,12 @@ function gun:shoot(x, y)
         -- Find where the end of the gun is
         local startX = gun.x + math.cos(gun.rotation) * gun.width
         local startY = gun.y + math.sin(gun.rotation) * gun.width
+
+        if contains(activeSection[1].specialEffects, "hyperburst") then
+            self.cooldownMax = self.orginCooldownMax/3
+        else
+            self.cooldownMax = self.orginCooldownMax
+        end
 
         -- Shoot the nut
         ProjectileManager:add(startX, startY, x, y, activeSection[1])
