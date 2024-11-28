@@ -22,6 +22,7 @@ baseNuts.peanut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
+    specialEffects = {"hyperburst"}, -- Less time between this nut and the next nut shot
     class = "nut",
     type = "peanut"
 }
@@ -122,32 +123,5 @@ baseNuts.deathNut = {
     class = "nut",
     type = "peanut"
 }
-
-
--- This is an example of how to make a buildable class
-buildableManager:create ("peanut", {
-    damage = 5,
-    projSpeed = 200,
-    projSize = 4,
-    range = 500,
-    knockback = 4,
-    magSize = 1,
-    spread = 0,
-    growthTime = 18000, -- Ticks
-    cropYeild = 8,
-    cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    frame = nutPlantImg,
-    interact = function () --[[print ("HEY")--]] end,
-    update = function (dt, passedTime)
-        -- do something
-    end,
-})
-
--- These are examples of how to make buildable objects from a defined class
-baseNuts.peanut = buildableManager:generate ("peanut")
-baseNuts.walnut = buildableManager:generate ("peanut")
-baseNuts.acorn = buildableManager:generate ("peanut")
-baseNuts.pecan = buildableManager:generate ("peanut")
-
 
 return baseNuts
