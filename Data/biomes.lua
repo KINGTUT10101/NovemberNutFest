@@ -9,6 +9,19 @@ local tileImages = {
     snow = love.graphics.newImage ("Graphics/Tiles/snow.png"),
 }
 
+-- filepath (string) A folder containing three slices: normal, hovered, and active
+local function loadTiles (filepath)
+    local files = love.filesystem.getDirectoryItems (filepath)
+
+    local newTiles = {}
+
+    for index, file in ipairs (files) do
+        newTiles[index] = love.graphics.newImage(filepath .. "/" .. file)
+    end
+
+    return newTiles
+end
+
 -- Defines the biomes used in the map
 -- ATTRIBUTES:
 -- weight: Defines how likely the biome is to appear in world generation
@@ -55,9 +68,7 @@ local biomes = {
         radiation = 0.1,
         size = 0.90,
         mapColor = {1, 1, 0, 1},
-        groundTiles = {
-            tileImages.sand,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Desert Sand"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -77,9 +88,7 @@ local biomes = {
         radiation = 0.1,
         size = 0.85,
         mapColor = {1, 0, 0, 1},
-        groundTiles = {
-            tileImages.sand,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Red Sand"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -99,9 +108,7 @@ local biomes = {
         radiation = 0,
         size = 0.85,
         mapColor = {0.65, 0.65, 0, 1},
-        groundTiles = {
-            tileImages.grass,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Dry Grass"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -125,9 +132,7 @@ local biomes = {
         radiation = 0,
         size = 0.75,
         mapColor = {0.35, 0.65, 0.45, 1},
-        groundTiles = {
-            tileImages.dirt,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Mud"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -147,9 +152,7 @@ local biomes = {
         radiation = 0.1,
         size = 0.40,
         mapColor = {0.45, 0, 1, 1},
-        groundTiles = {
-            tileImages.sand,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Beach Sand"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -173,9 +176,7 @@ local biomes = {
         radiation = 0,
         size = 0.85,
         mapColor = {0, 1, 0, 1},
-        groundTiles = {
-            tileImages.grass,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Normal Grass"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -195,9 +196,7 @@ local biomes = {
         radiation = 0,
         size = 0.45,
         mapColor = {1, 0, 1, 1},
-        groundTiles = {
-            tileImages.grass,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Flower Grass"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -217,9 +216,7 @@ local biomes = {
         radiation = 0,
         size = 0.85,
         mapColor = {0, 0.65, 0, 1},
-        groundTiles = {
-            tileImages.dirt,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Forest Grass"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -243,9 +240,7 @@ local biomes = {
         radiation = 0,
         size = 1,
         mapColor = {0, 0.75, 0.75, 1},
-        groundTiles = {
-            tileImages.dirt,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Chilly Grass"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -265,9 +260,7 @@ local biomes = {
         radiation = 0,
         size = 1,
         mapColor = {0, 0.95, 0.55, 1},
-        groundTiles = {
-            tileImages.snow,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Snowy Grass"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -291,9 +284,7 @@ local biomes = {
         radiation = 0,
         size = 0.90,
         mapColor = {0, 0, 0.25, 1},
-        groundTiles = {
-            tileImages.snow,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Thick Ice"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
@@ -313,9 +304,7 @@ local biomes = {
         radiation = 0,
         size = 0.35,
         mapColor = {0, 0.75, 0.25, 1},
-        groundTiles = {
-            tileImages.dirt,
-        },
+        groundTiles = loadTiles ("Graphics/Tiles/Spotty Snow"),
         weather = {
             thunder = 0.01,
             rain = 0.05,
