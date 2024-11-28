@@ -9,6 +9,8 @@ local hotbar = require ("UI.hotbar")
 local leftSideTrackers = require ("UI.leftSideTrackers")
 local rightSideTrackers = require ("UI.rightSideTrackers")
 
+local startWaveModal = require ("UI.startWaveModal")
+
 function thisScene:load (...)
     sceneMan = ...
     
@@ -22,6 +24,8 @@ function thisScene:update (dt)
 
     -- WAVE STATUS
     topStatusBar ("TEMP", 0.45)
+
+    startWaveModal (true)
 end
 
 function thisScene:draw ()
