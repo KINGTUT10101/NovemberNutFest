@@ -4,10 +4,18 @@ local inventoryHandler = {
     hotbar = {}, -- Holds the nuts in the player's inventory
     size = 0, -- Number of nuts in the inventory
     maxSlots = 10, -- Max number of hotbar slots
-    maxAmmmo  = 500, -- Max amount of ammo
+    maxAmmo  = 500, -- Max amount of ammo
     currAmmo = 0, -- Current amount of ammo
     activeSlot = 1, -- Currently selected hotbar slot
 }
+
+function inventoryHandler:getMaxSlots ()
+    return self.maxSlots
+end
+
+function inventoryHandler:getMaxAmmo ()
+    return self.maxAmmo
+end
 
 function inventoryHandler:getActiveSlot ()
     return self.activeSlot
@@ -51,11 +59,11 @@ function inventoryHandler:getAmmoCount ()
 end
 
 function inventoryHandler:setAmmoCount (amount)
-    self.currAmmo = clamp (amount, 0, self.maxAmmmo)
+    self.currAmmo = clamp (amount, 0, self.maxAmmo)
 end
 
 function inventoryHandler:addAmmoCount (amount)
-    self.currAmmo = clamp (self.currAmmo + amount, 0, self.maxAmmmo)
+    self.currAmmo = clamp (self.currAmmo + amount, 0, self.maxAmmo)
 end
 
 return inventoryHandler

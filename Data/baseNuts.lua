@@ -1,8 +1,5 @@
-local Nut = require ("Core.Nut")
-local buildableManager = require ("Core.buildableManager")
-
-local nutPlantImg = love.graphics.newImage ("Graphics/Plants/nutPlant.png")
-
+-- These are not actual nut objects
+-- They are blueprints that should be used with the Nut class to make actual nut objects
 local baseNuts = {}
 
 --[[
@@ -12,6 +9,9 @@ local baseNuts = {}
 --]]
 
 baseNuts.peanut = {
+    name = "Peanut",
+    image = love.graphics.newImage ("Graphics/Nuts/peanut.png"),
+
     damage = 10,
     projVelocity = 5,
     projSize = 4,
@@ -22,10 +22,14 @@ baseNuts.peanut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    type = "nut"
+    type = "nut",
+    ancestry = {peanut = 1},
 }
 
 baseNuts.coconut = {
+    name = "Coconut",
+    image = love.graphics.newImage ("Graphics/Nuts/coconut.png"),
+
     damage = 15,
     projVelocity = 3,
     projSize = 4,
@@ -36,10 +40,14 @@ baseNuts.coconut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    type = "nut"
+    type = "nut",
+    ancestry = {coconut = 1},
 }
 
 baseNuts.macadamia = {
+    name = "Macadamia Nut",
+    image = love.graphics.newImage ("Graphics/Nuts/macadamia.png"),
+
     damage = 5,
     projVelocity = 10,
     projSize = 2,
@@ -50,11 +58,15 @@ baseNuts.macadamia = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    type = "nut"
+    type = "nut",
+    ancestry = {macadamia = 1},
 }
 
 
 baseNuts.almond = {
+    name = "Almond",
+    image = love.graphics.newImage ("Graphics/Nuts/almond.png"),
+
     damage = 7,
     projVelocity = 5,
     projSize = 4,
@@ -66,10 +78,14 @@ baseNuts.almond = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"pierce"},
-    type = "nut"
+    type = "nut",
+    ancestry = {almond = 1},
 }
 
 baseNuts.candleNut = {
+    name = "Candlenut",
+    image = love.graphics.newImage ("Graphics/Nuts/candlenut.png"),
+
     damage = 4,
     projVelocity = 4,
     projSize = 4,
@@ -81,10 +97,14 @@ baseNuts.candleNut = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"fire"},
-    type = "nut"
+    type = "nut",
+    ancestry = {candleNut = 1},
 }
 
 baseNuts.pine = {
+    name = "Pine Nut",
+    image = love.graphics.newImage ("Graphics/Nuts/pinenut.png"),
+
     damage = 4,
     projVelocity = 4,
     projSize = 4,
@@ -96,11 +116,15 @@ baseNuts.pine = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"freeze"},
-    type = "nut"
+    type = "nut",
+    ancestry = {pine = 1},
 }
 
 -- This is for debugging
 baseNuts.deathNut = {
+    name = "Coconut",
+    image = love.graphics.newImage ("Graphics/Nuts/coconut.png"),
+
     damage = 10,
     projVelocity = 6,
     projSize = 4,
@@ -112,34 +136,8 @@ baseNuts.deathNut = {
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
     specialEffects = {"fire", "pierce"},
-    type = "nut"
+    type = "nut",
+    ancestry = {deathNut = 1},
 }
-
-
--- This is an example of how to make a buildable class
-buildableManager:create ("peanut", {
-    damage = 5,
-    projSpeed = 200,
-    projSize = 4,
-    range = 500,
-    knockback = 4,
-    magSize = 1,
-    spread = 0,
-    growthTime = 18000, -- Ticks
-    cropYeild = 8,
-    cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    frame = nutPlantImg,
-    interact = function () --[[print ("HEY")--]] end,
-    update = function (dt, passedTime)
-        -- do something
-    end,
-})
-
--- These are examples of how to make buildable objects from a defined class
-baseNuts.peanut = buildableManager:generate ("peanut")
-baseNuts.walnut = buildableManager:generate ("peanut")
-baseNuts.acorn = buildableManager:generate ("peanut")
-baseNuts.pecan = buildableManager:generate ("peanut")
-
 
 return baseNuts
