@@ -1,4 +1,4 @@
-local inventoryHandler = require("Core.inventoryHandler")
+local inventoryHandler = require("Core.newInventoryHandler")
 local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
 local push = require("Libraries.push")

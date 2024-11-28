@@ -2,13 +2,13 @@ local tux = require ("Libraries.tux")
 local layout = require ("Helpers.layout")
 local icons = require ("Helpers.icons")
 
-local inventoryHandler = require ("Core.inventoryHandler")
+local inventoryHandler = require ("Core.newInventoryHandler")
 
 local function leftSideTrackers ()
     local usedStorage = 0
 
-    for i = 1, inventoryHandler:getNumSections () do
-        usedStorage = usedStorage + inventoryHandler:getSectionSize (i)
+    for i = 1, inventoryHandler:getMaxSlots () do
+        usedStorage = usedStorage + inventoryHandler:getMaxAmmo (i)
     end
 
     layout:setOrigin (15, 850, 15, 5)
@@ -42,7 +42,7 @@ local function leftSideTrackers ()
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
-        text = "(I) " .. usedStorage .. " / " .. inventoryHandler:getMaxStorage (),
+        text = "(I) " .. usedStorage .. " / " .. inventoryHandler:getMaxAmmo (),
         align = "left",
         colors = {1, 0, 0, 1}
     }, layout:right (350, 50))

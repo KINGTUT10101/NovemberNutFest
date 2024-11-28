@@ -5,7 +5,7 @@ local throwables = require("Data.throwables")
 local consumables = require("Data.consumables")
 local projectileManager = require("Managers.projectile")
 local copyTable = require("Helpers/copyTable")
-local inventoryHandler = require("Core.inventoryHandler")
+local inventoryHandler = require("Core.newInventoryHandler")
 local push = require("Libraries.push")
 local camera = require("Libraries.hump.camera")
 

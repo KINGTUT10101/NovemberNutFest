@@ -88,7 +88,7 @@ baseNuts.almond = {
     ancestry = {almond = 1},
 }
 
-baseNuts.candleNut = {
+baseNuts.candle = {
     name = "Candlenut",
     image = love.graphics.newImage ("Graphics/Nuts/candlenut.png"),
 
@@ -133,7 +133,7 @@ baseNuts.deathNut = {
     name = "Coconut",
     image = love.graphics.newImage ("Graphics/Nuts/coconut.png"),
 
-    damage = 10,
+    damage = 100,
     projVelocity = 6,
     projSize = 4,
     range = 11,
@@ -143,7 +143,7 @@ baseNuts.deathNut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"pierce"},
+    specialEffects = {"pierce", "hyperburst", "stun"},
     class = "nut",
     type = "peanut",
     ancestry = {deathNut = 1},
