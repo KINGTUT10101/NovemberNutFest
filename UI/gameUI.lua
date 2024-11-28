@@ -1,7 +1,7 @@
 local gameUI = {}
 
 local drawTextWithBorder = require("Helpers/drawTextWithBorder")
-local inventoryHandler = require("Core.inventoryHandler")
+local inventoryHandler = require("Core.newInventoryHandler")
 local push = require("Libraries.push")
 local camera = require("Libraries.hump.camera")
 local hoard = require("Managers.hoard")

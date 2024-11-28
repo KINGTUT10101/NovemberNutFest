@@ -1,7 +1,7 @@
 local gun = {}
 
 local nut = require("Core.Nut")
-local inventoryHandler = require("Core.inventoryHandler")
+local inventoryHandler = require("Core.newInventoryHandler")
 local ProjectileManager = require("Managers.projectile")
 local ItemManager = require("Managers.item")
 local baseNuts = require("Data.baseNuts")
@@ -48,43 +48,30 @@ function gun:update(dt)
         gun:shoot(targetX, targetY)
     end
 
-    -- TEST ** adds nut to section 1 of inventory
-    if love.keyboard.isDown("space") then
-        inventoryHandler:addNut(nut:new(baseNuts.peanut))
-    end
-    if love.keyboard.isDown("f") then
-        inventoryHandler:addNut(nut:new(baseNuts.pine))
-    end
-    -- TEST ** adds nut oil into the inventory
-    if love.keyboard.isDown("t") then
-        inventoryHandler:addItem(ItemManager:newItem("nut oil"))
-    end
-    -- TEST ** adds cashew apples into the inventory
-    if love.keyboard.isDown("y") then
-        inventoryHandler:addItem(ItemManager:newItem("cashew apple"))
-    end
+    -- TEST ** Sets the hotbar to be full of nuts
+    inventoryHandler:replaceNut(nut:new(baseNuts.deathNut), 1)
+    inventoryHandler:replaceNut(nut:new(baseNuts.macadamia), 2)
+
 end
 
 function gun:shoot(x, y)
-    local activeSection = inventoryHandler.sections[inventoryHandler.activeSection]
-    if #activeSection > 0 and self.cooldownTimer >= self.cooldownMax then
+    local currentNut = inventoryHandler:getNut(inventoryHandler:getActiveSlot())
+    if currentNut ~= nil and self.cooldownTimer >= self.cooldownMax then
         shootSound:play()
 
         -- Find where the end of the gun is
         local startX = gun.x + math.cos(gun.rotation) * gun.width
         local startY = gun.y + math.sin(gun.rotation) * gun.width
 
-        if contains(activeSection[1].specialEffects, "hyperburst") then
-            self.cooldownMax = self.orginCooldownMax/3
+        if contains(currentNut.specialEffects, "hyperburst") then
+            self.cooldownMax = self.orginCooldownMax/2
         else
             self.cooldownMax = self.orginCooldownMax
         end
 
         -- Shoot the nut
-        ProjectileManager:add(startX, startY, x, y, activeSection[1])
+        ProjectileManager:add(startX, startY, x, y, currentNut)
         self.cooldownTimer = 0
-
-        inventoryHandler:consumeNut()
     end
 end
 

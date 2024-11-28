@@ -13,6 +13,7 @@ local push = require("Libraries.push")
 local physics = require("physics")
 local mapManager = require("Core.mapManager")
 local hoardManager = require("Managers.hoard")
+local inventoryHandler = require("Core.newInventoryHandler")
 
 
 local boundaries = {} -- Boundries around the map
@@ -106,6 +107,17 @@ end
 
 function thisScene:keypressed(key, scancode, isrepeat)
 
+    -- Change the active inventory slot by pressing the number keys
+    local slotIndex = tonumber(key)
+    if slotIndex then
+        if slotIndex == 0 then
+            slotIndex = 10 -- Map "0" key to the 10th slot
+        end
+
+        if slotIndex >= 1 and slotIndex <= inventoryHandler:getMaxSlots() then
+            inventoryHandler:setActiveSlot(slotIndex)
+        end
+    end
 end
 
 function thisScene:mousereleased(x, y, button)

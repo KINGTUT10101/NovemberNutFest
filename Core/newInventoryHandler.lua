@@ -1,5 +1,8 @@
 local clamp = require ("Libraries.lume").clamp
 
+Throwables = {}
+Consumables = {}
+
 local inventoryHandler = {
     hotbar = {}, -- Holds the nuts in the player's inventory
     size = 0, -- Number of nuts in the inventory
@@ -64,6 +67,23 @@ end
 
 function inventoryHandler:addAmmoCount (amount)
     self.currAmmo = clamp (self.currAmmo + amount, 0, self.maxAmmo)
+end
+
+-- Items
+function inventoryHandler:addItem(object)
+
+    if object.type == "throwable" then
+        table.insert(Throwables, object)
+    elseif object.type == "consumable" then
+        table.insert(Consumables, object)
+    else
+        error(object.type .. " is ont a valid object type.")
+    end
+end
+
+function inventoryHandler:addConsumeable(object)
+
+    table.insert(Consumables, object)
 end
 
 return inventoryHandler
