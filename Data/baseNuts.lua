@@ -13,7 +13,7 @@ local baseNuts = {}
 
 baseNuts.peanut = {
     damage = 10,
-    projSpeed = 5,
+    projVelocity = 5,
     projSize = 4,
     range = 11,
     knockback = 4,
@@ -27,7 +27,7 @@ baseNuts.peanut = {
 
 baseNuts.coconut = {
     damage = 15,
-    projSpeed = 3,
+    projVelocity = 3,
     projSize = 4,
     range = 8,
     knockback = 4,
@@ -39,9 +39,24 @@ baseNuts.coconut = {
     type = "nut"
 }
 
+baseNuts.macadamia = {
+    damage = 5,
+    projVelocity = 10,
+    projSize = 2,
+    range = 7,
+    knockback = 2,
+    mapdSize = 2,
+    spread = 0,
+    growthTime = 18000, -- Ticks
+    cropYeild = 8,
+    cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
+    type = "nut"
+}
+
+
 baseNuts.almond = {
     damage = 7,
-    projSpeed = 5,
+    projVelocity = 5,
     projSize = 4,
     range = 11,
     knockback = 4,
@@ -56,7 +71,7 @@ baseNuts.almond = {
 
 baseNuts.candleNut = {
     damage = 4,
-    projSpeed = 4,
+    projVelocity = 4,
     projSize = 4,
     range = 11,
     knockback = 4,
@@ -69,10 +84,25 @@ baseNuts.candleNut = {
     type = "nut"
 }
 
+baseNuts.pine = {
+    damage = 4,
+    projVelocity = 4,
+    projSize = 4,
+    range = 11,
+    knockback = 4,
+    magSize = 1,
+    spread = 0,
+    growthTime = 18000, -- Ticks
+    cropYeild = 8,
+    cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
+    specialEffects = {"freeze"},
+    type = "nut"
+}
+
 -- This is for debugging
 baseNuts.deathNut = {
     damage = 10,
-    projSpeed = 6,
+    projVelocity = 6,
     projSize = 4,
     range = 11,
     knockback = 4,
