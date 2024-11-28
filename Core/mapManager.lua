@@ -29,11 +29,7 @@ end
 
 -- Updates the map and its tiles
 -- The camera position basically defines where the player is in the map
-function mapManager:update(dt, camX, camY, camZoom)
-    self.cam.x = camX
-    self.cam.y = camY
-    self.cam.zoom = camZoom
-
+function mapManager:update(dt)
     -- Updates buildables within the player's view
     local updateStartTime = love.timer.getTime()
     local startX, startY = self:screenToMap(-10, -10)
