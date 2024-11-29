@@ -28,14 +28,7 @@ local availableBaseNuts = {
     "pine",
 }
 
-local nutList = {
-    Nut:new (baseNuts.peanut),
-    Nut:new (baseNuts.coconut),
-    Nut:new (baseNuts.macadamia),
-    Nut:new (baseNuts.almond),
-    Nut:new (baseNuts.candleNut),
-    Nut:new (baseNuts.pine),
-}
+local nutList = {}
 
 local firstWave = true
 
@@ -155,17 +148,22 @@ function thisScene:update (dt)
     elseif stage == "startWave" then
         if startWaveModal () == true then
             stage = "inWave"
-            showActiveNutStats = false
+        end
+
+        local activeNut = inventoryHandler:getNut (inventoryHandler:getActiveSlot ())
+        if showActiveNutStats == true and activeNut ~= nil then
+            nutStats (1470, 575, activeNut)
         end
 
     elseif stage == "inWave" then
-        if showActiveNutStats == true then
-            nutStats (1470, 575, inventoryHandler:getNut (inventoryHandler:getActiveSlot ()))
+        local activeNut = inventoryHandler:getNut (inventoryHandler:getActiveSlot ())
+        if showActiveNutStats == true and activeNut ~= nil then
+            nutStats (1470, 575, activeNut)
         end
     end
 
     hotbar ()
-    leftSideTrackers ()
+    leftSideTrackers (showActiveNutStats)
     rightSideTrackers ()
     topStatusBar ("TEMP", 0.45)
 end
@@ -179,7 +177,7 @@ function thisScene:lateDraw ()
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)
-	if key == "i" and stage == "inWave" then
+	if key == "i" and (stage == "inWave" or stage == "startWave") then
         showActiveNutStats = not showActiveNutStats
     end
 end
