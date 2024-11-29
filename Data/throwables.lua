@@ -8,8 +8,8 @@ throwables.nutOil = {
     projVelocity = 4,
     type = "throwable",
     object = "nut oil",
-    width = 6,
-    height = 12,
+    width = 7,
+    height = 13,
     splashRadius = 150,
     sprite = love.graphics.newImage("Graphics/nutOil.png")
 }

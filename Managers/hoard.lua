@@ -24,7 +24,6 @@ function hoardManager:startWave()
     self.spawnTimer = 0
     self.kills = 0
     self.previousTotalKills = EnemyManager.totalKills
-    print("WAVE " .. self.waveCount+1 .. " HAS BEGUN!!!")
     -- If there aren't anymore enemies to spawn in for the wave, increase the rate in which enemies are spawned
     if self.waveCount > EnemyManager.enemyTypes then
         self.hoardScale = self.hoardScale + .25
@@ -39,8 +38,8 @@ function hoardManager:restart()
     self.hoardScale = 1
     self.waveCount = 0
 
-    for i=#Enemies, -1, 1 do
-        table.remove(Enemies, i)
+    for _, e in ipairs(Enemies) do
+        e.dead = true
     end
 end
 
@@ -63,14 +62,12 @@ function hoardManager:update(dt)
         if self.kills >= math.floor(self.maxKills*self.hoardScale) then
             self.inProgress = false
             self.waveCount = self.waveCount + 1
-            print("You fended off wave " .. self.waveCount .. " succesfully!")
+
 
             -- Clears out the enemies when the wave's over
-            --[[
-            for i=#Enemies, -1, 1 do
-                table.remove(Enemies, i)
+            for _, e in ipairs(Enemies) do
+                e.dead = true
             end
-            --]]
             --hoardManager:startWave() -- REMOVE
         end
     end
