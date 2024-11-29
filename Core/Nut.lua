@@ -250,6 +250,44 @@ function Nut:new (...)
                 newNutObj.ancestry[k] = newNutObj.ancestry[k] + v
             end
         end
+
+        -- Cross breed nut effects
+        -- Adds the effects to a new table for processing
+        local parentEffects = {} -- Holds pairs of nut effects chances where each pair can have info from each parent
+
+        -- Parent 1
+        for index, pair in ipairs (nutObjCopy1.specialEffects) do
+            local effectid, chance = pair[1], pair[2]
+
+            parentEffects[effectid] = {
+                [1] = chance,
+                [2] = 0,
+            }
+        end
+        -- Parent 2
+        for index, pair in ipairs (nutObjCopy2.specialEffects) do
+            local effectid, chance = pair[1], pair[2]
+            
+            if parentEffects[effectid] == nil then
+                parentEffects[effectid] = {
+                    [1] = 0,
+                    [2] = chance,
+                }
+            else
+                parentEffects[effectid][2] = chance
+            end
+        end
+
+        -- Process effects genetics
+        local index = 1
+        for effectid, chancePair in pairs (parentEffects) do
+            newNutObj.specialEffects[index] = {
+                effectid,
+                average (chancePair[1], chancePair[2]),
+            }
+
+            index = index + 1
+        end
     else
         error ("Too many arguments provided to constructor")
     end
