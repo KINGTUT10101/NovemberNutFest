@@ -21,7 +21,8 @@ local function leftSideTrackers ()
     tux.show.label ({
         text = "(Q) " .. #Throwables,
         align = "left",
-        colors = {1, 0, 0, 1}
+        colors = {1, 0, 0, 1},
+        padding = {padX = 15},
     }, layout:right (350, 50))
 
     tux.show.button ({
@@ -32,7 +33,8 @@ local function leftSideTrackers ()
     tux.show.label ({
         text = "(E) " .. #Consumables,
         align = "left",
-        colors = {1, 0, 0, 1}
+        colors = {1, 0, 0, 1},
+        padding = {padX = 15},
     }, layout:right (350, 50))
 end
 
