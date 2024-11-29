@@ -31,6 +31,19 @@ function hoardManager:startWave()
     end
 end
 
+function hoardManager:restart()
+    self.kills = 0
+    self.inProgress = false
+    self.spawnTimer = 0
+    self.previousTotalKills = 0
+    self.hoardScale = 1
+    self.waveCount = 0
+
+    for i=#Enemies, -1, 1 do
+        table.remove(Enemies, i)
+    end
+end
+
 function hoardManager:update(dt)
     if not self.inProgress then
 
@@ -51,7 +64,7 @@ function hoardManager:update(dt)
             self.inProgress = false
             self.waveCount = self.waveCount + 1
             print("You fended off wave " .. self.waveCount .. " succesfully!")
-            --hoardManager:startWave() -- REMOVE
+            hoardManager:startWave() -- REMOVE
         end
     end
 end

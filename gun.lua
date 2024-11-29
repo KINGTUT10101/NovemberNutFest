@@ -68,7 +68,7 @@ function gun:shoot(x, y)
             local trib = currentNut.specialEffects[i]
             local chance = math.random()
             if trib[2] > chance then
-                table.remove(newNut, i)
+                table.remove(newNut.specialEffects, i)
             end
         end
 

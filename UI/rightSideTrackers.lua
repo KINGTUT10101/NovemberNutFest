@@ -17,7 +17,7 @@ local function rightSideTrackers ()
         iscale = 1.65,
     }, layout:left (50, 50))
     tux.show.label ({
-        text = "Wave Kills: " .. hoardManager.kills,
+        text = "Wave Kills: " .. hoardManager.kills .. "/" .. hoardManager.maxKills,
         align = "right",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
