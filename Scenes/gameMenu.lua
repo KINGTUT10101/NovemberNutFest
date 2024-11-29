@@ -46,6 +46,14 @@ function thisScene:load (...)
 end
 
 function thisScene:update (dt)
+    -- Detect when the player is dead
+    if Player.health <= 0 then
+        sceneMan:clearStack ()
+        sceneMan:push ("backgroundMap")
+        sceneMan:push ("deathScreen")
+    end
+
+    -- Set up the menus for the next cross breeding event
     if stage == "start" or (stage == "inWave" and hoardManager.inProgress == false and #Enemies <= 0) then
         stage = "chooseParents"
 
@@ -165,7 +173,7 @@ function thisScene:update (dt)
     hotbar ()
     leftSideTrackers (showActiveNutStats)
     rightSideTrackers ()
-    topStatusBar ("TEMP", 0.45)
+    -- topStatusBar ("TEMP", 0.45)
 end
 
 function thisScene:draw ()
