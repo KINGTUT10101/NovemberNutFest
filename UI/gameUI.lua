@@ -56,6 +56,7 @@ end
 function gameUI:update()
 
     -- Day night cycle
+    --[[
     if not hoard.inProgress and not self.manualControl then
         self.darknessLevel = 0
     elseif hoard.inProgress and not self.manualControl then
@@ -102,10 +103,12 @@ function gameUI:update()
     Darkness:send("base_opacity", self.darknessLevel)
     Darkness:send("lights", unpack(lights))
     Darkness:send("num_lights", lightAmount)
+    --]]
 end
 
 function gameUI:draw()
 
+    --[[
     -- Apply the shader
     love.graphics.setShader(Darkness)
 
@@ -121,7 +124,7 @@ function gameUI:draw()
 
     -- Invetory Sections
     --drawTextWithBorder("Section: " .. inventoryHandler.activeSection, 5, push:getHeight()-99, {1,1,1}, {0,0,0}, font)
-
+    --]]
 end
 
 

@@ -17,7 +17,7 @@ baseNuts.peanut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"hyperburst"}, -- Less time between this nut and the next nut shot
+    specialEffects = {{"hyperburst", 1}}, -- Less time between this nut and the next nut shot
     class = "nut",
     type = "peanut",
     ancestry = {peanut = 1},
@@ -37,7 +37,7 @@ baseNuts.coconut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"stun"},
+    specialEffects = {{"stun", 1}},
     class = "nut",
     type = "coconut",
     ancestry = {coconut = 1},
@@ -57,7 +57,7 @@ baseNuts.macadamia = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"confusion"}, -- Makes the enemy move away from the player
+    specialEffects = {{"confusion", 1}}, -- Makes the enemy move away from the player
     class = "nut",
     type = "macadamia",
     ancestry = {macadamia = 1},
@@ -78,7 +78,7 @@ baseNuts.almond = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"pierce"},
+    specialEffects = {{"pierce", 1}},
     class = "nut",
     type = "almond",
     ancestry = {almond = 1},
@@ -98,7 +98,7 @@ baseNuts.candle = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"fire"},
+    specialEffects = {{"fire", 1}},
     class = "nut",
     type = "candle",
     ancestry = {candleNut = 1},
@@ -118,7 +118,7 @@ baseNuts.pine = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"freeze"},
+    specialEffects = {{"freeze", 1}},
     class = "nut",
     type = "pine",
     ancestry = {pine = 1},
@@ -139,7 +139,7 @@ baseNuts.deathNut = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
-    specialEffects = {"pierce", "hyperburst", "stun"},
+    specialEffects = {{"pierce", 1}, {"hyperburst", 1}, {"stun", 1}},
     class = "nut",
     type = "peanut",
     ancestry = {deathNut = 1},
