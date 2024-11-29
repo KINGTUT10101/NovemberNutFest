@@ -9,8 +9,8 @@ Player = {}
 
 local spriteSheet
 
-Player.x = 0
-Player.y = 0
+Player.x = 4*mapManager.tileSize
+Player.y = 3*mapManager.tileSize
 Player.velX = 0
 Player.velY = 0
 Player.width = 32
@@ -24,6 +24,12 @@ Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immu
 Player.class = "player"
 Player.dead = false
 Player.god = false -- God mode
+
+-- Powerups
+-- speed
+Player.speedUp = false
+Player.speedUpMaxTimer = 5
+Player.speedUpTimer = Player.speedUpMaxTimer
 
 -- Gives more ammo the more it increases, is reset after the player gets hit
 Player.nutTimer = 0
@@ -52,7 +58,17 @@ function Player:update(dt)
     self.camX = select(1, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
     self.camY = select(2, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
 
+    -- Powerups
+    -- speed up
+    if self.speedUpTimer < self.speedUpMaxTimer then
+        self.speedUpTimer = self.speedUpTimer + dt
+        self.speedUp = true
+    else
+        self.speedUp = false
+    end
 
+
+    -- Add ammo based on the amount of time gone without being hit
     if hoard.inProgress then
         -- Add onto the nut regeneration timer
         self.nutTimer = self.nutTimer + dt
@@ -109,6 +125,11 @@ function Player:update(dt)
     end
     if love.keyboard.isDown("d") then
         self.velX = self.velX + self.speed
+    end
+
+    if self.speedUp then
+        self.velX = self.velX * 1.4
+        self.velY = self.velY * 1.4
     end
 
     if math.abs(self.velX) > 0 and math.abs(self.velY) > 0 then

@@ -3,11 +3,11 @@ Items = {} -- list of items on the ground
 
 local throwables = require("Data.throwables")
 local consumables = require("Data.consumables")
+local powerups = require("Data.powerups")
 local projectileManager = require("Managers.projectile")
 local copyTable = require("Helpers/copyTable")
 local inventoryHandler = require("Core.newInventoryHandler")
 local push = require("Libraries.push")
-local camera = require("Libraries.hump.camera")
 
 local eatSound = love.audio.newSource("SoundEffects/eating.wav", "static")
 local collectSound = love.audio.newSource("SoundEffects/collect.wav", "static")
@@ -25,6 +25,8 @@ function ItemManager:newItem(type)
         item = copyTable(throwables.nutButter)
     elseif type == "nut oil" then
         item = copyTable(throwables.nutOil)
+    elseif type == "speed" then
+        item = copyTable(powerups.speed)
     else
         error(type .. " is not a valid item.")
     end
@@ -71,12 +73,21 @@ function ItemManager:update()
     end
     ePressed = love.keyboard.isDown("e")
 
+    -- Powerup Despawn
+
     -- Detect collision with placed items
     for i = #Items, 1, -1 do
         local item = Items[i]
         if Player:collisionCheck(item.x, item.y, item.width, item.height) then
-            collectSound:play()
-            inventoryHandler:addItem(item)
+            if item.type ~= "powerup" then
+                collectSound:play()
+                inventoryHandler:addItem(item)
+            else
+                if item.object == "speed" then
+                    Player.speedUpTimer = 0
+                end
+                item.soundEffect:play()
+            end
             table.remove(Items, i)
         end
     end
