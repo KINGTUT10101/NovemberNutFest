@@ -60,10 +60,12 @@ end
 
 local lastTick = 0
 function thisScene:update(dt)
-    lastTick = lastTick - dt
-    if lastTick <= 0 then
-        inventoryHandler:addAmmoCount (1)
-        lastTick = 1
+    if hoardManager.inProgress == true then
+        lastTick = lastTick - dt
+        if lastTick <= 0 then
+            inventoryHandler:addAmmoCount (1)
+            lastTick = 1
+        end
     end
 
     -- Update Entities
