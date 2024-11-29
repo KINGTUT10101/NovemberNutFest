@@ -284,6 +284,9 @@ function EnemyManager:spawnEnemy(x, y, type)
     function enemy:hit(damage, strength, velX, velY)
         enemyHitSound:play()
 
+        -- More damage is done if the enemy's oiled
+        if self.statusEffects.oiled then damage = math.floor(damage * 1.5) end
+
         -- Scale knockback based on enemy size
         if (self.width * self.height) < 1024 then strength = strength * 6 end
         if strength < 0 then strength = 0 end

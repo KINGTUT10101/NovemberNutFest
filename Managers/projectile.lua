@@ -116,9 +116,6 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     -- Initialize the rotation
     projectile.rotation = 0
 
-    -- Get rid of those decimals
-    projectile.damage = math.floor(projectile.damage + .5)
-
     -- Has the projectile hit a tile
     projectile.hitTile = false
 
@@ -142,9 +139,12 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
 
     if projectile.class == "nut" then
 
+        -- Get rid of those decimals
+        projectile.damage = math.floor(projectile.damage + .5)
+
         -- The range needs to scale with the velocity
         projectile.range = (projectile.range/projectile.projVelocity)/1.85
-        
+
         -- Will accumulate time with delta time
         projectile.timer = 0
 
