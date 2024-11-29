@@ -4,20 +4,29 @@ local tux = require ("Libraries.tux")
 local layout = require ("Helpers.layout")
 local icons = require ("Helpers.icons")
 local inventoryHandler = require ("Core.newInventoryHandler")
-
+local hoardManager = require ("Managers.hoard")
 local baseNuts = require ("Data.baseNuts")
 local Nut = require ("Core.Nut")
+local shuffle = require ("LIbraries.lume").shuffle
 
 local topStatusBar = require ("UI.topStatusBar")
 local hotbar = require ("UI.hotbar")
 local leftSideTrackers = require ("UI.leftSideTrackers")
 local rightSideTrackers = require ("UI.rightSideTrackers")
-
 local genericModal = require ("UI.genericModal")
 local startWaveModal = require ("UI.startWaveModal")
 local nutStats = require ("UI.nutStats")
 local nutSelector = require ("UI.nutSelector")
 local breedNutsModal = require ("UI.breedNutsModal")
+
+local availableBaseNuts = {
+    "peanut",
+    "coconut",
+    "macadamia",
+    "almond",
+    "candle",
+    "pine",
+}
 
 local nutList = {
     Nut:new (baseNuts.peanut),
@@ -28,11 +37,15 @@ local nutList = {
     Nut:new (baseNuts.pine),
 }
 
+local firstWave = true
+
 local currentNut = nil
 local selectedNuts = {}
 
-local stage = "chooseParents"
+local stage = "start"
 local childNut = nil
+
+local showActiveNutStats = false
 
 function thisScene:load (...)
     sceneMan = ...
@@ -40,6 +53,40 @@ function thisScene:load (...)
 end
 
 function thisScene:update (dt)
+    if stage == "start" or (stage == "inWave" and hoardManager.inProgress == false) then
+        stage = "chooseParents"
+
+        -- Add random base nuts to breeding list
+        if firstWave == true then
+            local availableBaseNutsShuffled = shuffle (availableBaseNuts)
+            nutList = {} -- Reset nut breeding list
+
+            -- Add some random base nuts
+            for i = 1, 3 do
+                nutList[i] = Nut:new (baseNuts[availableBaseNutsShuffled[i]])
+                nutList[i].name = "(BASE) " .. nutList[i].name
+            end
+
+        -- Add mostly hotbar nuts to breeding list
+        else
+            nutList = {} -- Reset nut breeding list
+
+            -- Add one base nut
+            nutList[1] = Nut:new (availableBaseNuts[math.random (1, #availableBaseNuts)])
+            nutList[1].name = "(BASE)" .. nutList[1].name
+
+            -- Add the rest of the hotbar nuts
+            for i = 1, inventoryHandler:getMaxSlots () do
+                local nutObj = inventoryHandler:getNut ()
+
+                if nutObj ~= nil then
+                    nutList[#nutList+1] = nutObj
+                end
+            end
+        end
+    end
+
+    -- Only show the nut breeding menus between waves
     if stage == "chooseParents" then
         currentNut, selectedNuts = nutSelector (15, 575, nutList)
         nutStats (1470, 575, currentNut)
@@ -100,12 +147,19 @@ function thisScene:update (dt)
 
             childNut = nil
             selectedNuts = {}
+            firstWave = false
         end
         genericModal ((selectedNut == nil) and ("Add to Slot " .. activeSlot) or ("Replace Slot " .. activeSlot), "")
     
     elseif stage == "startWave" then
         if startWaveModal () == true then
             stage = "inWave"
+            showActiveNutStats = false
+        end
+
+    elseif stage == "inWave" then
+        if showActiveNutStats == true then
+            nutStats (1470, 575, inventoryHandler:getNut (inventoryHandler:getActiveSlot ()))
         end
     end
 
@@ -124,7 +178,9 @@ function thisScene:lateDraw ()
 end
 
 function thisScene:keypressed (key, scancode, isrepeat)
-	
+	if key == "i" and stage == "inWave" then
+        showActiveNutStats = not showActiveNutStats
+    end
 end
 
 function thisScene:mousereleased (x, y, button)

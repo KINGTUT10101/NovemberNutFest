@@ -66,15 +66,17 @@ function inventoryHandler:getAmmoCount ()
 end
 
 function inventoryHandler:setAmmoCount (amount)
+    print (self.currAmmo)
     self.currAmmo = clamp (amount, 0, self.maxAmmo)
+    print (self.currAmmo)
+    print ()
 end
 
 function inventoryHandler:addAmmoCount (amount)
-    if self.currAmmo + amount <= self.maxAmmo then
-        self.currAmmo = self.currAmmo + amount
-    else
-        self.currAmmo = self.maxAmmo
-    end
+    print (self.currAmmo)
+    self.currAmmo = clamp (self.currAmmo + amount, 0, self.maxAmmo)
+    print (self.currAmmo)
+    print ()
 end
 
 -- Items
