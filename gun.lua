@@ -6,10 +6,10 @@ local ProjectileManager = require("Managers.projectile")
 local ItemManager = require("Managers.item")
 local baseNuts = require("Data.baseNuts")
 local push = require("Libraries.push")
-local contains = require "Helpers.contains"
 local copyTable= require "Helpers.copyTable"
 local tux = require ("Libraries.tux")
 local Nut      = require "Core.Nut"
+local hasEffect= require "Helpers.hasEffect"
 
 gun.cooldownMax = .2 -- in seconds
 gun.orginCooldownMax = gun.cooldownMax
@@ -68,12 +68,12 @@ function gun:shoot(x, y)
             local trib = currentNut.specialEffects[i]
             local chance = math.random()
             if trib[2] > chance then
-                table.remove(trib, i)
+                table.remove(newNut, i)
             end
         end
 
         -- Lower the gun's cooldown for hyperburst
-        if contains(newNut.specialEffects, "hyperburst") then
+        if hasEffect(newNut.specialEffects, "hyperburst") then
             self.cooldownMax = self.orginCooldownMax/2
         else
             self.cooldownMax = self.orginCooldownMax
