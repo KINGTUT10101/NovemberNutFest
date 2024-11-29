@@ -9,8 +9,8 @@ Player = {}
 
 local spriteSheet
 
-Player.x = 0
-Player.y = 0
+Player.x = 4*mapManager.tileSize
+Player.y = 3*mapManager.tileSize
 Player.velX = 0
 Player.velY = 0
 Player.width = 32

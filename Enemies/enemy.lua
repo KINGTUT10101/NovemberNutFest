@@ -30,7 +30,7 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.speed = 3000
     enemy.friction = 10
     enemy.dead = false
-    enemy.damage = 5
+    enemy.damage = 10
     enemy.type = type
     enemy.class = "enemy"
     enemy.maxImmunityTimer = .15
@@ -55,6 +55,7 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.maxFireTimer = 10
     enemy.fireTimer = enemy.maxFireTimer
     enemy.fireHitTimer = 0
+    self.fireDamage = 3
     -- Frozen
     enemy.statusEffects.frozen = false
     enemy.freezeTimer = 0
@@ -209,7 +210,7 @@ function EnemyManager:spawnEnemy(x, y, type)
 
             if self.fireHitTimer > 1 then -- Fire hurts the enemy every second
                 self.fireHitTimer = 0
-                self:hit(2, 0, 0, 0)
+                self:hit(self.fireDamage, 0, 0, 0)
             end
 
             -- Damage the player over time
@@ -274,6 +275,14 @@ function EnemyManager:spawnEnemy(x, y, type)
         inventoryHandler:addAmmoCount(math.floor(self.maxHealth/20))
         self.body:destroy()
         self.deathSound:play()
+
+        -- Chance for an enemy to drop an item
+        local drop = math.random()
+        if drop < .05 then
+            ItemManager:placeConsumable(ItemManager:newItem("nut oil"), self.x, self.y)
+        elseif drop < .1 then
+            ItemManager:placeConsumable(ItemManager:newItem("cashew apple"), self.x, self.y)
+        end
 
         if self.kill ~= nil then
             self:kill()

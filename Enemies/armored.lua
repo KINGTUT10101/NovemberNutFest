@@ -3,6 +3,7 @@ local function genericInit(enemy, x, y)
     enemy.amHealth = 200 -- armor health
     enemy.width = 19
     enemy.height = 31
+    enemy.damage = 15
     enemy.maxAmHealth = enemy.amHealth
     enemy.origSpeed = enemy.speed
     enemy.hasArmor = true
