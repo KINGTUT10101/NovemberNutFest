@@ -8,6 +8,7 @@ local baseNuts = require("Data.baseNuts")
 local push = require("Libraries.push")
 local contains = require "Helpers.contains"
 local copyTable= require "Helpers.copyTable"
+local Nut      = require "Core.Nut"
 
 gun.cooldownMax = .2 -- in seconds
 gun.orginCooldownMax = gun.cooldownMax
@@ -61,19 +62,12 @@ function gun:shoot(x, y)
 
         local newNut = copyTable(currentNut)
 
-        -- Pick a random attribute to come out with the gun
-        if #newNut.specialEffects > 0 then
-            local tribNum = math.random(1, #currentNut.specialEffects)
-            local rare = math.random(1, 4) -- Chance of getting multiple attibutes
-
-            newNut.specialEffects = {currentNut.specialEffects[tribNum]}
-
-            if rare == 1 and #currentNut.specialEffects > 1 then
-                while true do
-                    local tribNum2 = math.random(1, #currentNut.specialEffects)
-                    if tribNum ~= tribNum2 then tribNum = tribNum2; break; end
-                end
-                newNut.specialEffects[2] = currentNut.specialEffects[tribNum]
+        -- Choose what attributes stay and go
+        for i = #currentNut.specialEffects, 1, -1 do
+            local trib = currentNut.specialEffects[i]
+            local chance = math.random()
+            if trib[2] > chance then
+                table.remove(trib, i)
             end
         end
 
@@ -82,6 +76,13 @@ function gun:shoot(x, y)
             self.cooldownMax = self.orginCooldownMax/2
         else
             self.cooldownMax = self.orginCooldownMax
+        end
+
+        -- Scale the nut's stats based on it's level
+        if newNut.level > 1 then
+            newNut.damage = newNut.damage * newNut.level/1.5
+            newNut.projVelocity = newNut.projVelocity * newNut.level/1.5
+            newNut.range = newNut.range * newNut.level/1.5
         end
 
         -- Shoot the nut

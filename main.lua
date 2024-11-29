@@ -20,7 +20,7 @@ local camera = require("Libraries.hump.camera")
 -- Declares / initializes the global variables
 SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
-WindowWidth, WindowHeight = 854, 480
+WindowWidth, WindowHeight = 1280, 720
 -- WindowWidth, WindowHeight = 1280, 720
 DevMode = true
 
