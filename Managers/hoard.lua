@@ -7,7 +7,7 @@ local collisionCheck = require("Helpers.collisionCheck")
 
 
 hoardManager.kills = 0      -- Amount of kills during the current wave
-hoardManager.maxKills = 10   -- Amount of kills needed to end the wave
+hoardManager.maxKills = 15   -- Amount of kills needed to end the wave
 hoardManager.previousTotalKills = 0   -- Amound of total kills at the start of the wave 
 hoardManager.waveCount = 0          -- Amount of waves the player has gone through
 hoardManager.inProgress = false -- Is true if a wave is currently happening

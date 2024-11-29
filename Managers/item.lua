@@ -43,6 +43,8 @@ function ItemManager:placeThrowable(item, x, y)
     item.x = x
     item.y = y
 
+    item.sprite.Player:setFilter("nearest", "nearest")
+
     table.insert(Items, item)
 end
 
