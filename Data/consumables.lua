@@ -1,6 +1,6 @@
 local consumables = {}
 
--- Nut Oil
+-- Cashew Apple
 consumables.cashewApple = {
     health = 15,
     type = "consumable",

@@ -1,7 +1,7 @@
 local function genericInit(enemy, x, y)
     enemy.speed = 1650
     enemy.health = 50
-    enemy.damge = 5
+    enemy.damge = 10
     enemy.width = 11
     enemy.height = 16
 
@@ -15,9 +15,6 @@ local function genericInit(enemy, x, y)
 
     end
 
-    function enemy:kill()
-        ItemManager:placeConsumable(ItemManager:newItem("nut oil"), self.x, self.y)
-    end
 
     function enemy:draw()
         -- Add death animations ect.
