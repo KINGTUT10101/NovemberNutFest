@@ -6,8 +6,8 @@ consumables.cashewApple = {
     type = "consumable",
     object = "cashew apple",
     sprite = love.graphics.newImage("Graphics/cashewApple.png"),
-    width = 8,
-    height = 8,
+    width = 10,
+    height = 12,
 }
 
 function consumables.cashewApple:onConsumption()
