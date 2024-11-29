@@ -2,11 +2,6 @@
 -- They are blueprints that should be used with the Nut class to make actual nut objects
 local baseNuts = {}
 
---[[
-    Special Effects:
-        pierce - nut can peirce through two enemies
-        fire - sets enemies on fire
---]]
 
 baseNuts.peanut = {
     name = "Peanut",
@@ -62,6 +57,7 @@ baseNuts.macadamia = {
     growthTime = 18000, -- Ticks
     cropYeild = 8,
     cropYeildVar = 3, -- How much extra/fewer nuts you get when harvesting
+    specialEffects = {"confusion"}, -- Makes the enemy move away from the player
     class = "nut",
     type = "macadamia",
     ancestry = {macadamia = 1},

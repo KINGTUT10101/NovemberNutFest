@@ -8,7 +8,7 @@ local hoard = require("Managers.hoard")
 local font = love.graphics.newFont("Fonts/PixelifySans.ttf", 96)
 
 gameUI.darknessLevel = 0
-gameUI.maxDarkness = .8
+gameUI.maxDarkness = .6
 gameUI.manualControl = false
 
 function gameUI:load()
