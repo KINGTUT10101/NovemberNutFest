@@ -78,6 +78,13 @@ function gun:shoot(x, y)
             self.cooldownMax = self.orginCooldownMax
         end
 
+        -- Scale the nut's stats based on it's level
+        if newNut.level > 1 then
+            newNut.damage = newNut.damage * newNut.level/1.5
+            newNut.projVelocity = newNut.projVelocity * newNut.level/1.5
+            newNut.range = newNut.range * newNut.level/1.5
+        end
+
         -- Shoot the nut
         ProjectileManager:add(startX, startY, x, y, newNut)
         self.cooldownTimer = 0
