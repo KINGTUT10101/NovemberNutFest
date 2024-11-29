@@ -101,7 +101,7 @@ baseNuts.candle = {
     specialEffects = {{"fire", 1}},
     class = "nut",
     type = "candle",
-    ancestry = {candleNut = 1},
+    ancestry = {candle = 1},
 }
 
 baseNuts.pine = {
