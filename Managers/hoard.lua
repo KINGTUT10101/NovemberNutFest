@@ -66,11 +66,9 @@ function hoardManager:update(dt)
             print("You fended off wave " .. self.waveCount .. " succesfully!")
 
             -- Clears out the enemies when the wave's over
-            --[[
             for i=#Enemies, -1, 1 do
                 table.remove(Enemies, i)
             end
-            --]]
             --hoardManager:startWave() -- REMOVE
         end
     end
