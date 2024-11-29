@@ -6,10 +6,8 @@ local hoardManager = require ("Managers.hoard")
 
 local compW, compH = 350, 200
 
-local function startWaveModal (show)
-    if show ~= true then
-        return
-    end
+local function startWaveModal ()
+    local result = false
 
     layout:setParent (0, 0, GAMEWIDTH, GAMEHEIGHT)
 
@@ -21,6 +19,7 @@ local function startWaveModal (show)
         text = "Start Next Wave"
     }, layout:right (300, 100)) == "end" then
         hoardManager:startWave()
+        result = true
     end
     
     -- Background
@@ -29,6 +28,8 @@ local function startWaveModal (show)
         valign = "top",
         padding = {padAll = 10}
     }, layout:center (compW, compH))
+
+    return result
 end
 
 return startWaveModal
