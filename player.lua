@@ -52,11 +52,13 @@ function Player:update(dt)
     self.camX = select(1, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
     self.camY = select(2, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
 
-    -- Add onto the nut regeneration timer
-    self.nutTimer = self.nutTimer + dt
-    self.nutAddTimer = self.nutAddTimer + dt
-    -- Add more ammo depending on where the timer is
+
     if hoard.inProgress then
+        -- Add onto the nut regeneration timer
+        self.nutTimer = self.nutTimer + dt
+        self.nutAddTimer = self.nutAddTimer + dt
+
+        -- Add more ammo depending on where the timer is
         if self.nutTimer < 3 then
             if self.nutAddTimer > .8 then
                 inventoryHandler:addAmmoCount(1)
@@ -78,6 +80,9 @@ function Player:update(dt)
                 self.nutAddTimer = 0
             end
         end
+    else
+        self.nutAddTimer = 0
+        self.nutTimer = 0
     end
 
     -- Deathcheck
