@@ -105,6 +105,10 @@ function love.keypressed(key, scancode, isrepeat)
     sceneMan:event("keypressed", key, scancode, isrepeat)
 end
 
+function love.wheelmoved (x, y)
+    sceneMan:event("wheelmoved", x, y)
+end
+
 function love.textinput(text)
     tux.callbacks.textinput(text)
 end
