@@ -11,7 +11,7 @@ local defaultNut = {
     name = "Default",
     image = baseNuts.peanut,
 
-    level = 1, -- The domestication level of the nut, which affects 
+    level = 1, -- The domestication level of the nut, which gives a stat boost for each level
     damage = 10, -- The base amount of damage the nut will deal to enemies
     projVelocity = 4, -- The velocity of the projectile
     projSize = 1, -- The scale of the projectile
@@ -67,6 +67,112 @@ local function clampNutAttributes (nutObj)
     for key, value in pairs (nutAttributeRanges) do
         nutObj[key] = clamp (nutObj[key], value[1], value[2])
     end
+end
+
+-- Generates a name and image for a nut depending on its genetics
+local function generateDisplayData (nutObj)
+    local type = "default"
+    local name = ""
+    local image = nil
+
+    if nutObj == nil then
+        return name, image
+    end
+
+    -- Gets the top 2 ancestors
+    local topAncestors = {
+        {
+            id = "default",
+            value = 0,
+        },
+        {
+            id = "default",
+            value = 0,
+        },
+    }
+    for ancestorid, ancestorValue in pairs (nutObj.ancestry) do
+        if ancestorValue > topAncestors[1].value then
+            topAncestors[2].id = topAncestors[1].id
+            topAncestors[2].value = topAncestors[1].value
+
+            topAncestors[1].id = ancestorid
+            topAncestors[1].value = ancestorValue
+
+        elseif ancestorValue > topAncestors[2].value then
+            topAncestors[2].id = ancestorid
+            topAncestors[2].value = ancestorValue
+        end
+    end
+
+    -- Gets the type for the nut
+    type = topAncestors[1].id
+
+    -- Gets the image for the nut
+    if topAncestors[1].id ~= "default" then
+        image = baseNuts[topAncestors[1].id].image
+    else
+        image = baseNuts.peanut.image
+    end
+
+    -- Generates the name of the nut
+
+    -- Second half of name
+    -- No ancestors
+    if topAncestors[1].id == "default" then
+        name = "Unknown Nut"
+
+    -- One ancestor
+    elseif topAncestors[2].id == "default" then
+        name = baseNuts[topAncestors[1].id].name
+
+    -- At least two ancestors
+    else
+        name = baseNuts[topAncestors[1].id].name .. "-" .. baseNuts[topAncestors[2].id].name
+    end
+
+    -- First half of name
+    local topStats = {
+        {
+            id = "default",
+            value = 0,
+        },
+        {
+            id = "default",
+            value = 0,
+        }
+    }
+    for statid, statValue in pairs (nutAttributeRanges) do
+        local scaledStatValue = mapToScale (nutObj[statid], statValue[1], statValue[2], 0, 1)
+
+        if scaledStatValue > topStats[1].value then
+            topStats[2].id = topStats[1].id
+            topStats[2].value = topStats[1].value
+    
+            topStats[1].id = statid
+            topStats[1].value = scaledStatValue
+        elseif scaledStatValue > topStats[2].value then
+            topStats[2].id = statid
+            topStats[2].value = scaledStatValue
+        end
+    end
+
+    -- No top stats
+    if topStats[1].id == "default" then
+        name = "Confusing " .. name
+
+    -- One top stat
+    elseif topStats[2].id == "default" then
+        name = nutAttributeMaxAdj[topStats[1].id] .. " " .. name
+
+    -- At least two top stats
+    else
+        name = nutAttributeMaxAdj[topStats[1].id] .. " " .. nutAttributeMaxAdj[topStats[2].id] .. " " .. name
+    end
+
+    -- Set nut stats
+    nutObj.type = type
+    nutObj.name = name
+    nutObj.image = image
 end
 
 local Nut = {} -- Nut class used to create new nut objects
@@ -151,111 +257,17 @@ function Nut:new (...)
     -- Clamp nut attributes
     clampNutAttributes (newNutObj)
 
+    -- Generate name and image for the nut
+    generateDisplayData (newNutObj)
+
+    print (newNutObj.type, newNutObj.class)
+
     return newNutObj
 end
 
 function Nut:load()
     SpriteSheets.nuts = love.graphics.newImage("Graphics/nuts.png") -- Each nut's 6x6
     SpriteSheets.Player:setFilter("nearest", "nearest")
-end
-
--- Generates a name and image for a nut depending on its genetics
-function Nut:generateDisplayData (nutObj)
-    local name = ""
-    local image = nil
-
-    if nutObj == nil then
-        return name, image
-    end
-
-    -- Gets the top 2 ancestors
-    local topAncestors = {
-        {
-            id = "default",
-            value = 0,
-        },
-        {
-            id = "default",
-            value = 0,
-        },
-    }
-    for ancestorid, ancestorValue in pairs (nutObj.ancestry) do
-        if ancestorValue > topAncestors[1].value then
-            topAncestors[2].id = topAncestors[1].id
-            topAncestors[2].value = topAncestors[1].value
-
-            topAncestors[1].id = ancestorid
-            topAncestors[1].value = ancestorValue
-
-        elseif ancestorValue > topAncestors[2].value then
-            topAncestors[2].id = ancestorid
-            topAncestors[2].value = ancestorValue
-        end
-    end
-
-    -- Gets the image for the nut
-    if topAncestors[1].id ~= "default" then
-        image = baseNuts[topAncestors[1].id].image
-    else
-        image = baseNuts.peanut.image
-    end
-
-    -- Generates the name of the nut
-
-    -- Second half of name
-    -- No ancestors
-    if topAncestors[1].id == "default" then
-        name = "Unknown Nut"
-
-    -- One ancestor
-    elseif topAncestors[2].id == "default" then
-        name = baseNuts[topAncestors[1].id].name
-
-    -- At least two ancestors
-    else
-        name = baseNuts[topAncestors[1].id].name .. "-" .. baseNuts[topAncestors[2].id].name
-    end
-
-    -- First half of name
-    local topStats = {
-        {
-            id = "default",
-            value = 0,
-        },
-        {
-            id = "default",
-            value = 0,
-        }
-    }
-    for statid, statValue in pairs (nutAttributeRanges) do
-        local scaledStatValue = mapToScale (nutObj[statid], statValue[1], statValue[2], 0, 1)
-
-        if scaledStatValue > topStats[1].value then
-            topStats[2].id = topStats[1].id
-            topStats[2].value = topStats[1].value
-    
-            topStats[1].id = statid
-            topStats[1].value = scaledStatValue
-        elseif scaledStatValue > topStats[2].value then
-            topStats[2].id = statid
-            topStats[2].value = scaledStatValue
-        end
-    end
-
-    -- No top stats
-    if topStats[1].id == "default" then
-        name = "Confusing " .. name
-
-    -- One top stat
-    elseif topStats[2].id == "default" then
-        name = nutAttributeMaxAdj[topStats[1].id] .. " " .. name
-
-    -- At least two top stats
-    else
-        name = nutAttributeMaxAdj[topStats[1].id] .. " " .. nutAttributeMaxAdj[topStats[2].id] .. " " .. name
-    end
-
-    return name, image
 end
 
 return Nut

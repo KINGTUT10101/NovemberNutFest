@@ -13,9 +13,24 @@ local sceneMan = require("Libraries.sceneMan")
 local lovelyToasts = require("Libraries.lovelyToasts")
 local tux = require("Libraries.tux")
 local camera = require("Libraries.hump.camera")
+local musicManager = require ("Core.musicManager")
 
 -- Declares / initializes the local variables
 
+-- filepath (string) A folder containing three slices: normal, hovered, and active
+local function loadTracks (filepath)
+    local files = love.filesystem.getDirectoryItems (filepath)
+
+    local newTracks = {}
+
+    for index, file in ipairs (files) do
+        newTracks[index] = love.audio.newSource(filepath .. "/" .. file, "stream")
+        newTracks[index]:setLooping(true)
+        newTracks[index]:setVolume(0.1)
+    end
+
+    return newTracks
+end
 
 -- Declares / initializes the global variables
 SpriteSheets = {}
@@ -23,13 +38,6 @@ GAMEWIDTH, GAMEHEIGHT = 1920, 1080
 WindowWidth, WindowHeight = 1280, 720
 -- WindowWidth, WindowHeight = 1280, 720
 DevMode = true
-
--- Defines the functions
-local Player = require("player")
-local EnemyManager = require("Enemies/enemy")
-local Nut = require("Core.Nut")
-local Gun = require("gun")
-local ProjectileManager = require("Managers.projectile")
 
 function love.load()
     -- Set up Push
@@ -63,8 +71,14 @@ function love.load()
         }
     )
 
+    -- Sets up scenes for the music manager
+    musicManager:newScene ("betweenWaves", loadTracks ("Music/Between Waves"))
+    musicManager:newScene ("activeWave", loadTracks ("Music/Active Wave"))
+    musicManager:newScene ("mainMenu", loadTracks ("Music/Main Menu"))
 
-    -- Set up scenes and SceneMan
+    musicManager:switchScene ("betweenWaves")
+
+    -- Set up scenes for SceneMan
     sceneMan:newScene("noiseTest", require("Scenes.noiseTest"))
     sceneMan:newScene("mapGenerationTest", require("Scenes.mapGenerationTest"))
     sceneMan:newScene("backgroundMap", require("Scenes.backgroundMap"))
@@ -75,9 +89,9 @@ function love.load()
     sceneMan:newScene("sideMenus", require("Scenes.sideMenus"))
 
     sceneMan:push("backgroundMap")
-    sceneMan:push("game")
     -- sceneMan:push("sideMenus")
     sceneMan:push("gameMenu")
+    sceneMan:push("game")
     sceneMan:push("debug")
 end
 
@@ -85,9 +99,7 @@ function love.update(dt)
     --require("Libraries.lurker").update()
 
     tux.callbacks.update(dt, push:toGame(love.mouse.getPosition()))
-
     sceneMan:event("update", dt)
-
     lovelyToasts.update(dt)
 end
 
@@ -103,6 +115,14 @@ end
 function love.keypressed(key, scancode, isrepeat)
     tux.callbacks.keypressed(key, scancode, isrepeat)
     sceneMan:event("keypressed", key, scancode, isrepeat)
+
+    if key == "k" then
+        musicManager:nextTrack ()
+    end
+end
+
+function love.wheelmoved (x, y)
+    sceneMan:event("wheelmoved", x, y)
 end
 
 function love.textinput(text)

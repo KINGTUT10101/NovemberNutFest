@@ -8,6 +8,7 @@ local baseNuts = require("Data.baseNuts")
 local push = require("Libraries.push")
 local contains = require "Helpers.contains"
 local copyTable= require "Helpers.copyTable"
+local tux = require ("Libraries.tux")
 local Nut      = require "Core.Nut"
 
 gun.cooldownMax = .2 -- in seconds
@@ -44,7 +45,7 @@ function gun:update(dt)
     end
 
     -- Fire the gun
-    if love.mouse.isDown(1) then
+    if love.mouse.isDown(1) and tux.utils.itemClicked () == false then
         local targetX = Player.x + (mouseGameX - gun.camX)
         local targetY = Player.y + (mouseGameY - gun.camY)
         gun:shoot(targetX, targetY)

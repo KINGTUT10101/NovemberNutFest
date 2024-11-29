@@ -8,7 +8,7 @@ local Nut = require ("Core.Nut")
 
 local function hotbar ()
     local activeSection = inventoryHandler:getActiveSlot ()
-    local activeNutName, activeNutImage = Nut:generateDisplayData (inventoryHandler:getNut (inventoryHandler:getActiveSlot ()))
+    local activeNut = inventoryHandler:getNut (inventoryHandler:getActiveSlot ())
 
     -- HOTBAR
     layout:setParent (0, 0, GAMEWIDTH, GAMEHEIGHT)
@@ -16,7 +16,12 @@ local function hotbar ()
     layout:setOrigin (centeredPos[1], 995, 0, 15)
 
     for i = 1, inventoryHandler:getMaxSlots () do
-        local nutName, nutImage = Nut:generateDisplayData (inventoryHandler:getNut (i))
+        local currentNut = inventoryHandler:getNut (i)
+        local nutImage = nil
+
+        if currentNut ~= nil then
+            nutImage = currentNut.image
+        end
 
         if tux.show.button ({
             image = nutImage,
@@ -45,7 +50,7 @@ local function hotbar ()
     }, layout:right (750, 36))
 
     -- NUT INFO
-    local sectionName = activeNutName
+    local sectionName = (activeNut == nil) and "" or activeNut.name
     local sectionSize = inventoryHandler:getAmmoCount ()
     local totalSize = inventoryHandler:getMaxAmmo ()
     local centeredPos = {layout:center (750, 0)}

@@ -120,6 +120,26 @@ function thisScene:keypressed(key, scancode, isrepeat)
     end
 end
 
+function thisScene:wheelmoved (x, y)
+    if y > 0 then
+        local newSlotIndex = inventoryHandler:getActiveSlot() + 1
+
+        if newSlotIndex > 10 then
+            newSlotIndex = 1
+        end
+
+        inventoryHandler:setActiveSlot (newSlotIndex)
+    elseif y < 0 then
+        local newSlotIndex = inventoryHandler:getActiveSlot() - 1
+
+        if newSlotIndex < 1 then
+            newSlotIndex = 10
+        end
+    
+        inventoryHandler:setActiveSlot (newSlotIndex)
+    end
+end
+
 function thisScene:mousereleased(x, y, button)
 
 end
