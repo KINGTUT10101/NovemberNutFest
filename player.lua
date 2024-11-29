@@ -1,46 +1,46 @@
-local inventoryHandler = require("Core.newInventoryHandler")
-local mapManager = require("Core.mapManager")
-local collisionCheck = require("Helpers.collisionCheck")
-local push = require("Libraries.push")
-local physics = require("physics")
-local camera = require("Libraries.hump.camera")
-local hoard  = require("Managers.hoard")
-Player = {}
+local inventoryHandler  = require("Core.newInventoryHandler")
+local mapManager        = require("Core.mapManager")
+local collisionCheck    = require("Helpers.collisionCheck")
+local push              = require("Libraries.push")
+local physics           = require("physics")
+local camera            = require("Libraries.hump.camera")
+local hoard             = require("Managers.hoard")
+Player                  = {}
 
 local spriteSheet
 
-Player.x = 4*mapManager.tileSize
-Player.y = 3*mapManager.tileSize
-Player.velX = 0
-Player.velY = 0
-Player.width = 31
-Player.height = 31
-Player.speed = 5000
-Player.runSpeed = 1.5 -- Isn't the actual run speed it's just a multiplier
-Player.maxHealth = 100
-Player.health = Player.maxHealth
+Player.x                = 4 * mapManager.tileSize
+Player.y                = 3 * mapManager.tileSize
+Player.velX             = 0
+Player.velY             = 0
+Player.width            = 31
+Player.height           = 31
+Player.speed            = 5000
+Player.runSpeed         = 1.5 -- Isn't the actual run speed it's just a multiplier
+Player.maxHealth        = 100
+Player.health           = Player.maxHealth
 Player.maxImmunityTimer = 0.8                  -- The max amount of time in the immunity timer
-Player.immunityTimer = Player.maxImmunityTimer -- The amount of time in the immunity timer
-Player.class = "player"
-Player.dead = false
-Player.god = false -- God mode
+Player.immunityTimer    = Player.maxImmunityTimer -- The amount of time in the immunity timer
+Player.class            = "player"
+Player.dead             = false
+Player.god              = false -- God mode
 
 -- Powerups
 -- speed
-Player.speedUp = false
-Player.speedUpMaxTimer = 5
-Player.speedUpTimer = Player.speedUpMaxTimer
+Player.speedUp          = false
+Player.speedUpMaxTimer  = 5
+Player.speedUpTimer     = Player.speedUpMaxTimer
 -- damage
-Player.damageUp = false
+Player.damageUp         = false
 Player.damageUpMaxTimer = 5
-Player.damageUpTimer = Player.damageUpMaxTimer
+Player.damageUpTimer    = Player.damageUpMaxTimer
 
 -- Gives more ammo the more it increases, is reset after the player gets hit
-Player.nutTimer = 0
-Player.nutAddTimer = 0
+Player.nutTimer         = 0
+Player.nutAddTimer      = 0
 
 -- Sound Effedts
-local hurtSound = love.audio.newSource("SoundEffects/player_hurt.wav", "static")
+local hurtSound         = love.audio.newSource("SoundEffects/player_hurt.wav", "static")
 
 function Player.load()
     SpriteSheets.Player = love.graphics.newImage("Graphics/player.png")
@@ -56,7 +56,6 @@ function Player.load()
 end
 
 function Player:update(dt)
-
     self.x, self.y = self.body:getPosition()
 
     self.camX = select(1, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))

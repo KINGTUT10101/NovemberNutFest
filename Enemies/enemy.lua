@@ -36,6 +36,15 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.maxImmunityTimer = .15
     enemy.immunityTimer = enemy.maxImmunityTimer
 
+    -- Physics
+    enemy.body = love.physics.newBody(physics.gameWorld, x, y, "dynamic")
+    enemy.shape = love.physics.newRectangleShape(enemy.width, enemy.height)
+    enemy.fixture = love.physics.newFixture(enemy.body, enemy.shape)
+    enemy.body:setMass(1)
+    enemy.fixture:setUserData(enemy)
+    enemy.body:setLinearDamping(enemy.friction)
+
+
     -- Sound Effects
     enemy.deathSound = love.audio.newSource("SoundEffects/enemy_killed.wav", "static")
 
@@ -81,18 +90,7 @@ function EnemyManager:spawnEnemy(x, y, type)
     end
 
     enemy = init(enemy, x, y)
-
-    enemy.body = love.physics.newBody(physics.gameWorld, x, y, "dynamic")
-    enemy.body:setMass(1)
-
     enemy:load()
-
-    -- Physics
-    enemy.shape = love.physics.newRectangleShape(enemy.width, enemy.height)
-    enemy.fixture = love.physics.newFixture(enemy.body, enemy.shape)
-    enemy.fixture:setUserData(enemy)
-    enemy.body:setLinearDamping(enemy.friction)
-
     enemy.maxHealth = enemy.health
 
     function enemy:genericUpdate(dt)

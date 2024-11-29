@@ -41,7 +41,7 @@ local function rightSideTrackers ()
     else
         -- Get number of enemies left from global variable
         if #Enemies > 0 then
-            waveProgressText = "Enemies Left: " .. #Enemies
+            waveProgressText = "Enemies: " .. #Enemies
         else
             waveProgressText = "Between Waves"
         end
