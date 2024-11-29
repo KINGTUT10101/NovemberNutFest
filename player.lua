@@ -19,7 +19,7 @@ Player.speed            = 5000
 Player.runSpeed         = 1.5 -- Isn't the actual run speed it's just a multiplier
 Player.maxHealth        = 100
 Player.health           = Player.maxHealth
-Player.maxImmunityTimer = 0.8                  -- The max amount of time in the immunity timer
+Player.maxImmunityTimer = 0.8                     -- The max amount of time in the immunity timer
 Player.immunityTimer    = Player.maxImmunityTimer -- The amount of time in the immunity timer
 Player.class            = "player"
 Player.dead             = false
@@ -87,22 +87,22 @@ function Player:update(dt)
         -- Add more ammo depending on where the timer is
         if self.nutTimer < 3 then
             if self.nutAddTimer > .8 then
-                inventoryHandler:addAmmoCount(1)
+                inventoryHandler:setAmmoCount(inventoryHandler:getAmmoCount() + 1)
                 self.nutAddTimer = 0
             end
         elseif self.nutTimer < 8 then
             if self.nutAddTimer > .6 then
-                inventoryHandler:addAmmoCount(1)
+                inventoryHandler:setAmmoCount(inventoryHandler:getAmmoCount() + 1)
                 self.nutAddTimer = 0
             end
         elseif self.nutTimer < 15 then
             if self.nutAddTimer > .4 then
-                inventoryHandler:addAmmoCount(1)
+                inventoryHandler:setAmmoCount(inventoryHandler:getAmmoCount() + 1)
                 self.nutAddTimer = 0
             end
         elseif self.nutTimer < 30 then
             if self.nutAddTimer > .2 then
-                inventoryHandler:addAmmoCount(1)
+                inventoryHandler:setAmmoCount(inventoryHandler:getAmmoCount() + 1)
                 self.nutAddTimer = 0
             end
         end
