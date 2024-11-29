@@ -279,9 +279,14 @@ function EnemyManager:spawnEnemy(x, y, type)
         -- Chance for an enemy to drop an item
         local drop = math.random()
         if drop < .05 then
-            ItemManager:placeConsumable(ItemManager:newItem("nut oil"), self.x, self.y)
+            ItemManager:placeConsumable(ItemManager:newItem("nut oil"), self.x, self.y) -- nut oil
         elseif drop < .1 then
-            ItemManager:placeConsumable(ItemManager:newItem("cashew apple"), self.x, self.y)
+            ItemManager:placeConsumable(ItemManager:newItem("cashew apple"), self.x, self.y) -- cashew apple
+        end
+        -- Chance to drop a powerup
+        drop = math.random()
+        if drop < .05 then
+            ItemManager:placeConsumable(ItemManager:newItem("speed"), self.x, self.y) -- speed up
         end
 
         if self.kill ~= nil then
@@ -355,7 +360,8 @@ function EnemyManager:updateEnemies(dt)
 
         -- Enemy out of bounds check
         if not collisionCheck(e.x, e.y, e.width, e.height, 0, 0, mapManager.realSize, mapManager.realSize) then
-            print("Enemy \"" .. e.type .. "\" out of bounds at, " .. e.x .. ", " .. e.y)
+            -- ** DEBUG
+            --print("Enemy \"" .. e.type .. "\" out of bounds at, " .. e.x .. ", " .. e.y) 
             table.remove(Enemies, i)
         end
 
