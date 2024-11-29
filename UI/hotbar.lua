@@ -4,7 +4,10 @@ local icons = require ("Helpers.icons")
 local inventoryHandler = require ("Core.newInventoryHandler")
 local slices = require ("Helpers.slices")
 
+local baseNuts = require ("Data.baseNuts") -- TEMP
 local Nut = require ("Core.Nut")
+
+inventoryHandler:replaceNut (Nut:new (baseNuts.peanut), 1)
 
 local function hotbar ()
     local activeSection = inventoryHandler:getActiveSlot ()

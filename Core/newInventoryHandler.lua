@@ -12,10 +12,6 @@ local inventoryHandler = {
     activeSlot = 1, -- Currently selected hotbar slot
 }
 
-function inventoryHandler:getSize ()
-    return self.size
-end
-
 function inventoryHandler:getMaxSlots ()
     return self.maxSlots
 end
