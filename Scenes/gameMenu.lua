@@ -72,12 +72,13 @@ function thisScene:update (dt)
             nutList = {} -- Reset nut breeding list
 
             -- Add one base nut
-            nutList[1] = Nut:new (availableBaseNuts[math.random (1, #availableBaseNuts)])
+            local nutToAdd = availableBaseNuts[math.random (1, #availableBaseNuts)]
+            nutList[1] = Nut:new (baseNuts[nutToAdd])
             nutList[1].name = "(BASE)" .. nutList[1].name
 
             -- Add the rest of the hotbar nuts
             for i = 1, inventoryHandler:getMaxSlots () do
-                local nutObj = inventoryHandler:getNut ()
+                local nutObj = inventoryHandler:getNut (i)
 
                 if nutObj ~= nil then
                     nutList[#nutList+1] = nutObj
