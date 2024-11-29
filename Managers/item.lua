@@ -27,6 +27,8 @@ function ItemManager:newItem(type)
         item = copyTable(throwables.nutOil)
     elseif type == "speed" then
         item = copyTable(powerups.speed)
+    elseif type == "damage" then
+        item = copyTable(powerups.damage)
     else
         error(type .. " is not a valid item.")
     end
@@ -53,7 +55,7 @@ end
 -- This will probally be reduntant later. It's just to test throwing throwables and consuming consumables
 function ItemManager:update()
     -- Throwables
-    if love.keyboard.isDown("e") and #Throwables > 0 and not qPressed then
+    if love.keyboard.isDown("e") and #Throwables > 0 and not ePressed then
         local mouseGameX, mouseGameY = push:toGame(love.mouse.getPosition())
         local targetX = (Player.x - Player.camX + mouseGameX) - (mouseGameX - Player.camX) / 2
         local targetY = (Player.y - Player.camY + mouseGameY) - (mouseGameY - Player.camY) / 2
@@ -71,7 +73,7 @@ function ItemManager:update()
         table.remove(Consumables, 1)
         qPressed = false
     end
-    ePressed = love.keyboard.isDown("q")
+    qPressed = love.keyboard.isDown("q")
 
     -- Powerup Despawn
 
@@ -85,6 +87,8 @@ function ItemManager:update()
             else
                 if item.object == "speed" then
                     Player.speedUpTimer = 0
+                elseif item.object == "damage" then
+                    Player.damageUpTimer = 0
                 end
                 item.soundEffect:play()
             end

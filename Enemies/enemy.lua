@@ -55,11 +55,11 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.maxFireTimer = 10
     enemy.fireTimer = enemy.maxFireTimer
     enemy.fireHitTimer = 0
-    self.fireDamage = 3
+    enemy.fireDamage = 3
     -- Frozen
     enemy.statusEffects.frozen = false
     enemy.freezeTimer = 0
-    enemy.maxFreezeTimer = 10
+    enemy.maxFreezeTimer = 4
     -- Stunned
     enemy.stunned = false -- When true the enemy won't go after the player
     enemy.maxStunTimer = 1
@@ -287,6 +287,8 @@ function EnemyManager:spawnEnemy(x, y, type)
         drop = math.random()
         if drop < .05 then
             ItemManager:placeConsumable(ItemManager:newItem("speed"), self.x, self.y) -- speed up
+        elseif drop < .1 then
+            ItemManager:placeConsumable(ItemManager:newItem("damage"), self.x, self.y) -- speed up
         end
 
         if self.kill ~= nil then
