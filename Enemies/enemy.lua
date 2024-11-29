@@ -1,10 +1,10 @@
 local hitmarkerManager = require "Managers.hitmarker"
-local contains = require "Helpers.contains"
 local physics = require "physics"
 local mapManager = require "Core.mapManager"
 local collisionCheck = require "Helpers.collisionCheck"
 local camera = require "Libraries.hump.camera"
 local inventoryHandler = require("Core.newInventoryHandler")
+local hasEffect        = require("Helpers.hasEffect")
 
 Enemies = {} -- list of all enemies in the game
 EnemyManager = {}
@@ -173,23 +173,23 @@ function EnemyManager:spawnEnemy(x, y, type)
                 if p.class == "nut" and enemy:collisionCheck(p.x, p.y, 6, 6) then
                     enemy:hit(p.damage, p.knockback, p.velX, p.velY)
                     self.immunityTimer = 0
-                    if contains(p.specialEffects, "fire") then
+                    if hasEffect(p.specialEffects, "fire") then
                         self.statusEffects.onFire = true
                         self.fireTimer = 0
                     end
-                    if contains(p.specialEffects, "freeze") then
+                    if hasEffect(p.specialEffects, "freeze") then
                         self.statusEffects.frozen = true
                         self.freezeTimer = 0
                     end
-                    if contains(p.specialEffects, "stun") then
+                    if hasEffect(p.specialEffects, "stun") then
                         self.stunned = true
                         self.stunTimer = 0
                     end
-                    if contains(p.specialEffects, "confusion") then
+                    if hasEffect(p.specialEffects, "confusion") then
                         self.statusEffects.confused = true
                         self.confusedTimer = 0
                     end
-                    if contains(p.specialEffects, "pierce") then
+                    if hasEffect(p.specialEffects, "pierce") then
                         if p.pierces >= 2 then
                             table.remove(Projectiles, i)
                         end
