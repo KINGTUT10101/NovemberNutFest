@@ -103,11 +103,6 @@ function Player:update(dt)
         self.velX = self.velX + self.speed
     end
 
-    if love.keyboard.isDown("lshift") then
-        self.velX = self.velX * self.runSpeed
-        self.velY = self.velY * self.runSpeed
-    end
-
     if math.abs(self.velX) > 0 and math.abs(self.velY) > 0 then
         self.velX = self.velX / 1.44
         self.velY = self.velY / 1.44
