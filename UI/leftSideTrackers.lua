@@ -13,7 +13,7 @@ local function leftSideTrackers ()
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
-        text = "(Q) Consumables " .. #Consumables,
+        text = "(Q) Consume: " .. #Consumables,
         align = "left",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
@@ -25,7 +25,7 @@ local function leftSideTrackers ()
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
-        text = "(E) Throwables " .. #Throwables,
+        text = "(E) Throw: " .. #Throwables,
         align = "left",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
