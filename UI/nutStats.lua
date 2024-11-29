@@ -42,11 +42,11 @@ local statsToShow = {
             name = "Knockback",
             icon = icons.inverseStar,
         },
-        {
-            id = "spread",
-            name = "Spread",
-            icon = icons.inverseStar,
-        },
+        -- {
+        --     id = "spread",
+        --     name = "Spread",
+        --     icon = icons.inverseStar,
+        -- },
     },
     farming = {
         {
