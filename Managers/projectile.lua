@@ -116,6 +116,9 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
     -- Initialize the rotation
     projectile.rotation = 0
 
+    -- Get rid of those decimals
+    projectile.damage = math.floor(projectile.damage + .5)
+
     -- Has the projectile hit a tile
     projectile.hitTile = false
 

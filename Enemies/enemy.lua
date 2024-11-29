@@ -271,7 +271,7 @@ function EnemyManager:spawnEnemy(x, y, type)
     function enemy:genericKill()
         self.dead = true
         self.health = 0
-        inventoryHandler:addAmmoCount(math.floor(self.maxHealth/50))
+        inventoryHandler:addAmmoCount(math.floor(self.maxHealth/20))
         self.body:destroy()
         self.deathSound:play()
 

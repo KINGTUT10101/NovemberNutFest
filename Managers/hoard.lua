@@ -5,8 +5,7 @@ local camera = require("Libraries.hump.camera")
 local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
 
-hoardManager.waveTimer = 0          -- Time counting up to next wave
-hoardManager.maxWaveTimer = 3       -- Seconds to before next wave
+
 hoardManager.kills = 0      -- Amount of kills during the current wave
 hoardManager.maxKills = 5   -- Amount of kills needed to end the wave
 hoardManager.previousTotalKills = 0   -- Amound of total kills at the start of the wave 
@@ -19,7 +18,6 @@ hoardManager.maxSpawnTimer = 2      -- The time it takes for another enemy to sp
 function hoardManager:startWave()
 
     self.inProgress = true
-    self.waveTimer = 0
     self.spawnTimer = 0
     self.kills = 0
     self.previousTotalKills = EnemyManager.totalKills
@@ -28,11 +26,7 @@ end
 
 function hoardManager:update(dt)
     if not self.inProgress then
-        self.waveTimer = self.waveTimer + dt
-        -- Only has a timer for the first wave
-        if self.waveTimer >= self.maxWaveTimer and self.waveCount == 0 then
-            self:startWave()
-        end
+
     else
         -- Spawner
         self.spawnTimer = self.spawnTimer + dt

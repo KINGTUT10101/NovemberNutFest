@@ -4,6 +4,7 @@ local collisionCheck = require("Helpers.collisionCheck")
 local push = require("Libraries.push")
 local physics = require("physics")
 local camera = require("Libraries.hump.camera")
+local hoard  = require("Managers.hoard")
 Player = {}
 
 local spriteSheet
@@ -55,25 +56,27 @@ function Player:update(dt)
     self.nutTimer = self.nutTimer + dt
     self.nutAddTimer = self.nutAddTimer + dt
     -- Add more ammo depending on where the timer is
-    if self.nutTimer < 3 then
-        if self.nutAddTimer > 1 then
-            inventoryHandler:addAmmoCount(1)
-            self.nutAddTimer = 0
-        end
-    elseif self.nutTimer < 8 then
-        if self.nutAddTimer > .8 then
-            inventoryHandler:addAmmoCount(1)
-            self.nutAddTimer = 0
-        end
-    elseif self.nutTimer < 15 then
-        if self.nutAddTimer > .6 then
-            inventoryHandler:addAmmoCount(1)
-            self.nutAddTimer = 0
-        end
-    elseif self.nutTimer < 30 then
-        if self.nutAddTimer > .4 then
-            inventoryHandler:addAmmoCount(1)
-            self.nutAddTimer = 0
+    if hoard.inProgress then
+        if self.nutTimer < 3 then
+            if self.nutAddTimer > .8 then
+                inventoryHandler:addAmmoCount(1)
+                self.nutAddTimer = 0
+            end
+        elseif self.nutTimer < 8 then
+            if self.nutAddTimer > .6 then
+                inventoryHandler:addAmmoCount(1)
+                self.nutAddTimer = 0
+            end
+        elseif self.nutTimer < 15 then
+            if self.nutAddTimer > .4 then
+                inventoryHandler:addAmmoCount(1)
+                self.nutAddTimer = 0
+            end
+        elseif self.nutTimer < 30 then
+            if self.nutAddTimer > .2 then
+                inventoryHandler:addAmmoCount(1)
+                self.nutAddTimer = 0
+            end
         end
     end
 
