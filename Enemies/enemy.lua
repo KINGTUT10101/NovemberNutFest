@@ -280,7 +280,7 @@ function EnemyManager:spawnEnemy(x, y, type)
         local drop = math.random()
         if drop < .05 then
             ItemManager:placeConsumable(ItemManager:newItem("nut oil"), self.x, self.y) -- nut oil
-        elseif drop < .1 then
+        elseif drop < .15 then
             ItemManager:placeConsumable(ItemManager:newItem("cashew apple"), self.x, self.y) -- cashew apple
         end
         -- Chance to drop a powerup
@@ -357,6 +357,11 @@ end
 function EnemyManager:updateEnemies(dt)
     for i = #Enemies, 1, -1 do
         local e = Enemies[i]
+
+        if e.dead then
+            e.fixture:destroy()
+        end
+
         e:genericUpdate(dt)
         e:update(dt)
 
