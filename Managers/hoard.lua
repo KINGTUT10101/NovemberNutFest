@@ -94,7 +94,7 @@ function hoardManager:HoardSpawn(type)
                 rare = math.random(1, 10)
                 if rare == 1 then type = "screecher" end
             elseif enemyType == 5 then
-                rare = math.random(1, 25)
+                rare = math.random(1, 20)
                 if rare == 1 then type = "witch" end
             else
                 error(enemyType .. " is not a valid number for an enemy.")

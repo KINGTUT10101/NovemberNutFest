@@ -29,7 +29,7 @@ local function rightSideTrackers ()
         iscale = 1.65,
     }, layout:down (50, 50, false))
     tux.show.label ({
-        text = "Wave: " .. math.min (hoardManager.waveCount, 1),
+        text = "Wave: " .. hoardManager.waveCount+1,
         align = "right",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
