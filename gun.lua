@@ -48,10 +48,6 @@ function gun:update(dt)
         local targetY = Player.y + (mouseGameY - gun.camY)
         gun:shoot(targetX, targetY)
     end
-
-    -- TEST ** Sets nuts to the hotbar
-    inventoryHandler:replaceNut(nut:new(baseNuts.deathNut), 1)
-    inventoryHandler:replaceNut(nut:new(baseNuts.macadamia), 2)
 end
 
 function gun:shoot(x, y)
