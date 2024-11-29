@@ -235,9 +235,7 @@ function Nut:new (...)
         newNutObj.bgColor[colorIndex] = clamp (newNutObj.bgColor[colorIndex] + 0.1 * (math.random () < 0.5 and 1 or -1), 0, 1)
 
         -- Round level down to nearest integer and increment it
-        -- print (newNutObj.level)
         newNutObj.level = math.floor (newNutObj.level) + 1
-        -- print (newNutObj.level)
 
         -- Calculate ancestors
         for k, v in pairs (nutObjCopy1.ancestry) do
