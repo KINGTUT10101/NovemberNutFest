@@ -53,7 +53,7 @@ function thisScene:load (...)
 end
 
 function thisScene:update (dt)
-    if stage == "start" or (stage == "inWave" and hoardManager.inProgress == false) then
+    if stage == "start" or (stage == "inWave" and hoardManager.inProgress == false and #Enemies <= 0) then
         stage = "chooseParents"
 
         -- Add random base nuts to breeding list
