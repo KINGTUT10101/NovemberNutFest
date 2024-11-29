@@ -90,7 +90,7 @@ function gun:shoot(x, y)
         ProjectileManager:add(startX, startY, x, y, newNut)
         self.cooldownTimer = 0
 
-        inventoryHandler:setAmmoCount(inventoryHandler:getAmmoCount()-1)
+        inventoryHandler:addAmmoCount(-1)
     end
 end
 

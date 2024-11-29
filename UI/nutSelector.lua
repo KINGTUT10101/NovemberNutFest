@@ -11,15 +11,17 @@ local rowsPerPage = 5
 
 local page = 1
 local selectedNuts = {}
+local lastNutList = nil
 
-local function nutSelector (x, y, nutList, reset)
+local function nutSelector (x, y, nutList)
     local currentNut = nutList[page]
     local maxPage = #nutList
 
     -- Reset values
-    if reset == true then
+    if lastNutList ~= nutList then
         page = 1
         selectedNuts = {}
+        lastNutList = nutList
     end
 
     -- Page buttons

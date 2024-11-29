@@ -53,7 +53,7 @@ function thisScene:load (...)
 end
 
 function thisScene:update (dt)
-    if stage == "start" or (stage == "inWave" and hoardManager.inProgress == false) then
+    if stage == "start" or (stage == "inWave" and hoardManager.inProgress == false and #Enemies <= 0) then
         stage = "chooseParents"
 
         -- Add random base nuts to breeding list
@@ -72,12 +72,13 @@ function thisScene:update (dt)
             nutList = {} -- Reset nut breeding list
 
             -- Add one base nut
-            nutList[1] = Nut:new (availableBaseNuts[math.random (1, #availableBaseNuts)])
+            local nutToAdd = availableBaseNuts[math.random (1, #availableBaseNuts)]
+            nutList[1] = Nut:new (baseNuts[nutToAdd])
             nutList[1].name = "(BASE)" .. nutList[1].name
 
             -- Add the rest of the hotbar nuts
             for i = 1, inventoryHandler:getMaxSlots () do
-                local nutObj = inventoryHandler:getNut ()
+                local nutObj = inventoryHandler:getNut (i)
 
                 if nutObj ~= nil then
                     nutList[#nutList+1] = nutObj
