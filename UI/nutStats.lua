@@ -1,7 +1,6 @@
 local tux = require ("Libraries.tux")
 local layout = require ("Helpers.layout")
 local icons = require ("Helpers.icons")
-local Nut = require ("Core.Nut")
 
 local statsToShow = {
     all = {
@@ -10,11 +9,11 @@ local statsToShow = {
             name = "Level",
             icon = icons.inverseStar,
         },
-        -- {
-        --     id = "invSize",
-        --     name = "Inventory Size",
-        --     icon = icons.inverseStar,
-        -- },
+        {
+            id = "invSize",
+            name = "Inventory Size",
+            icon = icons.inverseStar,
+        },
     },
     combat = {
         {
@@ -33,7 +32,7 @@ local statsToShow = {
             icon = icons.inverseStar,
         },
         {
-            id = "projSize",
+            id = "projScale",
             name = "Bullet Size",
             icon = icons.inverseStar,
         },
@@ -69,41 +68,37 @@ local statsToShow = {
 
 local compW, compH = 435, 500
 
-local mode = "combat"
-
 -- Mode can be either "combat", "effects", or "farming"
 -- The component may modify the mode, so it returns the new mode as a string
-local function nutStats (x, y, nutObj)
-    local nutName, nutImage = Nut:generateDisplayData (nutObj)
-
+local function nutStats (x, y, nutObj, mode)
     -- Mode change buttons
     layout:setParent (x + 10, y, compW - 20, compH)
     local centeredPos = {layout:center (compW - 20, 0)}
-    layout:setOrigin (centeredPos[1], y + 85, 0, 0)
+    layout:setOrigin (centeredPos[1], y + 50, 0, 0)
 
     if tux.show.button ({
         text = "Combat",
         fsize = 28,
-    }, layout:right ((compW - 20) / 2, 50)) == "end" then
+    }, layout:right ((compW - 20) / 3, 50)) == "end" then
         mode = "combat"
     end
 
     if tux.show.button ({
         text = "Effects",
         fsize = 28,
-    }, layout:right ((compW - 20) / 2, 50)) == "end" then
+    }, layout:right ((compW - 20) / 3, 50)) == "end" then
         mode = "effects"
     end
 
-    -- if tux.show.button ({
-    --     text = "Farming",
-    --     fsize = 28,
-    -- }, layout:right ((compW - 20) / 3, 50)) == "end" then
-    --     mode = "farming"
-    -- end
+    if tux.show.button ({
+        text = "Farming",
+        fsize = 28,
+    }, layout:right ((compW - 20) / 3, 50)) == "end" then
+        mode = "farming"
+    end
 
     -- Iterate over nut stats
-    layout:setOrigin (x + 15, y + 135, 10, 5)
+    layout:setOrigin (x + 15, y + 100, 10, 5)
 
     -- Core stats
     for index, statDef in ipairs (statsToShow.all) do
@@ -123,8 +118,8 @@ local function nutStats (x, y, nutObj)
         }, layout:right (350, 36))
     end
 
-    if mode == "combat" then
-        for index, statDef in ipairs (statsToShow.combat) do
+    if mode ~= "effects" then
+        for index, statDef in ipairs (statsToShow[mode]) do
             -- Icon
             tux.show.button ({
                 colors = {1, 0, 0, 1},
@@ -134,38 +129,19 @@ local function nutStats (x, y, nutObj)
 
             -- Text
             tux.show.label ({
-                text = statDef.name .. ": " .. math.floor (nutObj[statDef.id]),
+                text = statDef.name .. ": " .. nutObj[statDef.id],
                 align = "left",
                 colors = {1, 0, 0, 1},
                 fsize = 28,
             }, layout:right (350, 36))
         end
-
-    elseif mode == "effects" then
-        -- for index, statDef in ipairs (statsToShow.combat) do
-        --     -- Icon
-        --     tux.show.button ({
-        --         colors = {1, 0, 0, 1},
-        --         image = statDef.icon,
-        --         iscale = 1.65,
-        --     }, layout:down (36, 36))
-    
-        --     -- Text
-        --     tux.show.label ({
-        --         text = statDef.name .. ": " .. nutObj[statDef.id],
-        --         align = "left",
-        --         colors = {1, 0, 0, 1},
-        --         fsize = 28,
-        --     }, layout:right (350, 36))
-        -- end
     end
 
     -- Background
     tux.show.label ({
-        text = nutName,
+        text = "Nut Info",
         valign = "top",
-        fsize = 24,
-        padding = {padAll = 10, padTop = 10}
+        padding = {padAll = 5}
     }, x, y, compW, compH)
 
     return mode
