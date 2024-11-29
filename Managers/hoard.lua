@@ -64,7 +64,7 @@ function hoardManager:update(dt)
             self.inProgress = false
             self.waveCount = self.waveCount + 1
             print("You fended off wave " .. self.waveCount .. " succesfully!")
-            hoardManager:startWave() -- REMOVE
+            --hoardManager:startWave() -- REMOVE
         end
     end
 end
