@@ -96,8 +96,6 @@ function love.load()
 end
 
 function love.update(dt)
-    --require("Libraries.lurker").update()
-
     tux.callbacks.update(dt, push:toGame(love.mouse.getPosition()))
     sceneMan:event("update", dt)
     lovelyToasts.update(dt)
