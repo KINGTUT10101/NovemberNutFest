@@ -9,11 +9,11 @@ local function leftSideTrackers ()
 
     tux.show.button ({
         colors = {1, 0, 0, 1},
-        image = icons.inverseStar,
+        image = icons.battery,
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
-        text = "Throwables(E) " .. #Throwables,
+        text = "(Q) Consumables " .. #Consumables,
         align = "left",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
@@ -21,11 +21,11 @@ local function leftSideTrackers ()
 
     tux.show.button ({
         colors = {1, 0, 0, 1},
-        image = icons.battery,
+        image = icons.inverseStar,
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
-        text = "Consumables(Q) " .. #Consumables,
+        text = "(E) Throwables " .. #Throwables,
         align = "left",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
