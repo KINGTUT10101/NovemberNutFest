@@ -58,7 +58,13 @@ function thisScene:delete(...)
     local args = { ... }
 end
 
+local lastTick = 0
 function thisScene:update(dt)
+    lastTick = lastTick - dt
+    if lastTick <= 0 then
+        inventoryHandler:addAmmoCount (1)
+        lastTick = 1
+    end
 
     -- Update Entities
     Player:update(dt)
