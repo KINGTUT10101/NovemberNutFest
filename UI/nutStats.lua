@@ -74,8 +74,6 @@ local mode = "combat"
 -- Mode can be either "combat", "effects", or "farming"
 -- The component may modify the mode, so it returns the new mode as a string
 local function nutStats (x, y, nutObj)
-    local nutName, nutImage = Nut:generateDisplayData (nutObj)
-
     -- Mode change buttons
     layout:setParent (x + 10, y, compW - 20, compH)
     local centeredPos = {layout:center (compW - 20, 0)}
@@ -162,7 +160,7 @@ local function nutStats (x, y, nutObj)
 
     -- Background
     tux.show.label ({
-        text = nutName,
+        text = nutObj.name,
         valign = "top",
         fsize = 24,
         padding = {padAll = 10, padTop = 10}

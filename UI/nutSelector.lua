@@ -14,7 +14,6 @@ local selectedNuts = {}
 
 local function nutSelector (x, y, nutList, reset)
     local currentNut = nutList[page]
-    local nutName, nutImage = Nut:generateDisplayData (currentNut)
     local maxPage = #nutList
 
     -- Reset values
@@ -54,14 +53,14 @@ local function nutSelector (x, y, nutList, reset)
 
     -- Nut image
     tux.show.label ({
-        image = nutImage,
+        image = currentNut.image,
         iscale = 4,
         colors = {currentNut.bgColor[1], currentNut.bgColor[2], currentNut.bgColor[3], 1},
     }, layout:down (400, 150))
 
     -- Nut name
     tux.show.label ({
-        text = nutName,
+        text = currentNut.name,
         fsize = 36,
         colors = {0, 0, 0, 0},
         padding = {padX = 5},
