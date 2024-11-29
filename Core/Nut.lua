@@ -8,10 +8,13 @@ local baseNuts = require ("Data.baseNuts")
 
 -- Defines the default nut object attributes
 local defaultNut = {
+    name = "Default",
+    image = baseNuts.peanut,
+
     level = 1, -- The domestication level of the nut, which affects 
     damage = 10, -- The base amount of damage the nut will deal to enemies
     projVelocity = 4, -- The velocity of the projectile
-    projScale = 1, -- The scale of the projectile
+    projSize = 1, -- The scale of the projectile
     range = 10, -- The maximum range the projectile until it despawns
     knockback = 50, -- How far an enemy will be pushed when hit by the projectile
     -- invSize = 1, -- How many spaces the nut will use inside the player's inventory
@@ -21,6 +24,7 @@ local defaultNut = {
     -- variation = 1, -- How much the yield can vary in either direction
     specialEffects = {}, -- A list of tables, each with an effect and a probability
     class = "nut", -- What type of projectile
+    type = "default",
     bgColor = {0.5, 0.5, 0.5, 1},
     ancestry = {}, -- Tracks the nut's genetic lineage
 }
@@ -30,7 +34,7 @@ local nutAttributeRanges = {
     level = {1, 10},
     damage = {0, 100},
     projVelocity = {0, 25},
-    projScale = {0.1, 10},
+    projSize = {0.1, 10},
     range = {0, 25},
     knockback = {0, 10},
     -- invSize = {1, 10},
@@ -45,7 +49,7 @@ local nutAttributeMaxAdj = {
     level = "Max",
     damage = "Hurtful",
     projVelocity = "Swift",
-    projScale = "Giga",
+    projSize = "Giga",
     range = "Lasting",
     knockback = "Recoiling",
     -- invSize = "na",
@@ -113,9 +117,11 @@ function Nut:new (...)
 
             -- Apply random mutations
             -- It slightly favors positive mutations
-            local attributeRange = rangePair[2] - rangePair[1]
-            local mutation = mapToScale (love.math.randomNormal (1, 0), -3, 3, -5, 7) / 100 * attributeRange
-            newNutObj[key] = newNutObj[key] + mutation
+            if key ~= "level" then
+                local attributeRange = rangePair[2] - rangePair[1]
+                local mutation = mapToScale (love.math.randomNormal (1, 0), -3, 3, -5, 7) / 100 * attributeRange
+                newNutObj[key] = newNutObj[key] + mutation
+            end
         end
 
         -- Mutate color values
@@ -123,7 +129,21 @@ function Nut:new (...)
         newNutObj.bgColor[colorIndex] = clamp (newNutObj.bgColor[colorIndex] + 0.1 * (math.random () < 0.5 and 1 or -1), 0, 1)
 
         -- Round level down to nearest integer and increment it
-        newNutObj.level = math.min (newNutObj.level) + 1
+        -- print (newNutObj.level)
+        newNutObj.level = math.floor (newNutObj.level) + 1
+        -- print (newNutObj.level)
+
+        -- Calculate ancestors
+        for k, v in pairs (nutObjCopy1.ancestry) do
+            newNutObj.ancestry[k] = v
+        end
+        for k, v in pairs (nutObjCopy2.ancestry) do
+            if newNutObj.ancestry[k] == nil then
+                newNutObj.ancestry[k] = v
+            else
+                newNutObj.ancestry[k] = newNutObj.ancestry[k] + v
+            end
+        end
     else
         error ("Too many arguments provided to constructor")
     end
@@ -166,6 +186,10 @@ function Nut:generateDisplayData (nutObj)
 
             topAncestors[1].id = ancestorid
             topAncestors[1].value = ancestorValue
+
+        elseif ancestorValue > topAncestors[2].value then
+            topAncestors[2].id = ancestorid
+            topAncestors[2].value = ancestorValue
         end
     end
 
@@ -189,7 +213,7 @@ function Nut:generateDisplayData (nutObj)
 
     -- At least two ancestors
     else
-        name = baseNuts[topAncestors[1].id].name .. "-" .. baseNuts[topAncestors[1].id].name
+        name = baseNuts[topAncestors[1].id].name .. "-" .. baseNuts[topAncestors[2].id].name
     end
 
     -- First half of name
@@ -206,14 +230,15 @@ function Nut:generateDisplayData (nutObj)
     for statid, statValue in pairs (nutAttributeRanges) do
         local scaledStatValue = mapToScale (nutObj[statid], statValue[1], statValue[2], 0, 1)
 
-        -- print (nutObj[statid], scaledStatValue, nutObj)
-
         if scaledStatValue > topStats[1].value then
             topStats[2].id = topStats[1].id
             topStats[2].value = topStats[1].value
     
             topStats[1].id = statid
             topStats[1].value = scaledStatValue
+        elseif scaledStatValue > topStats[2].value then
+            topStats[2].id = statid
+            topStats[2].value = scaledStatValue
         end
     end
 
