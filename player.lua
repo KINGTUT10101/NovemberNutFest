@@ -30,6 +30,10 @@ Player.god = false -- God mode
 Player.speedUp = false
 Player.speedUpMaxTimer = 5
 Player.speedUpTimer = Player.speedUpMaxTimer
+-- damage
+Player.damageUp = false
+Player.damageUpMaxTimer = 5
+Player.damageUpTimer = Player.damageUpMaxTimer
 
 -- Gives more ammo the more it increases, is reset after the player gets hit
 Player.nutTimer = 0
@@ -65,6 +69,13 @@ function Player:update(dt)
         self.speedUp = true
     else
         self.speedUp = false
+    end
+    -- strength up
+    if self.damageUpTimer < self.damageUpMaxTimer then
+        self.damageUpTimer = self.damageUpTimer + dt
+        self.damageUp = true
+    else
+        self.damageUp = false
     end
 
 

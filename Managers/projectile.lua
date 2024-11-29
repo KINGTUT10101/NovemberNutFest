@@ -139,6 +139,11 @@ function projectileManager:add(startX, startY, endX, endY, projectile)
 
     if projectile.class == "nut" then
 
+        -- Add damage up
+        if Player.damageUp then
+            projectile.damage = projectile.damage*1.2
+        end
+
         -- Get rid of those decimals
         projectile.damage = math.floor(projectile.damage + .5)
 

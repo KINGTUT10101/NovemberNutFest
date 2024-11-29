@@ -47,7 +47,7 @@ baseNuts.macadamia = {
     name = "Macadamia Nut",
     image = love.graphics.newImage ("Graphics/Nuts/macadamia.png"),
 
-    damage = 5,
+    damage = 6,
     projVelocity = 10,
     projSize = 2,
     range = 7,

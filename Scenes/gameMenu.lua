@@ -7,7 +7,7 @@ local inventoryHandler = require ("Core.newInventoryHandler")
 local hoardManager = require ("Managers.hoard")
 local baseNuts = require ("Data.baseNuts")
 local Nut = require ("Core.Nut")
-local shuffle = require ("LIbraries.lume").shuffle
+local shuffle = require ("Libraries.lume").shuffle
 
 local topStatusBar = require ("UI.topStatusBar")
 local hotbar = require ("UI.hotbar")
