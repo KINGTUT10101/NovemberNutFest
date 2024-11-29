@@ -63,6 +63,10 @@ function EnemyManager:spawnEnemy(x, y, type)
     enemy.stunned = false -- When true the enemy won't go after the player
     enemy.maxStunTimer = 1
     enemy.stunTimer = enemy.maxStunTimer
+    -- Confused
+    enemy.statusEffects.confused = false -- When true the enemy won't go after the player
+    enemy.maxConfusedTimer = 1
+    enemy.confusedTimer = enemy.maxConfusedTimer
     -- Oiled... oiled nuts... heh
     enemy.statusEffects.oiled = false
     enemy.maxOiledTimer = 13
@@ -107,14 +111,17 @@ function EnemyManager:spawnEnemy(x, y, type)
             self.speed = self.speed / 2
         end
 
-        local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
+        -- Stunned logic
         if self.stunned and self.velX == 0 and self.velY == 0 and self.stunTimer >= self.maxStunTimer then
             self.stunned = false
         end
         if self.stunned and self.stunTimer < self.maxStunTimer then
             self.stunTimer = self.stunTimer + dt
         end
+
+
+        local threshold = 4 -- Stops the enemy from moving back and forth when it overshoots
 
         self.velX, self.velY = 0, 0
         -- Move towards the player
@@ -139,6 +146,12 @@ function EnemyManager:spawnEnemy(x, y, type)
                     end
                 end
             end
+        end
+
+        -- Reverse X and Y velocities if confused
+        if self.statusEffects.confused then
+            self.velX = -self.velX
+            self.velY = -self.velY
         end
 
         -- Set the speed back if the enemy's frozen
@@ -170,6 +183,10 @@ function EnemyManager:spawnEnemy(x, y, type)
                     if contains(p.specialEffects, "stun") then
                         self.stunned = true
                         self.stunTimer = 0
+                    end
+                    if contains(p.specialEffects, "confusion") then
+                        self.statusEffects.confused = true
+                        self.confusedTimer = 0
                     end
                     if contains(p.specialEffects, "pierce") then
                         if p.pierces >= 2 then
@@ -220,9 +237,17 @@ function EnemyManager:spawnEnemy(x, y, type)
             self.freezeTimer = 0
         end
 
+        -- Confused
+        if self.statusEffects.confused and self.confusedTimer < self.maxConfusedTimer then
+            self.confusedTimer = self.confusedTimer + dt
+        elseif self.confusedTimer >= self.maxConfusedTimer then
+            self.confusedTimer = 0
+            self.statusEffects.confused = false
+        end
+
         -- Oiled
         if self.statusEffects.oiled and self.oiledTimer < self.maxOiledTimer then
-            self.fireTimer = self.oiledTimer + dt
+            self.oiledTimerTimer = self.oiledTimer + dt
         elseif self.oiledTimer >= self.maxOiledTimer then
             self.oiledTimer = 0
             self.statusEffects.oiled = false
