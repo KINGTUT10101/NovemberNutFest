@@ -11,7 +11,7 @@ local function leftSideTrackers ()
         usedStorage = usedStorage + inventoryHandler:getMaxAmmo (i)
     end
 
-    layout:setOrigin (15, 850, 15, 5)
+    layout:setOrigin (15, 950, 15, 5)
 
     tux.show.button ({
         colors = {1, 0, 0, 1},
@@ -31,29 +31,6 @@ local function leftSideTrackers ()
     }, layout:down (50, 50))
     tux.show.label ({
         text = "(E) " .. #Consumables,
-        align = "left",
-        colors = {1, 0, 0, 1}
-    }, layout:right (350, 50))
-
-    
-    tux.show.button ({
-        colors = {1, 0, 0, 1},
-        image = icons.person,
-        iscale = 1.65,
-    }, layout:down (50, 50))
-    tux.show.label ({
-        text = "(I) " .. usedStorage .. " / " .. inventoryHandler:getMaxAmmo (),
-        align = "left",
-        colors = {1, 0, 0, 1}
-    }, layout:right (350, 50))
-
-    tux.show.button ({
-        colors = {1, 0, 0, 1},
-        image = icons.brush,
-        iscale = 1.65,
-    }, layout:down (50, 50))
-    tux.show.label ({
-        text = "(R) Shoot",
         align = "left",
         colors = {1, 0, 0, 1}
     }, layout:right (350, 50))
