@@ -4,7 +4,7 @@ local icons = require ("Helpers.icons")
 
 local inventoryHandler = require ("Core.newInventoryHandler")
 
-local function leftSideTrackers ()
+local function leftSideTrackers (showActiveNutStats)
     layout:setOrigin (15, 900, 15, 5)
 
     tux.show.button ({
@@ -13,7 +13,7 @@ local function leftSideTrackers ()
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
-        text = "(Q) Consumables " .. #Consumables,
+        text = "(Q) Consume: " .. #Consumables,
         align = "left",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
@@ -25,7 +25,7 @@ local function leftSideTrackers ()
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
-        text = "(E) Throwables " .. #Throwables,
+        text = "(E) Throw: " .. #Throwables,
         align = "left",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
@@ -39,7 +39,7 @@ local function leftSideTrackers ()
     tux.show.label ({
         text = "(I) Nut Info",
         align = "left",
-        colors = {1, 0, 0, 1},
+        colors = (showActiveNutStats == true) and {0.5, 0, 0, 1} or {1, 0, 0, 1},
         padding = {padX = 15},
     }, layout:right (350, 50))
 end

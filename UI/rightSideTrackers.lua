@@ -37,14 +37,9 @@ local function rightSideTrackers ()
 
     local waveProgressText = nil
     if hoardManager.inProgress == true then
-        waveProgressText = "Wave Progress: " .. math.ceil (hoardManager.kills / hoardManager.maxKills * 100) .. "%"
+        waveProgressText = "Enemies: " .. #Enemies
     else
-        -- Get number of enemies left from global variable
-        if #Enemies > 0 then
-            waveProgressText = "Enemies: " .. #Enemies
-        else
-            waveProgressText = "Between Waves"
-        end
+        waveProgressText = "Between Waves"
     end
     tux.show.button ({
         colors = {1, 0, 0, 1},

@@ -77,7 +77,6 @@ function Player:update(dt)
         self.damageUp = false
     end
 
-
     -- Add ammo based on the amount of time gone without being hit
     if hoard.inProgress or #Enemies > 0 then
         -- Add onto the nut regeneration timer

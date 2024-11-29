@@ -8,6 +8,7 @@ local projectileManager = require("Managers.projectile")
 local copyTable = require("Helpers/copyTable")
 local inventoryHandler = require("Core.newInventoryHandler")
 local push = require("Libraries.push")
+local lovelyToasts = require ("Libraries.lovelyToasts")
 
 local eatSound = love.audio.newSource("SoundEffects/eating.wav", "static")
 local collectSound = love.audio.newSource("SoundEffects/collect.wav", "static")
@@ -84,11 +85,14 @@ function ItemManager:update()
             if item.type ~= "powerup" then
                 collectSound:play()
                 inventoryHandler:addItem(item)
+
             else
                 if item.object == "speed" then
                     Player.speedUpTimer = 0
+                    lovelyToasts.show ("Speed BONUS!", 3)
                 elseif item.object == "damage" then
                     Player.damageUpTimer = 0
+                    lovelyToasts.show ("Damage BONUS!", 3)
                 end
                 item.soundEffect:play()
             end

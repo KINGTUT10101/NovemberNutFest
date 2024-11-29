@@ -29,20 +29,28 @@ function thisScene:update (dt)
     }, layout:right (580, 400))
 
     -- Menu buttons
-    tux.show.button ({
-        text = "NEW GAME"
-    }, layout:down (580, 100))
-
-    tux.show.button ({
-        text = "CREDITS"
-    }, layout:down (580, 100))
-
-    tux.show.button ({
-        text = "SETTINGS"
-    }, layout:down (580, 100))
+    if tux.show.button ({
+        text = "New Game"
+    }, layout:down (580, 100)) == "end" then
+        sceneMan:clearStack ()
+        sceneMan:push("backgroundMap")
+        sceneMan:push("gameMenu")
+        sceneMan:push("game")
+    end
 
     if tux.show.button ({
-        text = "EXIT"
+        text = "Credits"
+    }, layout:down (580, 100)) == "end" then
+        sceneMan:clearStack ()
+        sceneMan:push("credits")
+    end
+
+    -- tux.show.button ({
+    --     text = "Info"
+    -- }, layout:down (580, 100))
+
+    if tux.show.button ({
+        text = "Exit"
     }, layout:down (580, 100)) == "end" then
         love.event.quit ()
     end
@@ -57,7 +65,7 @@ function thisScene:update (dt)
         iscale = 3,
         colors = {0, 0, 0, 0},
     }, layout:right (100, 100)) == "end" then
-        
+        love.system.openURL ("https://www.youtube.com/@Lyrith-Games")
     end
 
     if tux.show.button ({
@@ -66,7 +74,7 @@ function thisScene:update (dt)
         iscale = 3,
         colors = {0, 0, 0, 0},
     }, layout:right (100, 100)) == "end" then
-        
+        love.system.openURL ("https://x.com/LyrithGames")
     end
 end
 

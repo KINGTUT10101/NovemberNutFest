@@ -29,7 +29,7 @@ baseNuts.coconut = {
 
     damage = 15,
     projVelocity = 3,
-    projSize = 4,
+    projSize = 10,
     range = 8,
     knockback = 4,
     magSize = 2,

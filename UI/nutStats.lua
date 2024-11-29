@@ -32,21 +32,21 @@ local statsToShow = {
             name = "Velocity",
             icon = icons.inverseStar,
         },
-        {
-            id = "projSize",
-            name = "Bullet Size",
-            icon = icons.inverseStar,
-        },
+        -- {
+        --     id = "projSize",
+        --     name = "Bullet Size",
+        --     icon = icons.inverseStar,
+        -- },
         {
             id = "knockback",
             name = "Knockback",
             icon = icons.inverseStar,
         },
-        {
-            id = "spread",
-            name = "Spread",
-            icon = icons.inverseStar,
-        },
+        -- {
+        --     id = "spread",
+        --     name = "Spread",
+        --     icon = icons.inverseStar,
+        -- },
     },
     farming = {
         {

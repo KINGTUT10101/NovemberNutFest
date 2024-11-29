@@ -37,7 +37,7 @@ SpriteSheets = {}
 GAMEWIDTH, GAMEHEIGHT = 1920, 1080
 WindowWidth, WindowHeight = 1280, 720
 -- WindowWidth, WindowHeight = 1280, 720
-DevMode = true
+DevMode = false
 
 function love.load()
     -- Set up Push
@@ -87,17 +87,22 @@ function love.load()
     sceneMan:newScene("title", require("Scenes.title"))
     sceneMan:newScene("gameMenu", require("Scenes.gameMenu"))
     sceneMan:newScene("sideMenus", require("Scenes.sideMenus"))
+    sceneMan:newScene("deathScreen", require("Scenes.deathScreen"))
+    sceneMan:newScene("credits", require("Scenes.credits"))
+    sceneMan:newScene("settings", require("Scenes.settings"))
 
-    sceneMan:push("backgroundMap")
-    -- sceneMan:push("sideMenus")
-    sceneMan:push("gameMenu")
-    sceneMan:push("game")
-    sceneMan:push("debug")
+    -- sceneMan:push("backgroundMap")
+    -- sceneMan:push("gameMenu")
+    -- sceneMan:push("game")
+    -- sceneMan:push("debug")
+
+    -- sceneMan:push ("deathScreen")
+    -- sceneMan:push ("debug")
+
+    sceneMan:push ("title")
 end
 
 function love.update(dt)
-    --require("Libraries.lurker").update()
-
     tux.callbacks.update(dt, push:toGame(love.mouse.getPosition()))
     sceneMan:event("update", dt)
     lovelyToasts.update(dt)
