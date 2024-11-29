@@ -5,17 +5,11 @@ local icons = require ("Helpers.icons")
 local inventoryHandler = require ("Core.newInventoryHandler")
 
 local function leftSideTrackers ()
-    local usedStorage = 0
-
-    for i = 1, inventoryHandler:getMaxSlots () do
-        usedStorage = usedStorage + inventoryHandler:getMaxAmmo (i)
-    end
-
-    layout:setOrigin (15, 950, 15, 5)
+    layout:setOrigin (15, 900, 15, 5)
 
     tux.show.button ({
         colors = {1, 0, 0, 1},
-        image = icons.extinguisher,
+        image = icons.inverseStar,
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
@@ -27,11 +21,23 @@ local function leftSideTrackers ()
 
     tux.show.button ({
         colors = {1, 0, 0, 1},
-        image = icons.inverseStar,
+        image = icons.battery,
         iscale = 1.65,
     }, layout:down (50, 50))
     tux.show.label ({
         text = "(E) " .. #Consumables,
+        align = "left",
+        colors = {1, 0, 0, 1},
+        padding = {padX = 15},
+    }, layout:right (350, 50))
+
+    tux.show.button ({
+        colors = {1, 0, 0, 1},
+        image = icons.info,
+        iscale = 1.65,
+    }, layout:down (50, 50))
+    tux.show.label ({
+        text = "(I) Nut Info",
         align = "left",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},

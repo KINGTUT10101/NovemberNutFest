@@ -10,10 +10,10 @@ local function rightSideTrackers ()
     local tileX, tileY = mapManager:screenToMap (Player.x + 0.5, Player.y)
     local biomeDef = biomes[mapManager:getBiome (tileX, tileY)]
 
-    layout:setOrigin (1905, 950, 15, 5)
+    layout:setOrigin (1905, 900, 15, 5)
     tux.show.button ({
         colors = {1, 0, 0, 1},
-        image = icons.clock,
+        image = icons.person,
         iscale = 1.65,
     }, layout:left (50, 50))
     tux.show.label ({
@@ -25,11 +25,29 @@ local function rightSideTrackers ()
 
     tux.show.button ({
         colors = {1, 0, 0, 1},
-        image = icons.calender,
+        image = icons.stopwatch,
         iscale = 1.65,
     }, layout:down (50, 50, false))
     tux.show.label ({
-        text = "Wave " .. math.min (hoardManager.waveCount, 1),
+        text = "Wave: " .. math.min (hoardManager.waveCount, 1),
+        align = "right",
+        colors = {1, 0, 0, 1},
+        padding = {padX = 15},
+    }, layout:left (350, 50))
+
+    local waveProgressText = nil
+    if hoardManager.inProgress == true then
+        waveProgressText = "Wave Progress: " .. math.ceil (hoardManager.kills / hoardManager.maxKills * 100) .. "%"
+    else
+        waveProgressText = "Between Waves"
+    end
+    tux.show.button ({
+        colors = {1, 0, 0, 1},
+        image = icons.lightbulb,
+        iscale = 1.65,
+    }, layout:down (50, 50, false))
+    tux.show.label ({
+        text = waveProgressText,
         align = "right",
         colors = {1, 0, 0, 1},
         padding = {padX = 15},
