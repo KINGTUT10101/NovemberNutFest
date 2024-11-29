@@ -260,8 +260,6 @@ function Nut:new (...)
     -- Generate name and image for the nut
     generateDisplayData (newNutObj)
 
-    print (newNutObj.type, newNutObj.class)
-
     return newNutObj
 end
 
