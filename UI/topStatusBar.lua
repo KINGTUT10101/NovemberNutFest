@@ -4,6 +4,7 @@ local icons = require ("Helpers.icons")
 local slices = require ("Helpers.slices")
 
 local function topStatusBar (text, progress)
+    layout:setParent (0, 0, GAMEWIDTH, GAMEHEIGHT)
     local centeredPos = {layout:center (800, 0)}
     layout:setOrigin (centeredPos[1], 75, 0, 15)
 
