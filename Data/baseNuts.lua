@@ -47,7 +47,7 @@ baseNuts.macadamia = {
     name = "Macadamia Nut",
     image = love.graphics.newImage ("Graphics/Nuts/macadamia.png"),
 
-    damage = 6,
+    damage = 9,
     projVelocity = 10,
     projSize = 2,
     range = 7,
@@ -88,7 +88,7 @@ baseNuts.candle = {
     name = "Candlenut",
     image = love.graphics.newImage ("Graphics/Nuts/candlenut.png"),
 
-    damage = 4,
+    damage = 9,
     projVelocity = 4,
     projSize = 4,
     range = 11,
@@ -108,7 +108,7 @@ baseNuts.pine = {
     name = "Pine Nut",
     image = love.graphics.newImage ("Graphics/Nuts/pinenut.png"),
 
-    damage = 4,
+    damage = 9,
     projVelocity = 4,
     projSize = 4,
     range = 11,
