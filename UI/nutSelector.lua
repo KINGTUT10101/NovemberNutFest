@@ -1,7 +1,7 @@
 local tux = require ("Libraries.tux")
 local layout = require ("Helpers.layout")
 local icons = require ("Helpers.icons")
-local inventoryHandler = require ("Core.inventoryHandler")
+local inventoryHandler = require ("Core.newInventoryHandler")
 local Nut = require ("Core.Nut")
 local getTableLength = require ("Helpers.getTableLength")
 

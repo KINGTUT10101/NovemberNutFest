@@ -44,7 +44,7 @@ local function hotbar ()
         slices = slices.rect,
     }, layout:right (750, 36))
 
-    -- SECTION INFO
+    -- NUT INFO
     local sectionName = activeNutName
     local sectionSize = inventoryHandler:getAmmoCount ()
     local totalSize = inventoryHandler:getMaxAmmo ()
@@ -52,7 +52,8 @@ local function hotbar ()
     layout:setOrigin (centeredPos[1], 900, 0, 15)
 
     tux.show.label ({
-        text = string.format ("(%s) %s - %s / %s", activeSection, sectionName, sectionSize, totalSize)
+        text = string.format ("(%s) %s - %s / %s", activeSection, sectionName, sectionSize, totalSize),
+        fsize = 24,
     }, layout:right (750, 50))
 end
 
