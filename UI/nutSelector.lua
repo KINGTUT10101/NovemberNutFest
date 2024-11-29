@@ -14,7 +14,6 @@ local selectedNuts = {}
 local lastNutList = nil
 
 local function nutSelector (x, y, nutList)
-    local currentNut = nutList[page]
     local maxPage = #nutList
 
     -- Reset values
@@ -23,6 +22,8 @@ local function nutSelector (x, y, nutList)
         selectedNuts = {}
         lastNutList = nutList
     end
+
+    local currentNut = nutList[page]
 
     -- Page buttons
     if tux.show.button ({
