@@ -26,6 +26,7 @@ local function nutSelector (x, y, nutList)
     local currentNut = nutList[page]
 
     if currentNut == nil then
+        page = 1
         currentNut = nutList[page]
 
         if currentNut == nil then
