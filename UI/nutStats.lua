@@ -82,6 +82,7 @@ local function nutStats (x, y, nutObj)
     if tux.show.button ({
         text = "Combat",
         fsize = 28,
+        colors = (mode == "combat") and {0.5, 0.5, 0.5, 1} or nil,
     }, layout:right ((compW - 20) / 2, 50)) == "end" then
         mode = "combat"
     end
@@ -89,6 +90,7 @@ local function nutStats (x, y, nutObj)
     if tux.show.button ({
         text = "Effects",
         fsize = 28,
+        colors = (mode == "effects") and {0.5, 0.5, 0.5, 1} or nil,
     }, layout:right ((compW - 20) / 2, 50)) == "end" then
         mode = "effects"
     end
