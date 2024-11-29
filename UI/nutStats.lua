@@ -8,7 +8,7 @@ local statsToShow = {
         {
             id = "level",
             name = "Level",
-            icon = icons.inverseStar,
+            icon = icons.up,
         },
         -- {
         --     id = "invSize",
@@ -107,7 +107,7 @@ local function nutStats (x, y, nutObj)
     for index, statDef in ipairs (statsToShow.all) do
         -- Icon
         tux.show.button ({
-            colors = {1, 0, 0, 1},
+            colors = {1, 0, 0, 0},
             image = statDef.icon,
             iscale = 1.65,
         }, layout:down (36, 36))
@@ -118,6 +118,7 @@ local function nutStats (x, y, nutObj)
             align = "left",
             colors = {1, 0, 0, 1},
             fsize = 28,
+            padding = {padX = 15},
         }, layout:right (350, 36))
     end
 
@@ -125,7 +126,7 @@ local function nutStats (x, y, nutObj)
         for index, statDef in ipairs (statsToShow.combat) do
             -- Icon
             tux.show.button ({
-                colors = {1, 0, 0, 1},
+                colors = {1, 0, 0, 0},
                 image = statDef.icon,
                 iscale = 1.65,
             }, layout:down (36, 36))
@@ -136,26 +137,30 @@ local function nutStats (x, y, nutObj)
                 align = "left",
                 colors = {1, 0, 0, 1},
                 fsize = 28,
+                padding = {padX = 15},
             }, layout:right (350, 36))
         end
 
     elseif mode == "effects" then
-        -- for index, statDef in ipairs (statsToShow.combat) do
-        --     -- Icon
-        --     tux.show.button ({
-        --         colors = {1, 0, 0, 1},
-        --         image = statDef.icon,
-        --         iscale = 1.65,
-        --     }, layout:down (36, 36))
+        for index, effectChancePair in ipairs (nutObj.specialEffects) do
+            local effectid, chance = effectChancePair[1], effectChancePair[2]
+
+            -- Icon
+            tux.show.button ({
+                colors = {1, 0, 0, 0},
+                image = icons.info,
+                iscale = 1.65,
+            }, layout:down (36, 36))
     
-        --     -- Text
-        --     tux.show.label ({
-        --         text = statDef.name .. ": " .. nutObj[statDef.id],
-        --         align = "left",
-        --         colors = {1, 0, 0, 1},
-        --         fsize = 28,
-        --     }, layout:right (350, 36))
-        -- end
+            -- Text
+            tux.show.label ({
+                text = effectid .. ": " .. math.ceil (chance * 100) .. "%",
+                align = "left",
+                colors = {1, 0, 0, 1},
+                fsize = 28,
+                padding = {padX = 15},
+            }, layout:right (350, 36))
+        end
     end
 
     -- Background
