@@ -25,6 +25,14 @@ local function nutSelector (x, y, nutList)
 
     local currentNut = nutList[page]
 
+    if currentNut == nil then
+        currentNut = nutList[page]
+
+        if currentNut == nil then
+            return
+        end
+    end
+
     -- Page buttons
     if tux.show.button ({
         text = "<<",
