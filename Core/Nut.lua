@@ -11,7 +11,7 @@ local defaultNut = {
     name = "Default",
     image = baseNuts.peanut,
 
-    level = 1, -- The domestication level of the nut, which affects 
+    level = 1, -- The domestication level of the nut, which gives a stat boost for each level
     damage = 10, -- The base amount of damage the nut will deal to enemies
     projVelocity = 4, -- The velocity of the projectile
     projSize = 1, -- The scale of the projectile
