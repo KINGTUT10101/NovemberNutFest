@@ -44,6 +44,10 @@ local animateObj = {
 }
 local page = 1
 
+function thisScene:whenAdded ()
+    page = 1
+end
+
 function thisScene:update (dt)
     local currEnemyInfo = enemyInfo[page]
 
@@ -94,6 +98,8 @@ function thisScene:update (dt)
         fsize = 28,
     }, layout:right (200, 100)) == "end" then
         page = math.max (1, page - 1)
+        animateObj.frame = 1
+        animateObj.frameTimer = 0
     end
 
     layout:setOrigin (x + 800, y + 815, 0, 5)
@@ -102,6 +108,8 @@ function thisScene:update (dt)
         fsize = 28,
     }, layout:left (200, 100)) == "end" then
         page = math.min (#enemyInfo, page + 1)
+        animateObj.frame = 1
+        animateObj.frameTimer = 0
     end
 
     -- Back button
