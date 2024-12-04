@@ -24,11 +24,19 @@ function gun:update(dt)
     local mouseGameX, mouseGameY = push:toGame(love.mouse.getPosition())
 
     -- Set the gun's position based on the player
-    gun.x = Player.x + (Player.width - 5)
-    gun.y = Player.y + (Player.height / 2)
+    if Player.facing == "right" then
+        gun.x = Player.x + (Player.width - 5)
+        gun.y = Player.y + (Player.height / 2)
 
-    gun.camX = Player.camX + (Player.width - 5)
-    gun.camY = Player.camY + (Player.height / 2)
+        gun.camX = Player.camX + (Player.width - 5)
+        gun.camY = Player.camY + (Player.height / 2)
+    else
+        gun.x = Player.x + 5
+        gun.y = Player.y + (Player.height / 2)
+    
+        gun.camX = Player.camX + 5
+        gun.camY = Player.camY + (Player.height / 2)
+    end
 
     -- Set the gun's rotation based on the cursor
     gun.rotation = math.atan2(mouseGameY - (gun.camY+self.height), mouseGameX - (gun.camX+self.width))
@@ -38,6 +46,8 @@ function gun:update(dt)
     else
         gun.flipped = 1
     end
+    
+    Player.facing = (gun.flipped == 1) and "right" or "left"
 
     -- Lower the cooldown timer
     if self.cooldownTimer < self.cooldownMax then

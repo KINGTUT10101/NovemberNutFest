@@ -7,7 +7,10 @@ local camera            = require("Libraries.hump.camera")
 local hoard             = require("Managers.hoard")
 Player                  = {}
 
-local spriteSheet
+local loadAnimationFrames = require ("Helpers.loadAnimationFrames")
+local processAnimation = require ("Helpers.processAnimation")
+
+local sprites = loadAnimationFrames ("Graphics/Player")
 
 Player.x                = 4 * mapManager.tileSize
 Player.y                = 3 * mapManager.tileSize
@@ -24,6 +27,9 @@ Player.immunityTimer    = Player.maxImmunityTimer -- The amount of time in the i
 Player.class            = "player"
 Player.dead             = false
 Player.god              = false -- God mode
+Player.frame = 1
+Player.frameTimer = 0
+Player.facing = "right"
 
 -- Powerups
 -- speed
@@ -56,6 +62,11 @@ function Player.load()
 end
 
 function Player:update(dt)
+    local velX, velY = self.body:getLinearVelocity()
+    if math.abs (velX) > 5 or math.abs (velY) > 5 then
+        processAnimation (dt, self, #sprites, 0.15)
+    end
+
     self.x, self.y = self.body:getPosition()
 
     self.camX = select(1, camera:cameraCoords(Player.x, Player.y, nil, nil, GAMEWIDTH, GAMEHEIGHT))
@@ -264,13 +275,19 @@ end
 
 function Player:draw()
     if not self.dead then
-        if self.immunityTimer >= self.maxImmunityTimer then
-            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
-        else
+        local scale, origin = 1, 0
+        if self.facing == "left" then
+            scale = -1
+            origin = sprites[self.frame]:getWidth ()
+        end
+
+        if self.immunityTimer < self.maxImmunityTimer then
             love.graphics.setColor(1, 1, 1, 0.85)
-            love.graphics.draw(SpriteSheets.Player, self.x, self.y)
+        else
             love.graphics.setColor(1, 1, 1, 1)
         end
+        love.graphics.draw(sprites[self.frame], self.x, self.y, nil, scale, 1, origin)
+        love.graphics.setColor(1, 1, 1, 1)
     end
 end
 
