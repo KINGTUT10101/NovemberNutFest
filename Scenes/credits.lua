@@ -3,7 +3,6 @@ local sceneMan = require ("Libraries.sceneMan")
 local tux = require ("Libraries.tux")
 local layout = require ("Helpers.layout")
 local icons = require ("Helpers.icons")
-local hoardManager = require ("Managers.hoard")
 local inventoryHandler = require ("Core.newInventoryHandler")
 
 local filledSlots = 0
