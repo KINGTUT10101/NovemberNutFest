@@ -1,6 +1,7 @@
 local hoard = require("Managers.hoard")
 
 local screechSound = love.audio.newSource("SoundEffects/screech.wav", "static")
+screechSound:setVolume (0.5)
 
 local loadAnimationFrames = require ("Helpers.loadAnimationFrames")
 local processAnimation = require ("Helpers.processAnimation")
