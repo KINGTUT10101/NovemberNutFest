@@ -9,6 +9,7 @@ local icons = require ("Helpers.icons")
 local tips = {
     "Clear 15 enemies per wave as fast as you can! Press the left mouse button to shoot.",
     "You can breed two nuts together after every wave to improve your arsenal. The child nut will share traits from each parent.",
+    "When breeding, you'll get to choose from 1 BASE nut and the nuts currently in your hotbar",
     "Keep an eye on your nuts' levels! The higher the level, the greater your nut's base stats will be boosted.",
     "Each BASE nut starts at level 1 and has a unique effect. Try out different combos to see what works best!",
     "Enemies will occasionally drop cashew apples and nut oil when they're defeated. Use these to your advantage to gain the upper hand!",
