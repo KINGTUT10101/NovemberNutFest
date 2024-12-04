@@ -89,6 +89,7 @@ function love.load()
     sceneMan:newScene("credits", require("Scenes.credits"))
     sceneMan:newScene("settings", require("Scenes.settings"))
     sceneMan:newScene("enemyInfo", require("Scenes.enemyInfo"))
+    sceneMan:newScene("gameInfo", require("Scenes.gameInfo"))
 
     -- sceneMan:push("backgroundMap")
     -- sceneMan:push("gameMenu")

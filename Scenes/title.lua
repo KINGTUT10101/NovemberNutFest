@@ -21,7 +21,7 @@ function thisScene:update (dt)
         image = logoImg,
         iscale = 2,
         colors = {0, 0, 0, 0},
-    }, layout:right (580, 400))
+    }, layout:right (580, 325))
 
     -- Menu buttons
     if tux.show.button ({
@@ -31,6 +31,13 @@ function thisScene:update (dt)
         sceneMan:push("backgroundMap")
         sceneMan:push("gameMenu")
         sceneMan:push("game")
+    end
+
+    if tux.show.button ({
+        text = "How to Play"
+    }, layout:down (580, 100)) == "end" then
+        sceneMan:clearStack ()
+        sceneMan:push("gameInfo")
     end
 
     if tux.show.button ({
