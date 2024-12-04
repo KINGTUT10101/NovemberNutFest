@@ -278,9 +278,9 @@ function EnemyManager:spawnEnemy(x, y, type)
 
         -- Chance for an enemy to drop an item
         local drop = math.random()
-        if drop < .05 then
+        if drop < .055 then
             ItemManager:placeConsumable(ItemManager:newItem("nut oil"), self.x, self.y) -- nut oil
-        elseif drop < .15 then
+        elseif drop < .075 then
             ItemManager:placeConsumable(ItemManager:newItem("cashew apple"), self.x, self.y) -- cashew apple
         end
         -- Chance to drop a powerup
@@ -288,7 +288,7 @@ function EnemyManager:spawnEnemy(x, y, type)
         if drop < .05 then
             ItemManager:placeConsumable(ItemManager:newItem("speed"), self.x, self.y) -- speed up
         elseif drop < .1 then
-            ItemManager:placeConsumable(ItemManager:newItem("damage"), self.x, self.y) -- speed up
+            ItemManager:placeConsumable(ItemManager:newItem("damage"), self.x, self.y) -- damage up
         end
 
         if self.kill ~= nil then

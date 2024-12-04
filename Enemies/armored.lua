@@ -139,14 +139,20 @@ local function genericInit(enemy, x, y)
     end
 
     function enemy:draw()
-        -- Add death animations ect.
-        if self.hasArmor then
-            love.graphics.draw(spritesNormal[self.frame], self.x, self.y)
-        elseif self.angry then
-            love.graphics.draw(spritesMad[self.frame], self.x, self.y)
-        elseif self.sad then
-            love.graphics.draw(spritesSad[self.frame], self.x, self.y)
+        local sprites = spritesNormal
+        if self.angry == true then
+            sprites = spritesMad
+        elseif self.sad == true then
+            sprites = spritesSad
         end
+
+        local velX = self.body:getLinearVelocity()
+        local scale, origin = 1, 0
+        if velX < 0 then
+            scale = -1
+            origin = sprites[self.frame]:getWidth ()
+        end
+        love.graphics.draw(sprites[self.frame], self.x, self.y, nil, scale, 1, origin)
     end
 
     return enemy

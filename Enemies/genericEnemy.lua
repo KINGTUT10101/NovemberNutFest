@@ -19,7 +19,13 @@ local function genericInit(enemy, x, y)
     end
 
     function enemy:draw()
-        love.graphics.draw(sprites[self.frame], self.x, self.y)
+        local velX = self.body:getLinearVelocity()
+        local scale, origin = 1, 0
+        if velX < 0 then
+            scale = -1
+            origin = sprites[self.frame]:getWidth ()
+        end
+        love.graphics.draw(sprites[self.frame], self.x, self.y, nil, scale, 1, origin)
     end
 
     return enemy
