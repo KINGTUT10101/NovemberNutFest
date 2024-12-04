@@ -68,7 +68,7 @@ function thisScene:update (dt)
 
     -- Restart button
     if tux.show.button ({
-        text = "Restart"
+        text = "Main Menu"
     }, 783, 600, 350, 75) == "end" then
         love.event.quit("restart")
     end
