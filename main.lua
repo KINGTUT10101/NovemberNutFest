@@ -74,9 +74,7 @@ function love.load()
     -- Sets up scenes for the music manager
     musicManager:newScene ("betweenWaves", loadTracks ("Music/Between Waves"))
     musicManager:newScene ("activeWave", loadTracks ("Music/Active Wave"))
-    musicManager:newScene ("mainMenu", loadTracks ("Music/Main Menu"))
-
-    musicManager:switchScene ("betweenWaves")
+    musicManager:newScene ("title", loadTracks ("Music/Main Menu"))
 
     -- Set up scenes for SceneMan
     sceneMan:newScene("noiseTest", require("Scenes.noiseTest"))

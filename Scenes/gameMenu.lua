@@ -8,6 +8,7 @@ local hoardManager = require ("Managers.hoard")
 local baseNuts = require ("Data.baseNuts")
 local Nut = require ("Core.Nut")
 local shuffle = require ("Libraries.lume").shuffle
+local musicManager =require ("Core.musicManager")
 
 local topStatusBar = require ("UI.topStatusBar")
 local hotbar = require ("UI.hotbar")
@@ -56,6 +57,7 @@ function thisScene:update (dt)
     -- Set up the menus for the next cross breeding event
     if stage == "start" or (stage == "inWave" and hoardManager.inProgress == false and #Enemies <= 0) then
         stage = "chooseParents"
+        musicManager:switchScene ("betweenWaves")
 
         -- Add random base nuts to breeding list
         if firstWave == true then
@@ -156,6 +158,7 @@ function thisScene:update (dt)
     elseif stage == "startWave" then
         if startWaveModal () == true then
             stage = "inWave"
+            musicManager:switchScene ("activeWave")
         end
 
         local activeNut = inventoryHandler:getNut (inventoryHandler:getActiveSlot ())

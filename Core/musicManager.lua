@@ -7,32 +7,34 @@ local musicManager = {
 
 -- Creates a new scene for the music manager to use
 function musicManager:newScene (id, tracks)
-    assert (self.scenes[id] == nil, "Attempt to redefine an existing scene")
+    assert (self.scenes[id] == nil, "Attempt to redefine an existing scene: " .. id)
     assert (#tracks > 0, "No tracks were provided with the scene")
-
-    self.scenes[id] = {
+    local newScene = {
         id = id,
         tracks = copyTable (tracks),
         lastTrack = nil
     }
+    newScene.lastTrack = newScene.tracks[math.random (1, #newScene.tracks)]
+
+    self.scenes[id] = newScene
 end
 
 -- Switches the current scene and loops a random song from its song list
 function musicManager:switchScene (id)
-    assert (self.scenes[id] ~= nil, "Attempt to switch to an undefined scene")
+    assert (self.scenes[id] ~= nil, "Attempt to switch to an undefined scene: " .. id)
 
-    self.activeScene = id
-    self:nextTrack ()
+    if self.activeScene ~= id then
+        if self.activeScene ~= nil then
+            self.scenes[self.activeScene].lastTrack:stop ()
+        end
+        self.activeScene = id
+        self:nextTrack ()
+    end
 end
 
 function musicManager:nextTrack ()
     local activeScene = self.scenes[self.activeScene]
     local selectedTrack = activeScene.lastTrack
-
-    -- Return early if there are no other tracks to choose from
-    if #activeScene.tracks <= 1 then
-        return
-    end
 
     -- Stop current track
     if selectedTrack ~= nil then
@@ -40,7 +42,7 @@ function musicManager:nextTrack ()
     end
 
     -- Randomly select tracks until a new one is chosen
-    while selectedTrack == activeScene.lastTrack do
+    while selectedTrack == activeScene.lastTrack and not (#activeScene.tracks <= 1) do
         selectedTrack = activeScene.tracks[math.random (1, #activeScene.tracks)]
     end
 

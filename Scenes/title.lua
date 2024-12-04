@@ -3,17 +3,12 @@ local sceneMan = require ("Libraries.sceneMan")
 local tux = require ("Libraries.tux")
 local layout = require ("Helpers.layout")
 local icons = require ("Helpers.icons")
+local musicManager =require ("Core.musicManager")
 
 local logoImg = love.graphics.newImage ("Graphics/Logos/nutPlantLarge.png")
 
-function thisScene:load (...)
-    sceneMan = ...
-    
-end
-
-function thisScene:delete (...)
-    local args = {...}
-    
+function thisScene:whenAdded (...)
+    musicManager:switchScene ("title")
 end
 
 function thisScene:update (dt)
