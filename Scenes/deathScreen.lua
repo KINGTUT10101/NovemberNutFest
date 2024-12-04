@@ -52,20 +52,6 @@ function thisScene:update (dt)
         padding = {padX = 15},
     }, layout:right (325, 50))
 
-    --Enemies killed last wave
-    tux.show.button ({
-        colors = {1, 0, 0, 0},
-        image = icons.inverseStar,
-        iscale = 1.65,
-    }, layout:down (50, 50))
-    tux.show.label ({
-        text = "Kills Last Wave: " .. hoardManager.previousTotalKills,
-        align = "left",
-        colors = {1, 0, 0, 1},
-        fsize = 28,
-        padding = {padX = 15},
-    }, layout:right (325, 50))
-
     -- Nuts in hotbar
     tux.show.button ({
         colors = {1, 0, 0, 0},
