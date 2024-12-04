@@ -11,6 +11,7 @@ throwables.nutOil = {
     width = 7,
     height = 13,
     splashRadius = 150,
+    miniSplashRadius = 30,
     sprite = love.graphics.newImage("Graphics/nutOil.png")
 }
 
@@ -19,6 +20,16 @@ function throwables.nutOil:onCollision(x, y)
     glassBreakSound:play()
     for _, e in pairs(Enemies) do
         if e:collisionCheck(x-(self.splashRadius/2), y-(self.splashRadius/2), self.splashRadius, self.splashRadius) then
+            e.statusEffects.oiled = true
+        end
+    end
+end
+
+function throwables.nutOil:flyingOverhead(x, y)
+    -- Go through enemies, give them a status effect
+    glassBreakSound:play()
+    for _, e in pairs(Enemies) do
+        if e:collisionCheck(x-(self.miniSplashRadius/2), y-(self.miniSplashRadius/2), self.miniSplashRadius, self.miniSplashRadius) then
             e.statusEffects.oiled = true
         end
     end

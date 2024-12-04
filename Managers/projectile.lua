@@ -102,6 +102,10 @@ function projectileManager:update(dt)
             end
         -- Throwables
         elseif p.type == "throwable" then
+            -- Affect each enemy that it contacts
+            p:flyingOverhead (p.x, p.y)
+
+            -- Affect enemies in radius when it explodes
             if math.abs(p.x - p.endX) <= 3 and math.abs(p.y - p.endY) <= 2 then
                 p:onCollision(p.endX, p.endY)
                 table.remove(Projectiles, n)
