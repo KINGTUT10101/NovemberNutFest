@@ -5,8 +5,8 @@ local mapToScale = require ("Helpers.mapToScale")
 
 -- NOTE: Assume a tile size of 64x64p when at 1x zoom
 
-local roughWaveHeight = 25
-local biomeScale = 75
+local roughWaveHeight = 8
+local biomeScale = 35
 local buildScale = 100000
 
 -- Temperature gradient

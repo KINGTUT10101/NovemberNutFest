@@ -67,5 +67,6 @@ end
 
 -- Register buildables
 buildableManager:create ("bush", require ("Data.Buildables.Bush"))
+buildableManager:create ("cactus", require ("Data.Buildables.Cactus"))
 
 return buildableManager

@@ -1,4 +1,5 @@
 local bushBuildObj = require ("Core.buildableManager"):generate ("bush")
+local cactusBuildObj = require ("Core.buildableManager"):generate ("cactus")
 
 -- filepath (string) A folder containing three slices: normal, hovered, and active
 local function loadTiles (filepath)
@@ -65,10 +66,10 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
-        buildableThreshold = 0.65,
+        buildableChance = 0.25,
+        buildableThreshold = 0.75,
         buildables = {
-            {bushBuildObj, 1}
+            {cactusBuildObj, 1}
         }
     },
     bloodDesert = {
@@ -85,10 +86,10 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
-        buildableThreshold = 0.65,
+        buildableChance = 0.25,
+        buildableThreshold = 0.75,
         buildables = {
-            {bushBuildObj, 1}
+            {cactusBuildObj, 1}
         }
     },
     savana = {
@@ -105,7 +106,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
+        buildableChance = 0.50,
         buildableThreshold = 0.65,
         buildables = {
             {bushBuildObj, 1}
@@ -129,7 +130,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
+        buildableChance = 0.75,
         buildableThreshold = 0.65,
         buildables = {
             {bushBuildObj, 1}
@@ -149,8 +150,8 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
-        buildableThreshold = 0.65,
+        buildableChance = 0.15,
+        buildableThreshold = 0.75,
         buildables = {
             {bushBuildObj, 1}
         }
@@ -173,7 +174,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
+        buildableChance = 0.90,
         buildableThreshold = 0.65,
         buildables = {
             {bushBuildObj, 1}
@@ -193,7 +194,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
+        buildableChance = 0.80,
         buildableThreshold = 0.65,
         buildables = {
             {bushBuildObj, 1}
@@ -257,7 +258,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
+        buildableChance = 0.35,
         buildableThreshold = 0.65,
         buildables = {
             {bushBuildObj, 1}
@@ -281,7 +282,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
+        buildableChance = 0.15,
         buildableThreshold = 0.65,
         buildables = {
             {bushBuildObj, 1}
@@ -301,7 +302,7 @@ local biomes = {
             rain = 0.05,
             fishRain = 0.005
         },
-        buildableChance = 1,
+        buildableChance = 0.25,
         buildableThreshold = 0.65,
         buildables = {
             {bushBuildObj, 1}
