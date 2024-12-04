@@ -34,15 +34,18 @@ function thisScene:update (dt)
     end
 
     if tux.show.button ({
+        text = "Enemies"
+    }, layout:down (580, 100)) == "end" then
+        sceneMan:clearStack ()
+        sceneMan:push("enemyInfo")
+    end
+
+    if tux.show.button ({
         text = "Credits"
     }, layout:down (580, 100)) == "end" then
         sceneMan:clearStack ()
         sceneMan:push("credits")
     end
-
-    -- tux.show.button ({
-    --     text = "Info"
-    -- }, layout:down (580, 100))
 
     if tux.show.button ({
         text = "Exit"
