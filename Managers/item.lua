@@ -91,10 +91,10 @@ function ItemManager:update()
             else
                 if item.object == "speed" then
                     Player.speedUpTimer = 0
-                    lovelyToasts.show ("Speed BONUS!", 3)
+                    lovelyToasts.show ("Speed BOOST!", 3)
                 elseif item.object == "damage" then
                     Player.damageUpTimer = 0
-                    lovelyToasts.show ("Damage BONUS!", 3)
+                    lovelyToasts.show ("Damage BOOST!", 3)
                 end
                 item.soundEffect:play()
             end
