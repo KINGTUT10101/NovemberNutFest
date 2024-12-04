@@ -2,6 +2,12 @@ local hoard = require("Managers.hoard")
 
 local screechSound = love.audio.newSource("SoundEffects/screech.wav", "static")
 
+local loadAnimationFrames = require ("Helpers.loadAnimationFrames")
+local processAnimation = require ("Helpers.processAnimation")
+
+local spritesOpen = loadAnimationFrames ("Graphics/enemies/Screecher Open")
+local spritesClosed = loadAnimationFrames ("Graphics/enemies/Screecher Closed")
+
 local function genericInit(enemy, x, y)
 
     enemy.health = 50
@@ -18,12 +24,10 @@ local function genericInit(enemy, x, y)
     enemy.hasNewMove = true
 
     function enemy:load()
-        self.sprite = love.graphics.newImage("Graphics/enemies/screecher.png")
-        self.sprite:setFilter("nearest", "nearest")
-        self.screechingSprite = love.graphics.newImage("Graphics/enemies/screecherScreaming.png")
-        self.screechingSprite:setFilter("nearest", "nearest")
-
         enemy.body:setMass(3)
+
+        self.frame = 1
+        self.frameTimer = 0
     end
 
     function enemy:update(dt)
@@ -36,6 +40,7 @@ local function genericInit(enemy, x, y)
                 hoard:HoardSpawn()
                 self.screeching = false
                 self.screechTimer.time = 0
+                self.frame = 1
             end
         else
             self.screechBeginTimer.time = self.screechBeginTimer.time + dt
@@ -43,8 +48,17 @@ local function genericInit(enemy, x, y)
                 self.screechBeginTimer.time = 0
                 self.screeching = true
                 screechSound:play()
+                self.frame = 1
             end
         end
+
+        local spriteTbl = spritesClosed
+        local aniSpeed = 0.2
+        if self.screeching == true then
+            spriteTbl = spritesOpen
+            aniSpeed = 0.1
+        end
+        processAnimation (dt, self, #spriteTbl, aniSpeed)
     end
 
     function enemy:move(threshold)
@@ -75,9 +89,9 @@ local function genericInit(enemy, x, y)
     function enemy:draw()
         -- Add death animations ect.
         if self.screeching then
-            love.graphics.draw(self.screechingSprite, self.x, self.y)
+            love.graphics.draw(spritesOpen[self.frame], self.x, self.y)
         else
-            love.graphics.draw(self.sprite, self.x, self.y)
+            love.graphics.draw(spritesClosed[self.frame], self.x, self.y)
         end
     end
 

@@ -1,3 +1,10 @@
+local loadAnimationFrames = require ("Helpers.loadAnimationFrames")
+local processAnimation = require ("Helpers.processAnimation")
+
+local spritesNormal = loadAnimationFrames ("Graphics/enemies/Armored Normal")
+local spritesMad = loadAnimationFrames ("Graphics/enemies/Armored Mad")
+local spritesSad = loadAnimationFrames ("Graphics/enemies/Armored Sad")
+
 local function genericInit(enemy, x, y)
     enemy.health = 50
     enemy.amHealth = 200 -- armor health
@@ -29,6 +36,9 @@ local function genericInit(enemy, x, y)
         self.sadSprite:setFilter("nearest", "nearest")
 
         enemy.body:setMass(3)
+
+        self.frame = 1
+        self.frameTimer = 0
     end
 
     function enemy:update(dt)
@@ -46,6 +56,17 @@ local function genericInit(enemy, x, y)
             self.speed = self.origSpeed
             enemy.body:setMass(3)
         end
+
+        local spriteTbl = spritesNormal
+        local aniSpeed = 0.2
+        if self.angry == true then
+            spriteTbl = spritesMad
+            aniSpeed = 0.1
+        elseif self.sad == true then
+            spriteTbl = spritesSad
+            aniSpeed = 0.15
+        end
+        processAnimation (dt, self, #spriteTbl, aniSpeed)
     end
 
     function enemy:newOnHit(damage)
@@ -58,6 +79,7 @@ local function genericInit(enemy, x, y)
         -- Armor broke off
         if enemy.amHealth <= 0 and self.hasArmor then
             enemy.hasArmor = false
+            self.frame = 1
 
             local choice = math.random(1, 2)
             if choice == 1 then
@@ -119,11 +141,11 @@ local function genericInit(enemy, x, y)
     function enemy:draw()
         -- Add death animations ect.
         if self.hasArmor then
-            love.graphics.draw(self.armoredSprite, self.x, self.y)
+            love.graphics.draw(spritesNormal[self.frame], self.x, self.y)
         elseif self.angry then
-            love.graphics.draw(self.madSprite, self.x, self.y)
+            love.graphics.draw(spritesMad[self.frame], self.x, self.y)
         elseif self.sad then
-            love.graphics.draw(self.sadSprite, self.x, self.y)
+            love.graphics.draw(spritesSad[self.frame], self.x, self.y)
         end
     end
 

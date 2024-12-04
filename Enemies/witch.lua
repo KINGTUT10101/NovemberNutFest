@@ -1,3 +1,8 @@
+local loadAnimationFrames = require ("Helpers.loadAnimationFrames")
+local processAnimation = require ("Helpers.processAnimation")
+
+local sprites = loadAnimationFrames ("Graphics/enemies/Basic")
+
 local function genericInit(enemy, x, y)
 
     enemy.speed = 22500
@@ -14,16 +19,19 @@ local function genericInit(enemy, x, y)
         self.sprite:setFilter("nearest", "nearest")
         enemy.body:setLinearDamping(enemy.friction)
         enemy.body:setMass(8)
+
+        self.frame = 1
+        self.frameTimer = 0
     end
 
     function enemy:update(dt)
-
+        processAnimation (dt, self, #sprites, 0.2)
     end
 
 
     function enemy:draw()
         -- Add death animations ect.
-        love.graphics.draw(self.sprite, enemy.x, enemy.y)
+        love.graphics.draw(sprites[self.frame], enemy.x, enemy.y)
     end
 
     return enemy
