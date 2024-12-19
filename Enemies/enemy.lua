@@ -76,15 +76,15 @@ function EnemyManager:spawnEnemy(x, y, type)
     -- Each enemy will return their init function
     local init
     if type == "generic" then
-        init = require("enemies.genericEnemy")
+        init = require("Enemies.genericEnemy")
     elseif type == "small" then
-        init = require("enemies.smallEnemy")
+        init = require("Enemies.smallEnemy")
     elseif type == "witch" then
-        init = require("enemies.witch")
+        init = require("Enemies.witch")
     elseif type == "armored" then
-        init = require("enemies.armored")
+        init = require("Enemies.armored")
     elseif type == "screecher" then
-        init = require("enemies.screecher")
+        init = require("Enemies.screecher")
     else
         error(type + "is not an enemy type.")
     end

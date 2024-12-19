@@ -1,6 +1,6 @@
 local hoardManager = {}
 
-local enemyManager = require("enemies.enemy")
+local enemyManager = require("Enemies.enemy")
 local camera = require("Libraries.hump.camera")
 local mapManager = require("Core.mapManager")
 local collisionCheck = require("Helpers.collisionCheck")
